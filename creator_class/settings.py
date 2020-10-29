@@ -138,7 +138,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_USER_MODEL = 'authentication.Account'
+AUTH_USER_MODEL = 'user.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -169,7 +169,7 @@ STATIC_ROOT = path.join(BASE_DIR, 'static').replace('\\', '/')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    path.join(BASE_DIR, 'hawkish', 'static'),
+    path.join(BASE_DIR, 'creator_class', 'static'),
 )
 
 STATICFILES_FINDERS = (
