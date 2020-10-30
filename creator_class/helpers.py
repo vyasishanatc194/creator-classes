@@ -1,22 +1,14 @@
-
-import random
-import stripe
 import datetime
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from rest_framework.pagination import PageNumberPagination
 from smtplib import SMTPException
-from twilio.rest import Client
-from pyfcm import FCMNotification
-from geopy import distance
 
 from rest_framework import status
 from rest_framework.response import Response
 from django.core.mail import EmailMultiAlternatives
-from authentication.models import Account
 import uuid
 import os
-import math 
 
 # Pagination
 PAGINATOR = PageNumberPagination()

@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'creator_class',
         'USER': 'postgres',
         'HOST': 'localhost',
-        'PASSWORD': 'root',
+        'PASSWORD': 'postgres',
         'PORT': '5432'
     }
 }
