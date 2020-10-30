@@ -27,7 +27,7 @@ def custom_response(status_value, code, message, result={}):
                     'status': status_value,
                     'code': code,
                     'message': message,
-                    'result': result
+                    'data': result
                 }, status=status.HTTP_200_OK)
 
 

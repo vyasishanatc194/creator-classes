@@ -1,1 +1,1 @@
-from .auth import SignUpApiView
+from .auth import SignUpApiView, LoginAPIView, LogoutAPIView

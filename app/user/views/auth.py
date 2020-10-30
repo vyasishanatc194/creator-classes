@@ -2,8 +2,9 @@ from rest_framework.views import APIView
 from ..serializers import UserProfileSerializer
 from ..models import User
 from creator_class.helpers import custom_response, serialized_response
-from rest_framework import status
-
+from rest_framework import status, parsers, renderers
+from django.contrib.auth import authenticate, login, logout
+from creator_class.permissions import IsAccountOwner
 
 
 class SignUpApiView(APIView):
@@ -30,7 +31,52 @@ class SignUpApiView(APIView):
             message = "Account created successfully!"
             serializer = self.serializer_class(data=request.data)
             response_status, result, message = serialized_response(serializer, message)
-            status_code = status.HTTP_201 if response_status else status.HTTP_400_BAD_REQUEST
+            status_code = status.HTTP_201_CREATED if response_status else status.HTTP_400_BAD_REQUEST
+            # TODO Email
             return custom_response(response_status, status_code, message, result)
         else:
             return custom_response(False, status.HTTP_400_BAD_REQUEST, "Email is required")
+
+
+
+class LoginAPIView(APIView):
+    """
+    User Login View
+    """
+    parser_classes = (
+        parsers.FormParser,
+        parsers.MultiPartParser,
+        parsers.JSONParser,
+    )
+    renderer_classes = (renderers.JSONRenderer,)
+
+    def post(self, request, format=None):
+        email_or_username = request.data.get("email_or_username", None)
+        password = request.data.get("password", None)
+
+        account = authenticate(email=email_or_username, password=password)
+        if not account:
+            user = User.objects.filter(username=email_or_username)
+            if user:
+                account = authenticate(email=user[0].email, password=password)
+        
+        if account is not None:
+            login(request, account)
+            serializer = UserProfileSerializer(account, context={'request':request})
+            return custom_response(True, status.HTTP_200_OK, "Login Successful!", serializer.data)
+        else:
+            message = "Email/password combination invalid"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class LogoutAPIView(APIView):
+    """
+    User Logout View
+    """
+    permission_classes = (IsAccountOwner,)
+
+    def post(self, request, format=None):
+        request.user.auth_token.delete()
+        logout(request)
+        message = "Logout successful!"
+        return custom_response(True, status.HTTP_200_OK, message)

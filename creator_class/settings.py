@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'social_django',
+    'rest_social_auth',
 
     'creator',
     'user'
@@ -136,6 +138,8 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    # social auth
+    'social_core.backends.facebook.FacebookOAuth2'
 )
 
 AUTH_USER_MODEL = 'user.User'
@@ -176,3 +180,15 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+
+#Local Facebook social login
+SOCIAL_AUTH_FACEBOOK_KEY = '596410561297291'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '73285fb88839658c99a3fa940fce10ca'  # App Secret
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}  # optional
+
+
+#Local Twitter social login
+SOCIAL_AUTH_TWITTER_KEY = 'ekZ5wn6z1RczPQdfLDkgGDCqW'
+SOCIAL_AUTH_TWITTER_SECRET = 'od6C3iKBjYlL5oaHNzp2mG6lU4dKttJ0cKlOZl9c83Mp7cxGGx'
