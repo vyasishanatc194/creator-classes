@@ -45,9 +45,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'rest_social_auth',
+    'widget_tweaks',
+    'crispy_forms',
 
     'creator',
-    'user'
+    'user',
+    'customadmin',
 ]
 
 MIDDLEWARE = [
@@ -192,3 +195,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}  # optional
 #Local Twitter social login
 SOCIAL_AUTH_TWITTER_KEY = 'ekZ5wn6z1RczPQdfLDkgGDCqW'
 SOCIAL_AUTH_TWITTER_SECRET = 'od6C3iKBjYlL5oaHNzp2mG6lU4dKttJ0cKlOZl9c83Mp7cxGGx'
+LOGIN_REDIRECT_URL = "customadmin:user-list"
+
+LOGIN_URL = "auth:auth_login"
+
+LOGOUT_REDIRECT_URL = "auth:auth_login"
