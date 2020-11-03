@@ -24,8 +24,6 @@ urlpatterns = [
     path('superadmin/', admin.site.urls),
 
     path("user/", include("user.urls")),
-
+    path("creator/", include("creator.urls")),
     path('customadmin/', include("customadmin.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += staticfiles_urlpatterns()

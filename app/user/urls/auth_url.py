@@ -11,6 +11,10 @@ urlpatterns = [
     path("logout/", views.LogoutAPIView.as_view(), name="logout"),
 
     # url(r'^api/login/', include('rest_social_auth.urls_token')),
+
+    # path('facebook/', views.FacebookLogin.as_view(), name='fb_login'),
+    # path('twitter/', views.TwitterLogin.as_view(), name='twitter_login'),
+    # path('google/', views.GoogleLogin.as_view(), name='google_login'),
 ]
 
 

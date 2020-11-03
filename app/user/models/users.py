@@ -45,7 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name=_("Unique Id"),)
 
-
+    is_creator = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

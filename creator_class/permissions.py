@@ -29,3 +29,17 @@ class IsAccountOwner(permissions.IsAuthenticated):
             },
             status_code=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class IsUser(permissions.IsAuthenticated):
+    def has_permission(self, request, view):
+        if not request.user.is_creator:
+            return True
+        raise GenericAPIException(
+            {
+                "status": False,
+                "code": status.HTTP_400_BAD_REQUEST,
+                "message": "You don't have permisson to access this view!",
+                "result": status.HTTP_400_BAD_REQUEST,
+            }
+        )

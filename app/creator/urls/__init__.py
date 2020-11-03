@@ -2,9 +2,10 @@
 from django.urls import include, path
 
 from .. import views
+from . import creator_url
 
-app_name = 'creator'
+
 
 urlpatterns = [
-    # path('',include(creators))
+    path("", include(creator_url)),
 ]

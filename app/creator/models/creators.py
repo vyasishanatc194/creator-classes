@@ -12,6 +12,8 @@ class Creator(User):
     google_url = models.CharField(max_length=40, blank=True, null=True, default='')
     facebook_url = models.CharField(max_length=40, blank=True, null=True, default='')
 
+    def __str__(self):
+        return f"{self.email}"
 
     class Meta:
         verbose_name = "Creator"
@@ -23,6 +25,8 @@ class CreatorSkill(ActivityTracking):
     skill = models.CharField(max_length=40, blank=True, null=True, default='')
     creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="creator")
 
+    def __str__(self):
+        return f"{self.creator.email}"
 
     class Meta:
         verbose_name = "Creator skill"
