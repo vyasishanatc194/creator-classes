@@ -36,12 +36,24 @@ class MyUserCreationForm(UserCreationForm):
             "password1",
 
         ]
+        labels = {
+        "is_staff": "Client Admin",         
+        "is_superuser": "TF Admin",         
+        "groups": "User Role",         
+        }
 
     def __init__(self, user, *args, **kwargs):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         self.user = user
         print(*args)
+
+         # filter out the permissions we don't want the user to see
+        if not self.user.is_superuser:
+            self.fields["user_permissions"].queryset = filter_perms()
+        else:
+            # self.fields["user_permissions"].queryset = False
+            pass
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -65,6 +77,8 @@ class MyUserChangeForm(UserChangeForm):
             "profile_image",
             "description",
             "is_active",
+            "is_superuser",
+            "is_staff",
             
         )
 
@@ -73,12 +87,7 @@ class MyUserChangeForm(UserChangeForm):
         super().__init__(*args, **kwargs)
         self.user = user
 
-        # filter out the permissions we don't want the user to see
-        if not self.user.is_superuser:
-            self.fields["user_permissions"].queryset = filter_perms()
-        else:
-            # self.fields["user_permissions"].queryset = False
-            pass
+       
 
     # def save(self, commit=True):
     #     instance = super().save(commit)

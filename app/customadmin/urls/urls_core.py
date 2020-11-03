@@ -27,18 +27,35 @@ urlpatterns = [
 
 urlpatterns +=[
 #     # path("creators/", views.CreatorListView.as_view(), name="creator-list"),
-    path("classes/", views.ClassListView.as_view(), name="class-list"),
     path("streams/", views.StreamListView.as_view(), name="stream-list"),
 
 
-# # # # ------------------------------------------------------------------------------------------------------
-#     path("creators/", views.CreatorListView.as_view(), name="creator-detail"),
-
-#     path("creators/", views.CreatorListView.as_view(), name="creator-list"),
-#     path("creators/create/", views.CreatorCreateView.as_view(), name="creator-create"),
-#     path("creators/<int:pk>/update/", views.CreatorUpdateView.as_view(), name="creator-update"),
-#     path("creators/<int:pk>/delete/", views.CreatorDeleteView.as_view(), name="creator-delete"),
-#     path("ajax-creators", views.CreatorAjaxPagination.as_view(), name="creator-list-ajax"),
-# # # ------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    path("creator_export_product_csv", views.creator_export_product_csv, name="creator_export_product_csv"),
+    
+    path("creators/", views.CreatorListView.as_view(), name="creator-detail"),
+    path("creators/", views.CreatorListView.as_view(), name="creator-list"),
+    path("creators/create/", views.CreatorCreateView.as_view(), name="creator-create"),
+    path("creators/<int:pk>/update/", views.CreatorUpdateView.as_view(), name="creator-update"),
+    path("creators/<int:pk>/delete/", views.CreatorDeleteView.as_view(), name="creator-delete"),
+    path("ajax-creators", views.CreatorAjaxPagination.as_view(), name="creator-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+    
+    path("classes/", views.CreatorClassListView.as_view(), name="creatorclass-detail"),
+    path("classes/", views.CreatorClassListView.as_view(), name="creatorclass-list"),
+    path("classes/create/", views.CreatorClassCreateView.as_view(), name="creatorclass-create"),
+    path("classes/<int:pk>/update/", views.CreatorClassUpdateView.as_view(), name="creatorclass-update"),
+    path("classes/<int:pk>/delete/", views.CreatorClassDeleteView.as_view(), name="creatorclass-delete"),
+    path("ajax-classes", views.CreatorClassAjaxPagination.as_view(), name="creatorclass-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("reviews/", views.CreatorReviewListView.as_view(), name="creatorreview-detail"),
+    path("reviews/", views.CreatorReviewListView.as_view(), name="creatorreview-list"),
+    path("reviews/create/", views.CreatorReviewCreateView.as_view(), name="creatorreview-create"),
+    path("reviews/<int:pk>/update/", views.CreatorReviewUpdateView.as_view(), name="creatorreview-update"),
+    path("reviews/<int:pk>/delete/", views.CreatorReviewDeleteView.as_view(), name="creatorreview-delete"),
+    path("ajax-reviews", views.CreatorReviewAjaxPagination.as_view(), name="creatorreview-list-ajax"),
+#------------------------------------------------------------------------------------------------------
 
 ]

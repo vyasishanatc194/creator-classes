@@ -1,2 +1,2 @@
 from .creators import Creator, CreatorSkill
-from .classes import ClassCovers, ClassCovers, CreatorClass
+from .classes import ClassKeyword, ClassCovers, CreatorClass

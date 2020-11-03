@@ -20,9 +20,10 @@ from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
 from ..forms import MyUserChangeForm, MyUserCreationForm
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render
 
 from user.models import User 
+from creator.models import Creator 
 
 import csv
 
@@ -67,6 +68,12 @@ def export_user_csv(request):
 
 class IndexView(LoginRequiredMixin, TemplateView): 
     template_name = "customadmin/index.html"
+    context = {}
+
+    def get(self, request):
+        self.context['user_count']=User.objects.all().count()
+        self.context['creator_count']=Creator.objects.all().count()
+        return render(request, self.template_name, self.context)
 
 # -----------------------------------------------------------------------------
 # Users
@@ -84,10 +91,7 @@ class UserListView(MyListView):
     permission_required = ("customadmin.view_user",)
 
     def get_queryset(self):
-        print(self.model)
-        print(self.model._meta)
-        print(type(self.model._meta))
-        return self.model.objects.exclude(username="admin").exclude(username=self.request.user)
+        return self.model.objects.exclude(username="admin").exclude(email=self.request.user).exclude(is_creator=True)
 
 
 class UserCreateView(MyCreateView):

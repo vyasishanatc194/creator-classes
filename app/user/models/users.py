@@ -36,11 +36,11 @@ class AccountManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(null=True, blank=True)
+    email = models.EmailField(null=True, blank=True, unique=True)
     username = models.CharField(max_length=40, blank=True, null=True)
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
-    profile_image = models.ImageField(upload_to="profile_image", null=True,  blank=True, verbose_name=_("Profile Image"))
+    profile_image = models.ImageField(upload_to="profile_image", default="sample.jpg", null=True,  blank=True, verbose_name=_("Profile Image"))
     description = models.CharField(max_length=255, blank=True)
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name=_("Unique Id"),)
@@ -70,3 +70,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = "User"
         verbose_name_plural = "Users"
         ordering = ["-created_at"]
+
+    def get_absolute_url(self):
+        return reverse("customadmin:user-list")

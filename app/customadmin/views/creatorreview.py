@@ -21,90 +21,40 @@ from django.utils.text import Truncator
 from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
-from customadmin.forms import MyCreatorChangeForm, MyCreatorCreationForm, CreatorSkillCreationForm, CreatorSkillChangeForm
+from customadmin.forms import MyCreatorReviewChangeForm, MyCreatorReviewCreationForm
 from django.shortcuts import reverse
 
-from creator.models import Creator , CreatorSkill
-
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
-
-
-import csv
-
-
-# User = get_user_model()
-
-
-# Export CSV FILE
-
-def creator_export_product_csv(request):
-
-    output = []
-    response = HttpResponse (content_type='text/csv')
-    filename = u"Creator.csv"
-    response['Content-Disposition'] = u'attachment; filename="{0}"'.format(filename)
-   
-    writer = csv.writer(response)
-    query_set = Creator.objects.all()
-
-    #Header
-    writer.writerow(['Email', "Username",'Firstname', 'Lastname', 'Profile Image','Description','is_active',"is_staff", "is_superuser","Key Skill","Instagram", "LinkedIn", "Twitter", "Google", "Facebook"])
-    for creator in query_set:
-        if creator.groups.all():
-            gp = creator.groups.all()[0].name
-        else:
-            gp = None 
-
-        if not creator.profile_image:
-            avatar = None
-        else:
-            avatar = creator.profile_image.url
-
-
-        output.append([creator.email, creator.username, creator.first_name, creator.last_name,request.build_absolute_uri(avatar), creator.description, creator.is_active, creator.is_staff, creator.is_superuser, creator.key_skill, creator.instagram_url, creator.linkedin_url, creator.twitter_url, creator.google_url, creator.facebook_url ,])
-    #CSV Data
-    writer.writerows(output)
-    return response
+from user.models import CreatorReview
 
 
 
 
 # -----------------------------------------------------------------------------
-# Users
+# CreatorReviews
 # -----------------------------------------------------------------------------
 
-class CreatorListView(MyListView):
+class CreatorReviewListView(MyListView):
     """View for User listing"""
 
     # paginate_by = 25
     ordering = ["id"]
-    model = Creator
+    model = CreatorReview
     queryset = model.objects.all()
-    template_name = "customadmin/creator/creator_list.html"
-    permission_required = ("customadmin.view_creator",)
+    template_name = "customadmin/reviews/creator_review_list.html"
+    permission_required = ("customadmin.view_creator_review",)
 
     def get_queryset(self):
         return self.model.objects.all()
 
-class CreatorSkillInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
 
-    model = CreatorSkill
-    form_class = CreatorSkillCreationForm
-    factory_kwargs = {'extra': 4, 'max_num': None, 'can_order': False, 'can_delete': True}
-
-
-class CreatorCreateView(MyNewFormsetCreateView):
+class CreatorReviewCreateView(MyNewFormsetCreateView):
     """View to create User"""
 
-    model = Creator
+    model = CreatorReview
 
-    inline_model = CreatorSkill
-    inlines = [CreatorSkillInline, ]
-
-    form_class = MyCreatorCreationForm
-    template_name = "customadmin/creator/creator_form.html"
-    permission_required = ("customadmin.add_creator",)
+    form_class = MyCreatorReviewCreationForm
+    template_name = "customadmin/reviews/creator_review_form.html"
+    permission_required = ("customadmin.add_creator_review",)
 
     # def get_form_kwargs(self):
     #     kwargs = super().get_form_kwargs()
@@ -113,27 +63,17 @@ class CreatorCreateView(MyNewFormsetCreateView):
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:creator-list")
+        return reverse("customadmin:creatorreview-list")
 
-class CreatorSkillUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
 
-    model = CreatorSkill
-    form_class = CreatorSkillChangeForm
-    factory_kwargs = {'extra': 4, 'max_num': None, 'can_order': False, 'can_delete': True}
-
-class CreatorUpdateView(MyNewFormsetUpdateView):
+class CreatorReviewUpdateView(MyNewFormsetUpdateView):
     """View to update User"""
 
-    model = Creator
+    model = CreatorReview
 
-    inline_model = CreatorSkill
-    inlines = [CreatorSkillInline, ]
-
-
-    form_class = MyCreatorChangeForm
-    template_name = "customadmin/creator/creator_form_update.html"
-    permission_required = ("customadmin.change_creator",)
+    form_class = MyCreatorReviewChangeForm
+    template_name = "customadmin/reviews/creator_review_form_update.html"
+    permission_required = ("customadmin.change_creator_review",)
 
     # def get_form_kwargs(self):
     #     kwargs = super().get_form_kwargs()
@@ -142,25 +82,25 @@ class CreatorUpdateView(MyNewFormsetUpdateView):
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:creator-list")
+        return reverse("customadmin:creatorreview-list")
 
-class CreatorDeleteView(MyDeleteView):
+class CreatorReviewDeleteView(MyDeleteView):
     """View to delete User"""
 
-    model = Creator
+    model = CreatorReview
     template_name = "customadmin/confirm_delete.html"
-    permission_required = ("customadmin.delete_creator",)
+    permission_required = ("customadmin.delete_creator_review",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:creator-list")
+        return reverse("customadmin:creatorreview-list")
 
-class CreatorAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class CreatorReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
     """Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view."""
 
-    model = Creator
-    queryset = Creator.objects.all().order_by("key_skill")
+    model = CreatorReview
+    queryset = CreatorReview.objects.all().order_by("created_at")
 
     def _get_is_superuser(self, obj):
         """Get boolean column markup."""

@@ -18,9 +18,9 @@
       <a href="{% url 'customadmin:export_user_csv' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> Export CSV</a>
     </div>
 
-    {% elif  opts.verbose_name_plural == 'Item List' %}
+    {% elif  opts.verbose_name_plural == 'Creators' %}
     <div class="float-right lead" style="margin-left: 10px;">      
-      <a href="{% url 'customadmin:export_product_csv' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> Export CSV</a>
+      <a href="{% url 'customadmin:creator_export_product_csv' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> Export CSV</a>
     </div>
 
 

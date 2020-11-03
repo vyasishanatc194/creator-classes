@@ -14,32 +14,61 @@
 
         <div class="ibox float-e-margins">
 
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Login Credentials" icon_class="fas fa-sign-in-alt" only %}
+
+            <div class="ibox-content">
+
+                <div class="row">
+                    <div class="col-sm-6">
+
+                        {{ form.email|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.username|as_crispy_field }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form.password|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.confirm_password|as_crispy_field }}
+                    </div>
+                    
+                </div>
+                
+
+
+            </div>
+            <!-- /ibox-content -->
+
+        </div>
+        <!-- /ibox --> 
+
+        <div class="ibox float-e-margins">
+
             {% include "customadmin/partials/ibox_title.html" with ibox_title="Personal Info" icon_class="fas fa-user" only %}
 
             <div class="ibox-content">
 
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ form.key_skill|as_crispy_field }}
+                        {{ form.first_name|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.last_name|as_crispy_field }}
                     </div>
                 </div>
 
                 <br>
+
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ form.instagram_url|as_crispy_field }}
+                        {{ form.profile_image|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form.linkdin_url|as_crispy_field }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form.facebook_url|as_crispy_field }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form.tweeter_url|as_crispy_field }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form.google_plus_url|as_crispy_field }}
+                        {{ form.description|as_crispy_field }}
                     </div>
                 </div>
                
@@ -50,7 +79,6 @@
 
         </div>
         <!-- /ibox -->
-
         <div class="ibox float-e-margins">
 
             {% include "customadmin/partials/ibox_title.html" with ibox_title="Permissions" icon_class="fas fa-key" only %}
@@ -58,12 +86,32 @@
             <div class="ibox-content">
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                     {% input_icheck form.is_active %}
                     </div>
+                    {% if request.user.is_superuser %}
+                    <div class="col-sm-4">
+                        {% input_icheck form.is_staff %}
+                    </div>
+                    <div class="col-sm-4">
+                        {% input_icheck form.is_superuser %}
+                    </div>
+                    {% endif%}
+                    
                 </div>
 
                 <hr/>
+                
+                {{ form.groups|attr:"class:groups-select"|attr:"size:10"|as_crispy_field }}
+
+                <hr/>
+
+                {% if request.user.is_superuser %}
+
+                {{ form.user_permissions|attr:"class:permissions-select"|attr:"size:10"|as_crispy_field }}
+
+                {% endif%}
+               
 
 
             </div>
@@ -71,6 +119,86 @@
 
         </div>
         <!-- /ibox -->
+
+
+
+        <div class="ibox float-e-margins">
+
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Personal Info" icon_class="fas fa-user" only %}
+
+            <div class="ibox-content">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        {{ form.key_skill|as_crispy_field }}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form.instagram_url|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.linkedin_url|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.facebook_url|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.twitter_url|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.google_url|as_crispy_field }}
+                    </div>
+                </div>
+               
+
+                
+            </div>
+            <!-- /ibox-content -->
+
+        </div>
+        <!-- /ibox -->
+        <div class="ibox float-e-margins">
+
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Other Skills" icon_class="fas fa-user" only %}
+
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                  
+                        {% for formset in inlines %}
+                        <div  class="form-group">
+                            <table>
+                                
+                                {{ formset.management_form|crispy }}
+                                
+                                {% for form in formset.forms %}
+                                        <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
+                                            {% for field in form.visible_fields %}
+                                            <td>
+                                                {# Include the hidden fields in the form #}
+                                                {% if forloop.first %}
+                                                    {% for hidden in form.hidden_fields %}
+                                                        {{ hidden }}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {{ field.errors.as_ul }}
+                                                {{ field|as_crispy_field }}
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                {% endfor %}
+                                
+                            </table>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
 
         {% include "customadmin/partials/form_footer.html" %}
 
@@ -81,11 +209,23 @@
 
 {% block js %}
 {{ block.super }}
-<script src="{% static 'customadmin/js/userroles.js' %}"></script>
-
+<script src="{% static 'customadmin/js/jquery.formset.js' %}"></script>
 <script>
     $(function() {
-        userroles.users.details();
+        $('.formset_row-creator').formset({
+            addText: 'Add Another',
+            deleteText: 'Remove',
+            prefix: 'creator',
+            addCssClass: 'add-row btn btn-success',
+            deleteCssClass: 'hidden btn-delete btn btn-danger',
+
+        });
+    });
+</script>
+<script src="{% static 'customadmin/js/userroles.js' %}"></script>
+<script>
+    $(function() {
+        userroles.creators.details();
     });
 </script>
 {% endblock %}

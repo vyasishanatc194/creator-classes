@@ -48,13 +48,32 @@
             {% endif %}
             
             {% if perms.users or request.user.is_staff %}
+            <li {% if 'creators/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:creator-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Creators</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% if perms.users or request.user.is_staff %}
             <li {% if 'classes/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'customadmin:class-list' %}"> 
+                <a href="{% url 'customadmin:creatorclass-list' %}"> 
                     <i class="fa fa-user fa-fw fa-2x"></i>
                     <span class="nav-label">Classes</span>
                 </a>
             </li>
             {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'reviews/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:creatorreview-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Reviews</span>
+                </a>
+            </li>
+            {% endif %}
+
             {% if perms.users or request.user.is_staff %}
             <li {% if 'streams/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:stream-list' %}"> 

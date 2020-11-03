@@ -49,6 +49,10 @@ def admin_urlname(value, arg):
         pattern = "%s:%s-%s" % ('customadmin', 'user', arg)
     if value.model_name == 'creator':
         pattern = "%s:%s-%s" % ('customadmin', 'creator', arg)
+    if value.model_name == 'creatorclass':
+        pattern = "%s:%s-%s" % ('customadmin', 'creatorclass', arg)
+    if value.model_name == 'creatorreview':
+        pattern = "%s:%s-%s" % ('customadmin', 'creatorreview', arg)
     # print('---------------------------------------------------------------------------------',pattern)
     return pattern
 
