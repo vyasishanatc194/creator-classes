@@ -4,8 +4,6 @@ from creator_class.models import ActivityTracking
 from creator.models import Creator
 
 
-
-
 class CreatorClass(ActivityTracking):
     creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="class_by")
     title = models.CharField(max_length=200, blank=True, null=True, default='')

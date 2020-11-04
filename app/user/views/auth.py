@@ -6,16 +6,16 @@ from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
 from creator_class.permissions import IsAccountOwner
 
-# from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-# from rest_auth.registration.views import SocialLoginView
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
 
-# from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
-# from rest_auth.social_serializers import TwitterLoginSerializer
+from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
+from rest_auth.social_serializers import TwitterLoginSerializer
 
-# from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
-# from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 
-# from core.google.views import GoogleOAuth2Adapter
+from google.views import GoogleOAuth2Adapter
 
 
 
@@ -94,16 +94,16 @@ class LogoutAPIView(APIView):
         return custom_response(True, status.HTTP_200_OK, message)
 
 
-# class FacebookLogin(SocialLoginView):
-#     adapter_class = FacebookOAuth2Adapter
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
 
 
-# class TwitterLogin(SocialLoginView):
-#     serializer_class = TwitterLoginSerializer
-#     adapter_class = TwitterOAuthAdapter
+class TwitterLogin(SocialLoginView):
+    serializer_class = TwitterLoginSerializer
+    adapter_class = TwitterOAuthAdapter
 
 
-# class GoogleLogin(SocialLoginView):
-#     adapter_class = GoogleOAuth2Adapter
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
 
 

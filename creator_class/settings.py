@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites",
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -48,6 +49,14 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'crispy_forms',
 
+    "allauth",
+    "allauth.account",
+    'rest_auth.registration',
+    "allauth.socialaccount",
+    'allauth.socialaccount.providers.facebook',
+    'rest_auth',
+
+    'google',
     'creator',
     'user',
     'customadmin',
@@ -203,3 +212,5 @@ LOGIN_REDIRECT_URL = "customadmin:user-list"
 LOGIN_URL = "auth:auth_login"
 
 LOGOUT_REDIRECT_URL = "auth:auth_login"
+
+SITE_ID = 1

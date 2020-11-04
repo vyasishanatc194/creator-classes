@@ -1,5 +1,5 @@
 from rest_framework import fields, serializers
-from ..models import CreatorReview, User
+from ..models import CreatorReview, User, ClassReview
 
 
 class CreatorReviewSerializer(serializers.ModelSerializer):
@@ -10,3 +10,9 @@ class CreatorReviewSerializer(serializers.ModelSerializer):
         fields = ('id','user', 'creator','review','rating',)
 
     
+class ClassReviewSerializer(serializers.ModelSerializer):
+    review = serializers.CharField(required=True)
+    rating = serializers.FloatField(required=True)
+    class Meta:
+        model = ClassReview
+        fields = ('id','user', 'creator_class','review','rating',)

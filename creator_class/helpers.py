@@ -7,7 +7,6 @@ from smtplib import SMTPException
 from rest_framework import status
 from rest_framework.response import Response
 from django.core.mail import EmailMultiAlternatives
-import uuid
 import os
 
 # Pagination

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib.auth.admin import UserAdmin
-from .models import User, CreatorReview
+from .models import User, CreatorReview, ClassReview
 from .forms import AccountUpdateForm, AccountCreationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -66,5 +66,10 @@ class CreatorReviewAdmin(admin.ModelAdmin):
     list_display = ["pk", "user", "creator", "rating"]
 
 
+class ClassReviewAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "user", "creator_class", "rating"]
+
 admin.site.register(User, UserAdmin)
 admin.site.register(CreatorReview, CreatorReviewAdmin)
+admin.site.register(ClassReview, ClassReviewAdmin)

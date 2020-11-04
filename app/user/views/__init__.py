@@ -1,2 +1,3 @@
-from .auth import SignUpApiView, LoginAPIView, LogoutAPIView
-from .review import CreatorReviewAPIView
+from .auth import SignUpApiView, LoginAPIView, LogoutAPIView, FacebookLogin, TwitterLogin, GoogleLogin
+from .review import CreatorReviewAPIView, ClassReviewAPIView
+# from .favourites import FavouriteClassAPIView
