@@ -1,2 +1,2 @@
 from .testimonials import Testimonial
-from .keywords import AdminKeywords
+from .keywords import AdminKeyword

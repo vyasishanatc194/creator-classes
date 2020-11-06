@@ -3,7 +3,7 @@ from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
 
 
-class AdminKeywords(ActivityTracking):
+class AdminKeyword(ActivityTracking):
     keyword = models.CharField(max_length=55, blank=False, null=False)
 
     def __str__(self):

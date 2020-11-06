@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
 from creator.models import Creator
+from customadmin.models import AdminKeyword
 
 
 class CreatorClass(ActivityTracking):
@@ -20,7 +21,7 @@ class CreatorClass(ActivityTracking):
 
 
 class ClassKeyword(ActivityTracking):
-    keyword = models.CharField(max_length=40, blank=True, null=True, default='')
+    keyword = models.ForeignKey("customadmin.AdminKeyword", on_delete=models.CASCADE)
     creator_class = models.ForeignKey("CreatorClass", on_delete=models.CASCADE, related_name="keyword_for")
 
     def __str__(self):
@@ -42,4 +43,17 @@ class ClassCovers(ActivityTracking):
     class Meta:
         verbose_name = "Class Cover"
         verbose_name_plural = "Class Covers"
+        ordering = ["-created_at"]
+
+
+class ClassMaterials(ActivityTracking):
+    creator_class = models.ForeignKey("CreatorClass", on_delete=models.CASCADE)
+    class_material = models.ForeignKey("Material", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.creator_class.title}"
+
+    class Meta:
+        verbose_name = "Class material"
+        verbose_name_plural = "Class materials"
         ordering = ["-created_at"]
