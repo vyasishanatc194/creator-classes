@@ -11,7 +11,7 @@ class CreatorClass(ActivityTracking):
     class_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class video"))
 
     def __str__(self):
-        return f"{self.creator.email}"
+        return f"{self.creator.username} | {self.title} "
 
     class Meta:
         verbose_name = "Creator Class"

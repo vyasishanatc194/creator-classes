@@ -1,0 +1,1 @@
+from .testimonials import Testimonial

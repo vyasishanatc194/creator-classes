@@ -74,7 +74,7 @@ def creator_export_product_csv(request):
 # -----------------------------------------------------------------------------
 
 class CreatorListView(MyListView):
-    """View for User listing"""
+    """View for Creator listing"""
 
     # paginate_by = 25
     ordering = ["id"]
@@ -91,7 +91,7 @@ class CreatorSkillInline(InlineFormSetFactory):
 
     model = CreatorSkill
     form_class = CreatorSkillCreationForm
-    factory_kwargs = {'extra': 4, 'max_num': None, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
 
 
 class CreatorCreateView(MyNewFormsetCreateView):
@@ -106,11 +106,6 @@ class CreatorCreateView(MyNewFormsetCreateView):
     template_name = "customadmin/creator/creator_form.html"
     permission_required = ("customadmin.add_creator",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user 
-    #     return kwargs
-
     def get_success_url(self):
         opts = self.model._meta
         return reverse("customadmin:creator-list")
@@ -120,7 +115,7 @@ class CreatorSkillUpdateInline(InlineFormSetFactory):
 
     model = CreatorSkill
     form_class = CreatorSkillChangeForm
-    factory_kwargs = {'extra': 4, 'max_num': None, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
 
 class CreatorUpdateView(MyNewFormsetUpdateView):
     """View to update User"""

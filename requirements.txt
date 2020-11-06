@@ -12,6 +12,7 @@ django-dotenv==1.4.2
 django-extra-views==0.13.0
 django-filter==2.4.0
 django-multi-form-view==2.0.1
+django-rest-auth==0.9.5
 django-widget-tweaks==1.4.8
 djangorestframework==3.12.1
 idna==2.10
@@ -30,8 +31,4 @@ social-auth-app-django==3.4.0
 social-auth-core==3.3.3
 sqlparse==0.4.1
 stripe==2.55.0
-<<<<<<< Updated upstream
 urllib3==1.25.11
-=======
-urllib3==1.25.11
->>>>>>> Stashed changes

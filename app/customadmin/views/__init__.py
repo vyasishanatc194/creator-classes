@@ -23,12 +23,38 @@ from .classes import (
     CreatorClassListView,
     CreatorClassUpdateView,
 )
-from .creatorreview import (
+from .reviews import (
     CreatorReviewAjaxPagination,
     CreatorReviewCreateView,
     CreatorReviewDeleteView,
     CreatorReviewListView,
     CreatorReviewUpdateView,
+    ClassReviewAjaxPagination,
+    ClassReviewCreateView,
+    ClassReviewDeleteView,
+    ClassReviewListView,
+    ClassReviewUpdateView,
+)
+from .testimonials import (
+    TestimonialAjaxPagination,
+    TestimonialCreateView,
+    TestimonialDeleteView,
+    TestimonialListView,
+    TestimonialUpdateView,
+)
+
+from .materials import (
+    MaterialCategoryAjaxPagination,
+    MaterialCategoryCreateView,
+    MaterialCategoryDeleteView,
+    MaterialCategoryListView,
+    MaterialCategoryUpdateView,
+
+    MaterialAjaxPagination,
+    MaterialCreateView,
+    MaterialDeleteView,
+    MaterialListView,
+    MaterialUpdateView,
 )
 
 

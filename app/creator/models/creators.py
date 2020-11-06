@@ -20,9 +20,6 @@ class Creator(User):
         verbose_name_plural = "Creators"
         ordering = ["-created_at"]
 
-    def __str__(self):
-        return str(self.email)
-
 
 class CreatorSkill(ActivityTracking):
     skill = models.CharField(max_length=40, blank=True, null=True, default='')

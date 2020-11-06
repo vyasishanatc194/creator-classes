@@ -84,6 +84,32 @@ var userroles = {
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
+    // Testimonials
+    // ------------------------------------------------------------------------
+    testimonials: {
+
+        index: function () {
+            $('#testimonial-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
+    // ------------------------------------------------------------------------
     // CreatorClasses
     // ------------------------------------------------------------------------
     creatorclasses: {
@@ -113,12 +139,100 @@ var userroles = {
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
+    // ClassReviews
+    // ------------------------------------------------------------------------
+    classreviews: {
+
+        index: function () {
+            $('#classreview-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
+
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     // CreatorReviews
     // ------------------------------------------------------------------------
     creatorreviews: {
 
         index: function () {
             $('#creatorreview-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
+
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // Material
+    // ------------------------------------------------------------------------
+    materials: {
+
+        index: function () {
+            $('#material-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
+
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // MaterialCategory
+    // ------------------------------------------------------------------------
+    materialcategories: {
+
+        index: function () {
+            $('#materialcategory-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{

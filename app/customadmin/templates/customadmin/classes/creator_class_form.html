@@ -12,22 +12,24 @@
 
         {% include "customadmin/partials/form_hidden_fields.html" %}
 
+
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Login Credentials" icon_class="fas fa-sign-in-alt" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Personal Info" icon_class="fas fa-user" only %}
 
             <div class="ibox-content">
 
                 <div class="row">
                     <div class="col-sm-6">
-
                         {{ form.creator|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
                         {{ form.title|as_crispy_field }}
                     </div>
                 </div>
+
                 <br>
+
                 <div class="row">
                     <div class="col-sm-6">
                         {{ form.thumbnail_file|as_crispy_field }}
@@ -35,20 +37,20 @@
                     <div class="col-sm-6">
                         {{ form.class_file|as_crispy_field }}
                     </div>
-                    
                 </div>
+               
+
                 
-
-
             </div>
             <!-- /ibox-content -->
 
         </div>
-        <!-- /ibox --> 
+
+
 
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Keywords" icon_class="fas fa-user" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Keywords & Covers" icon_class="fas fa-user" only %}
 
             <div class="ibox-content">
                 <div class="row">
@@ -63,7 +65,7 @@
                                 {% for form in formset.forms %}
                                         <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
                                             {% for field in form.visible_fields %}
-                                            <td class="col-sm-12">
+                                            <td>
                                                 {# Include the hidden fields in the form #}
                                                 {% if forloop.first %}
                                                     {% for hidden in form.hidden_fields %}
@@ -76,7 +78,6 @@
                                             {% endfor %}
                                         </tr>
                                 {% endfor %}
-                                        <hr>
                                 
                             </table>
                         </div>
@@ -86,7 +87,26 @@
             </div>
         </div>
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         {% include "customadmin/partials/form_footer.html" %}
 
@@ -108,6 +128,8 @@
             deleteCssClass: 'hidden btn-delete btn btn-danger',
 
         });
+    });
+    $(function() {
         $('.formset_row-classcovers_set').formset({
             addText: 'Add Another',
             deleteText: 'Remove',

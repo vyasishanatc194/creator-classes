@@ -50,12 +50,48 @@ urlpatterns +=[
 #------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
     
-    path("reviews/", views.CreatorReviewListView.as_view(), name="creatorreview-detail"),
-    path("reviews/", views.CreatorReviewListView.as_view(), name="creatorreview-list"),
-    path("reviews/create/", views.CreatorReviewCreateView.as_view(), name="creatorreview-create"),
-    path("reviews/<int:pk>/update/", views.CreatorReviewUpdateView.as_view(), name="creatorreview-update"),
-    path("reviews/<int:pk>/delete/", views.CreatorReviewDeleteView.as_view(), name="creatorreview-delete"),
-    path("ajax-reviews", views.CreatorReviewAjaxPagination.as_view(), name="creatorreview-list-ajax"),
+    path("creator-reviews/", views.CreatorReviewListView.as_view(), name="creatorreview-detail"),
+    path("creator-reviews/", views.CreatorReviewListView.as_view(), name="creatorreview-list"),
+    path("creator-reviews/create/", views.CreatorReviewCreateView.as_view(), name="creatorreview-create"),
+    path("creator-reviews/<int:pk>/update/", views.CreatorReviewUpdateView.as_view(), name="creatorreview-update"),
+    path("creator-reviews/<int:pk>/delete/", views.CreatorReviewDeleteView.as_view(), name="creatorreview-delete"),
+    path("ajax-creator-reviews", views.CreatorReviewAjaxPagination.as_view(), name="creatorreview-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("class-reviews/", views.ClassReviewListView.as_view(), name="classreview-detail"),
+    path("class-reviews/", views.ClassReviewListView.as_view(), name="classreview-list"),
+    path("class-reviews/create/", views.ClassReviewCreateView.as_view(), name="classreview-create"),
+    path("class-reviews/<int:pk>/update/", views.ClassReviewUpdateView.as_view(), name="classreview-update"),
+    path("class-reviews/<int:pk>/delete/", views.ClassReviewDeleteView.as_view(), name="classreview-delete"),
+    path("ajax-class-reviews", views.ClassReviewAjaxPagination.as_view(), name="classreview-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("material-category/", views.MaterialCategoryListView.as_view(), name="materialcategory-detail"),
+    path("material-category/", views.MaterialCategoryListView.as_view(), name="materialcategory-list"),
+    path("material-category/create/", views.MaterialCategoryCreateView.as_view(), name="materialcategory-create"),
+    path("material-category/<int:pk>/update/", views.MaterialCategoryUpdateView.as_view(), name="materialcategory-update"),
+    path("material-category/<int:pk>/delete/", views.MaterialCategoryDeleteView.as_view(), name="materialcategory-delete"),
+    path("ajax-material-category", views.MaterialCategoryAjaxPagination.as_view(), name="materialcategory-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("material/", views.MaterialListView.as_view(), name="material-detail"),
+    path("material/", views.MaterialListView.as_view(), name="material-list"),
+    path("material/create/", views.MaterialCreateView.as_view(), name="material-create"),
+    path("material/<int:pk>/update/", views.MaterialUpdateView.as_view(), name="material-update"),
+    path("material/<int:pk>/delete/", views.MaterialDeleteView.as_view(), name="material-delete"),
+    path("ajax-material", views.MaterialAjaxPagination.as_view(), name="material-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("testimonials/", views.TestimonialListView.as_view(), name="testimonial-detail"),
+    path("testimonials/", views.TestimonialListView.as_view(), name="testimonial-list"),
+    path("testimonials/create/", views.TestimonialCreateView.as_view(), name="testimonial-create"),
+    path("testimonials/<int:pk>/update/", views.TestimonialUpdateView.as_view(), name="testimonial-update"),
+    path("testimonials/<int:pk>/delete/", views.TestimonialDeleteView.as_view(), name="testimonial-delete"),
+    path("ajax-testimonials", views.TestimonialAjaxPagination.as_view(), name="testimonial-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 
 ]

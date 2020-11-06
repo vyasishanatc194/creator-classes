@@ -14,30 +14,19 @@
 
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Creator Review Details" icon_class="fas fa-sign-in-alt" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Material Category Details" icon_class="fas fa-sign-in-alt" only %}
 
             <div class="ibox-content">
 
                 <div class="row">
                     <div class="col-sm-6">
 
-                        {{ form.creator|as_crispy_field }}
+                        {{ form.category_title|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form.user|as_crispy_field }}
+                        {{ form.category_image|as_crispy_field }}
                     </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ form.review|as_crispy_field }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form.rating|as_crispy_field }}
-                    </div>
-                    
-                </div>
-                
+                </div>             
 
 
             </div>
@@ -60,7 +49,7 @@
 <script src="{% static 'customadmin/js/userroles.js' %}"></script>
 <script>
     $(function() {
-        userroles.creators.details();
+        userroles.materialcategories.details();
     });
 </script>
 {% endblock %}

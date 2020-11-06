@@ -7,8 +7,6 @@ from customadmin.views.generic import (
     MyLoginRequiredView,
     MyUpdateView,
     MyView,
-    MyNewFormsetCreateView,
-    MyNewFormsetUpdateView
 )
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -21,86 +19,70 @@ from django.utils.text import Truncator
 from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
-from customadmin.forms import MyCreatorReviewChangeForm, MyCreatorReviewCreationForm
+from customadmin.forms import TestimonialChangeForm, TestimonialCreationForm
 from django.shortcuts import reverse
 
-from user.models import CreatorReview
-
-
-
+from ..models import Testimonial
 
 # -----------------------------------------------------------------------------
-# CreatorReviews
+# Testimonials
 # -----------------------------------------------------------------------------
 
-class CreatorReviewListView(MyListView):
+class TestimonialListView(MyListView):
     """View for User listing"""
 
     # paginate_by = 25
     ordering = ["id"]
-    model = CreatorReview
+    model = Testimonial
     queryset = model.objects.all()
-    template_name = "customadmin/reviews/creator_review_list.html"
-    permission_required = ("customadmin.view_creator_review",)
+    template_name = "customadmin/testimonials/testimonial_list.html"
+    permission_required = ("customadmin.view_testimonial",)
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().exclude(active=False)
 
-
-class CreatorReviewCreateView(MyNewFormsetCreateView):
+class TestimonialCreateView(MyCreateView):
     """View to create User"""
 
-    model = CreatorReview
-
-    form_class = MyCreatorReviewCreationForm
-    template_name = "customadmin/reviews/creator_review_form.html"
-    permission_required = ("customadmin.add_creator_review",)
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user 
-    #     return kwargs
+    model = Testimonial
+    form_class = TestimonialCreationForm
+    template_name = "customadmin/testimonials/testimonial_form.html"
+    permission_required = ("customadmin.add_testimonial",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:creatorreview-list")
+        return reverse("customadmin:testimonial-list")
 
-
-class CreatorReviewUpdateView(MyNewFormsetUpdateView):
+class TestimonialUpdateView(MyUpdateView):
     """View to update User"""
 
-    model = CreatorReview
+    model = Testimonial
 
-    form_class = MyCreatorReviewChangeForm
-    template_name = "customadmin/reviews/creator_review_form_update.html"
-    permission_required = ("customadmin.change_creator_review",)
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
+    form_class = TestimonialChangeForm
+    template_name = "customadmin/testimonials/testimonial_form.html"
+    permission_required = ("customadmin.change_testimonial",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:creatorreview-list")
+        return reverse("customadmin:testimonial-list")
 
-class CreatorReviewDeleteView(MyDeleteView):
+class TestimonialDeleteView(MyDeleteView):
     """View to delete User"""
 
-    model = CreatorReview
+    model = Testimonial
     template_name = "customadmin/confirm_delete.html"
-    permission_required = ("customadmin.delete_creator_review",)
+    permission_required = ("customadmin.delete_testimonial",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:creatorreview-list")
+        return reverse("customadmin:testimonial-list")
 
-class CreatorReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class TestimonialAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
     """Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view."""
 
-    model = CreatorReview
-    queryset = CreatorReview.objects.all().order_by("created_at")
+    model = Testimonial
+    queryset = Testimonial.objects.all().order_by("created_at")
 
     def _get_is_superuser(self, obj):
         """Get boolean column markup."""

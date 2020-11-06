@@ -10,7 +10,7 @@
 
     
 
-    {% include "customadmin/includes/list_header_card.html" with title="Create a new user" subtitle="Create a new user and assign with individual or group permissions." show_button=True %}
+    {% include "customadmin/includes/list_header_card.html" with title="Create a new class" subtitle="Create a new class and assign keywords and covers to it." show_button=True %}
 
     <div class="ibox float-e-margins">
         {% comment %} <div class="ibox-title">
@@ -54,7 +54,7 @@
                             <td>No Thumbnail File</td>
                             {% endif %}
                             {% if o.class_file %}
-                            <td><img src="{{MEDIA_URL}}{{ o.class_file.url }}" height="80x" width="80px"></td>
+                            <td>{{ o.class_file }}</td>
                             {% else %}
                             <td>No Class File</td>
                             {% endif %}

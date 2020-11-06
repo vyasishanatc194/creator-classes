@@ -1,4 +1,6 @@
 from .user import MyUserCreationForm, MyUserChangeForm
 from .creator import MyCreatorCreationForm, MyCreatorChangeForm, CreatorSkillCreationForm, CreatorSkillChangeForm
 from .classes import MyCreatorClassCreationForm, MyCreatorClassChangeForm, ClassKeywordCreationForm, ClassKeywordChangeForm, ClassCoversCreationForm, ClassCoversChangeForm
-from .creatorreview import MyCreatorReviewCreationForm, MyCreatorReviewChangeForm
+from .reviews import MyCreatorReviewCreationForm, MyCreatorReviewChangeForm, MyClassReviewCreationForm, MyClassReviewChangeForm
+from .materials import MyMaterialCategoryCreationForm, MyMaterialCategoryChangeForm, MyMaterialCreationForm, MyMaterialChangeForm
+from .testimonials import TestimonialCreationForm, TestimonialChangeForm

@@ -66,10 +66,44 @@
             {% endif %}
 
             {% if perms.users or request.user.is_staff %}
-            <li {% if 'reviews/' in request.path %}class="active" {% endif %}>
+            <li {% if 'material-category/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:materialcategory-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Material Category</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'material/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:material-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Materials</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'creator-reviews/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:creatorreview-list' %}"> 
                     <i class="fa fa-user fa-fw fa-2x"></i>
-                    <span class="nav-label">Reviews</span>
+                    <span class="nav-label">Creator Reviews</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'class-reviews/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:classreview-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Class Reviews</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'testimonials/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:testimonial-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Testimonials</span>
                 </a>
             </li>
             {% endif %}

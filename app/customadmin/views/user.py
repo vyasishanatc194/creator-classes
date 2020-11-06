@@ -71,7 +71,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
     context = {}
 
     def get(self, request):
-        self.context['user_count']=User.objects.all().count()
+        self.context['user_count']=User.objects.all().exclude(is_creator=True).count()
         self.context['creator_count']=Creator.objects.all().count()
         return render(request, self.template_name, self.context)
 

@@ -86,9 +86,3 @@ class MyUserChangeForm(UserChangeForm):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         self.user = user
-
-       
-
-    # def save(self, commit=True):
-    #     instance = super().save(commit)
-    #     return instance

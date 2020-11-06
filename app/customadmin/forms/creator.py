@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group, Permission
-
-from ..utils import filter_perms
-
-from customadmin.utils import Emails
-from django.template import loader
 
 from creator.models import Creator, CreatorSkill
 
@@ -21,7 +12,7 @@ from django.contrib.auth.hashers import make_password, check_password
 
 
 class MyCreatorCreationForm(forms.ModelForm):
-    """Custom UserCreationForm."""
+    """Custom CreatorCreationForm."""
 
     password=forms.CharField(widget=forms.PasswordInput())
     confirm_password=forms.CharField(widget=forms.PasswordInput())
@@ -61,6 +52,8 @@ class MyCreatorCreationForm(forms.ModelForm):
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
+        
+
         if password != confirm_password:
             raise forms.ValidationError(
                 "password and confirm_password does not match"
@@ -80,7 +73,7 @@ class MyCreatorCreationForm(forms.ModelForm):
 
 
 class MyCreatorChangeForm(forms.ModelForm):
-    """Custom UserChangeForm."""
+    """Custom CreatorChangeForm."""
     class Meta:
         model = Creator
         fields = (
@@ -102,8 +95,12 @@ class MyCreatorChangeForm(forms.ModelForm):
             "facebook_url",
         )
 
+# -----------------------------------------------------------------------------
+# Creator Skills
+# -----------------------------------------------------------------------------
+
 class CreatorSkillCreationForm(forms.ModelForm):
-    """Custom form to create Chat settings"""
+    """Custom form to create Creator skills"""
 
     class Meta():
         model = CreatorSkill
@@ -111,6 +108,8 @@ class CreatorSkillCreationForm(forms.ModelForm):
             "skill",
             "creator",
         ]
+
+    
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -122,7 +121,7 @@ class CreatorSkillCreationForm(forms.ModelForm):
 
 
 class CreatorSkillChangeForm(forms.ModelForm):
-    """Custom form to change Chat settings"""
+    """Custom form to change Creator skills"""
 
     class Meta():
         model = CreatorSkill
@@ -131,6 +130,7 @@ class CreatorSkillChangeForm(forms.ModelForm):
             "skill",
             "creator",
         ]
+
     def save(self, commit=True):
         instance = super().save(commit=False)
 

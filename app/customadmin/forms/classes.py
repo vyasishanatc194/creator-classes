@@ -1,27 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group, Permission
-
-from ..utils import filter_perms
-
-from customadmin.utils import Emails
-from django.template import loader
 
 from creator.models import CreatorClass, ClassKeyword, ClassCovers
 
-from django.contrib.auth.hashers import make_password, check_password
-
 # -----------------------------------------------------------------------------
-# Creators
+# Creator Classes
 # -----------------------------------------------------------------------------
 
 
 class MyCreatorClassCreationForm(forms.ModelForm):
-    """Custom UserCreationForm."""
+    """Custom CreatorCreationForm."""
 
     class Meta:
         model = CreatorClass
@@ -46,7 +35,7 @@ class MyCreatorClassCreationForm(forms.ModelForm):
 
 
 class MyCreatorClassChangeForm(forms.ModelForm):
-    """Custom UserChangeForm."""
+    """Custom CreatorChangeForm."""
     class Meta:
         model = CreatorClass
         fields = (
@@ -56,8 +45,12 @@ class MyCreatorClassChangeForm(forms.ModelForm):
             "class_file",
         )
 
+# -----------------------------------------------------------------------------
+# Creator Keywords
+# -----------------------------------------------------------------------------
+
 class ClassKeywordCreationForm(forms.ModelForm):
-    """Custom form to create Chat settings"""
+    """Custom form to create Class Keyword"""
 
     class Meta():
         model = ClassKeyword
@@ -76,7 +69,7 @@ class ClassKeywordCreationForm(forms.ModelForm):
 
 
 class ClassKeywordChangeForm(forms.ModelForm):
-    """Custom form to change Chat settings"""
+    """Custom form to change Class Keyword"""
 
     class Meta():
         model = ClassKeyword
@@ -86,8 +79,20 @@ class ClassKeywordChangeForm(forms.ModelForm):
             "creator_class",
         ]
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if commit:
+            instance.save()
+
+        return instance
+
+# -----------------------------------------------------------------------------
+# Creator Covers
+# -----------------------------------------------------------------------------
+
 class ClassCoversCreationForm(forms.ModelForm):
-    """Custom form to create Chat settings"""
+    """Custom form to create Class Covers"""
 
     class Meta():
         model = ClassCovers
@@ -106,7 +111,7 @@ class ClassCoversCreationForm(forms.ModelForm):
 
 
 class ClassCoversChangeForm(forms.ModelForm):
-    """Custom form to change Chat settings"""
+    """Custom form to change Class Covers"""
 
     class Meta():
         model = ClassCovers
@@ -115,3 +120,10 @@ class ClassCoversChangeForm(forms.ModelForm):
             "covers",
             "creator_class",
         ]
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if commit:
+            instance.save()
+
+        return instance

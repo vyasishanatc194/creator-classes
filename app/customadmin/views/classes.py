@@ -70,11 +70,11 @@ def creator_export_product_csv(request):
 
 
 # -----------------------------------------------------------------------------
-# Users
+# Creators
 # -----------------------------------------------------------------------------
 
 class CreatorClassListView(MyListView):
-    """View for User listing"""
+    """View for Creator Class listing"""
 
     # paginate_by = 25
     ordering = ["id"]
@@ -84,38 +84,33 @@ class CreatorClassListView(MyListView):
     permission_required = ("customadmin.view_creator_class",)
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().exclude(active=False)
+
 
 class ClassKeywordInline(InlineFormSetFactory):
     """Inline view to show Newsimage within the Parent View"""
 
     model = ClassKeyword
     form_class = ClassKeywordCreationForm
-    factory_kwargs = {'extra': 4, 'max_num': None, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+
 class ClassCoversInline(InlineFormSetFactory):
     """Inline view to show Newsimage within the Parent View"""
 
     model = ClassCovers
     form_class = ClassCoversCreationForm
-    factory_kwargs = {'extra': 2, 'max_num': None, 'can_order': False, 'can_delete': True}
-
+    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
 
 class CreatorClassCreateView(MyNewFormsetCreateView):
     """View to create User"""
 
     model = CreatorClass
 
-    inline_model = ClassKeyword, ClassCovers
-    inlines = [ClassKeywordInline,ClassCoversInline ]
+    inlines = [ClassKeywordInline,ClassCoversInline, ]
 
     form_class = MyCreatorClassCreationForm
     template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.add_creator_class",)
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user 
-    #     return kwargs
 
     def get_success_url(self):
         opts = self.model._meta
@@ -126,32 +121,27 @@ class ClassKeywordUpdateInline(InlineFormSetFactory):
 
     model = ClassKeyword
     form_class = ClassKeywordChangeForm
-    factory_kwargs = {'extra': 4, 'max_num': None, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
 
 class ClassCoversUpdateInline(InlineFormSetFactory):
     """View to update Newsimage which is a inline view"""
 
     model = ClassCovers
     form_class = ClassCoversChangeForm
-    factory_kwargs = {'extra': 2, 'max_num': None, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
 
 class CreatorClassUpdateView(MyNewFormsetUpdateView):
     """View to update User"""
 
     model = CreatorClass
 
-    inline_model = ClassKeyword, ClassCovers
-    inlines = [ClassKeywordInline,ClassCoversInline ]
+    inlines = [ClassKeywordUpdateInline,ClassCoversUpdateInline, ]
 
 
     form_class = MyCreatorClassChangeForm
     template_name = "customadmin/classes/creator_class_form_update.html"
     permission_required = ("customadmin.change_creator_class",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
 
     def get_success_url(self):
         opts = self.model._meta

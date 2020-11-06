@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers
+from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, Material, MaterialCategory
 
 # Register your models here.
 
@@ -25,10 +25,20 @@ class ClassCoversAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "creator_class", "covers",]
 
+class MaterialAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "creator", "material_category", "title"]
+
+class MaterialCategoryAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "category_title", "created_at",]
+
 
 admin.site.register(Creator, CreatorAdmin)
 admin.site.register(CreatorSkill, CreatorSkillAdmin)
 admin.site.register(CreatorClass, CreatorClassAdmin)
 admin.site.register(ClassKeyword, ClassKeywordAdmin)
 admin.site.register(ClassCovers, ClassCoversAdmin)
+admin.site.register(Material, MaterialAdmin)
+admin.site.register(MaterialCategory, MaterialCategoryAdmin)
     
