@@ -17,11 +17,11 @@ class MaterialCategory(ActivityTracking):
         ordering = ["-created_at"]
 
 class Material(ActivityTracking):
-    creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="materialcreator")
-    material_category = models.ForeignKey("MaterialCategory", on_delete=models.CASCADE, related_name="materialcategory")
+    creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="material_creator")
+    material_category = models.ForeignKey("MaterialCategory", on_delete=models.CASCADE, related_name="material_category")
     title = models.CharField(max_length=80, blank=True, null=True, default='')
     thumbnail_file = models.FileField(upload_to="materials", null=True,  blank=True, verbose_name=_("material thumbnail"))
-    material_file = models.FileField(upload_to="materials", null=True,  blank=True, verbose_name=_("material video"))
+    material_file = models.FileField(upload_to="materials", null=True,  blank=True, verbose_name=_("material file"))
     
     def __str__(self):
         return f"{self.title}"

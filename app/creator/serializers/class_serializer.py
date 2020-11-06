@@ -1,7 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import Creator, CreatorClass, ClassKeyword, ClassCovers
 from user.models import CreatorReview, User, ClassReview
-from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 
 

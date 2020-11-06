@@ -9,5 +9,5 @@ app_name="user"
 urlpatterns = [
     path("", include(auth_url)),
     path("", include(review_url)),
-    # path("", include(favourite_url)),
+    path("", include(favourite_url)),
 ]
