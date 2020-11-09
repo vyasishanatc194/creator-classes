@@ -78,7 +78,10 @@ class MyMaterialAPIView(APIView):
     serializer_class = MaterialSerializer
     permission_classes = (IsAccountOwner, IsCreator)
     def get(self, request, format=None):
-        material = Material.objects.filter(active=True)
-        serializer = self.serializer_class(material, many=True, context={"request": request})
+        materials = Material.objects.filter(active=True, creator=request.user.pk)
+        if 'category' in request.GET:
+            materials = materials.filter(material_category=request.GET['category'])
+
+        serializer = self.serializer_class(materials, many=True, context={"request": request})
         message = "Materials fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)

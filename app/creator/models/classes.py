@@ -21,7 +21,7 @@ class CreatorClass(ActivityTracking):
 
 
 class ClassKeyword(ActivityTracking):
-    keyword = models.ForeignKey("customadmin.AdminKeyword", on_delete=models.CASCADE)
+    keyword = models.ForeignKey("customadmin.AdminKeyword", on_delete=models.CASCADE, null=True, blank=True)
     creator_class = models.ForeignKey("CreatorClass", on_delete=models.CASCADE, related_name="keyword_for")
 
     def __str__(self):
@@ -46,7 +46,7 @@ class ClassCovers(ActivityTracking):
         ordering = ["-created_at"]
 
 
-class ClassMaterials(ActivityTracking):
+class ClassMaterial(ActivityTracking):
     creator_class = models.ForeignKey("CreatorClass", on_delete=models.CASCADE)
     class_material = models.ForeignKey("Material", on_delete=models.CASCADE)
 

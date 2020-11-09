@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
-from ..serializers import AddClassSerializer, ClassListingSerializer
+from ..serializers import AddClassSerializer, ClassListingSerializer, ClassDetailSerializer, AdminKeywordSerializer
 from ..models import Creator, CreatorClass
+from customadmin.models import AdminKeyword
 from creator_class.helpers import custom_response, serialized_response, get_object
-from rest_framework import status, parsers, renderers
-from django.contrib.auth import authenticate, login, logout
+from rest_framework import status, renderers
 from creator_class.permissions import IsAccountOwner, IsCreator
 
 
@@ -64,5 +64,32 @@ class MyClassListingAPIView(APIView):
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 
 
+class ClassDetailAPIView(APIView):
+    """
+    Class detail view
+    """
+    serializer_class = ClassDetailSerializer
+    permission_classes = ()
+
+    def get(self, request, pk):
+        creator_class = CreatorClass.objects.filter(active=True, pk=pk)
+        if not creator_class:
+            message = "Class not found"
+            return custom_response(True, status.HTTP_400_BAD_REQUEST, message)  
+        serializer = self.serializer_class(creator_class[0],context={"request": request})
+        message = "Class fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 
 
+class KeywordsAPIView(APIView):
+    """
+    Keyword view
+    """
+    serializer_class = AdminKeywordSerializer
+    permission_classes = ()
+
+    def get(self, request):
+        keywords = AdminKeyword.objects.filter(active=True)
+        serializer = self.serializer_class(keywords, many=True, context={"request": request})
+        message = "Keywords fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
