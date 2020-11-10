@@ -44,7 +44,7 @@ class AddClassSerializer(serializers.ModelSerializer):
             for class_material in class_materials:
                 material = Material.objects.filter(pk=class_material)
                 if material:
-                    ClassMaterial.objects.create(creator_class=creator_class, class_material=material)
+                    ClassMaterial.objects.create(creator_class=creator_class, class_material=material[0])
 
         creator_class.class_keywords = class_keywords
         creator_class.class_covers = class_covers
@@ -73,7 +73,7 @@ class AddClassSerializer(serializers.ModelSerializer):
             for covers in class_covers:
                 ClassCovers.objects.create(covers=covers, creator_class=instance)
 
-        if class_materials:
+        if class_materials: 
             class_materials = class_materials.split(',')
             ClassMaterial.objects.filter(creator_class=instance).delete()
             for class_material in class_materials:
@@ -93,10 +93,13 @@ class ClassListingSerializer(serializers.ModelSerializer):
     """
     avg_rating = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
+    creator_name = serializers.SerializerMethodField()
+    is_favourite = serializers.SerializerMethodField()
+    creator_profile_image = serializers.SerializerMethodField('get_profile_image_url')
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'title', 'thumbnail_file', 'class_file', 'avg_rating', 'total_rating']
+        fields = ['id', 'title', 'thumbnail_file', 'class_file', 'avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'created_at', 'is_favourite']
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)
@@ -108,6 +111,22 @@ class ClassListingSerializer(serializers.ModelSerializer):
     def get_total_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance).count()
         return ratings
+
+    def get_creator_name(self, instance):
+        return f"{instance.creator.first_name} {instance.creator.last_name}"
+
+    def get_is_favourite(self, instance):
+        user = self.context['request'].user
+        if not user.is_anonymous:
+            is_favourite = FavouriteClass.objects.filter(creator_class=instance, user=user)
+            return True if is_favourite else False
+        return False
+
+    def get_profile_image_url(self, creator_class):
+        request = self.context.get('request')
+        if creator_class.creator.profile_image:
+            profile_image_url = creator_class.creator.profile_image.url
+            return request.build_absolute_uri(profile_image_url)
 
 
 class ClassMaterialListSerializer(serializers.ModelSerializer):
@@ -198,3 +217,44 @@ class AdminKeywordSerializer(serializers.ModelSerializer):
         model = AdminKeyword
         fields = ['id', 'keyword']
 
+
+class PopularClassListingSerializer(serializers.ModelSerializer):
+    """
+    Class listing serializer
+    """
+    avg_rating = serializers.SerializerMethodField()
+    total_rating = serializers.SerializerMethodField()
+    creator_name = serializers.SerializerMethodField()
+    is_favourite = serializers.SerializerMethodField()
+    creator_profile_image = serializers.SerializerMethodField('get_profile_image_url')
+
+    class Meta:
+        model = CreatorClass
+        fields = ['id', 'title', 'thumbnail_file', 'class_file', 'avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'created_at', 'is_favourite']
+
+    def get_avg_rating(self, instance):
+        ratings = ClassReview.objects.filter(creator_class=instance)
+        sum_ratings = ratings.aggregate(Sum('rating'))
+        if sum_ratings['rating__sum'] and ratings.count():
+            return sum_ratings['rating__sum']/ratings.count()
+        return 0
+
+    def get_total_rating(self, instance):
+        ratings = ClassReview.objects.filter(creator_class=instance).count()
+        return ratings
+
+    def get_creator_name(self, instance):
+        return f"{instance.creator.first_name} {instance.creator.last_name}"
+
+    def get_is_favourite(self, instance):
+        user = self.context['request'].user
+        if not user.is_anonymous:
+            is_favourite = FavouriteClass.objects.filter(creator_class=instance, user=user)
+            return True if is_favourite else False
+        return False
+
+    def get_profile_image_url(self, creator_class):
+        request = self.context.get('request')
+        if creator_class.creator.profile_image:
+            profile_image_url = creator_class.creator.profile_image.url
+            return request.build_absolute_uri(profile_image_url)

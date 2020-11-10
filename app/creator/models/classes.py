@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
-from creator.models import Creator
-from customadmin.models import AdminKeyword
 
 
 class CreatorClass(ActivityTracking):

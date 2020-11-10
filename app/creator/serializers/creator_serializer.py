@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import Creator, CreatorSkill
-from user.models import CreatorReview, User
+from user.models import CreatorReview
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 
@@ -40,22 +40,6 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
 
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
-
-
-# class UserReviewSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'email', 'profile_image']
-
-
-# class CreatorReviewListingSerializer(serializers.ModelSerializer):
-#     """
-#     Creator reviews listing serializer
-#     """
-#     user = UserReviewSerializer()
-#     class Meta:
-#         model = CreatorReview
-#         fields = ['id', 'user', 'review', 'rating']
 
 
 class CreatorProfileDisplaySerializer(serializers.ModelSerializer):

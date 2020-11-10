@@ -4,7 +4,7 @@ from django.conf.urls import url
 
 from . import views
 
- 
+
 urlpatterns = [
     path("profile/", views.CreatorProfileAPI.as_view(), name="creator-profile"),
     

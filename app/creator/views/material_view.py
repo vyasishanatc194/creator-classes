@@ -5,6 +5,7 @@ from creator_class.helpers import custom_response, serialized_response, get_obje
 from rest_framework import status, parsers, renderers
 from creator_class.permissions import IsAccountOwner, IsCreator
 
+NOT_FOUND_MESSAGE = "Material not found!"
 
 class MaterialcategoryListingAPIView(APIView):
     """
@@ -37,8 +38,7 @@ class AddMaterialAPIView(APIView):
         request.data["creator"] = request.user
         material_exists = Material.objects.filter(pk=pk, active=True)
         if not material_exists:
-            message = "Material not found!"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, NOT_FOUND_MESSAGE)
 
         message = "Material updated successfully!"
         serializer = self.serializer_class(material_exists[0], data=request.data, partial=True, context={"request": request})
@@ -52,8 +52,7 @@ class AddMaterialAPIView(APIView):
     def delete(self, request, pk, format=None):
         material_exists = Material.objects.filter(pk=pk, active=True)
         if not material_exists:
-            message = "Material not found!"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, NOT_FOUND_MESSAGE)
         
         material_exists[0].active=False
         material_exists[0].save()
@@ -64,8 +63,7 @@ class AddMaterialAPIView(APIView):
     def get(self, request, pk, format=None):
         material_exists = Material.objects.filter(pk=pk, active=True)
         if not material_exists:
-            message = "Material not found!"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, NOT_FOUND_MESSAGE)
         serializer = self.serializer_class(material_exists[0], context={"request": request})
         message = "Material fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)

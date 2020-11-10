@@ -4,7 +4,7 @@ from django.conf.urls import url
 
 from . import views
 
- 
+
 urlpatterns = [
     path("class/", views.AddClassAPIView.as_view(), name="add-class"),
     path("class/<int:pk>/", views.AddClassAPIView.as_view(), name="update-class"),

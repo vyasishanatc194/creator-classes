@@ -43,7 +43,7 @@ class AddClassAPIView(APIView):
         if not class_exists:
             message = "Class not found!"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-        
+
         class_exists[0].active=False
         class_exists[0].save()
         message = "Class deleted successfully!"
@@ -75,7 +75,7 @@ class ClassDetailAPIView(APIView):
         creator_class = CreatorClass.objects.filter(active=True, pk=pk)
         if not creator_class:
             message = "Class not found"
-            return custom_response(True, status.HTTP_400_BAD_REQUEST, message)  
+            return custom_response(True, status.HTTP_400_BAD_REQUEST, message)
         serializer = self.serializer_class(creator_class[0],context={"request": request})
         message = "Class fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)

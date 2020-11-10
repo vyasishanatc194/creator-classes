@@ -4,7 +4,7 @@ from django.conf.urls import url
 
 from . import views
 
- 
+
 urlpatterns = [
     path("material-category/", views.MaterialcategoryListingAPIView.as_view(), name="material-category"),
     path("material/", views.AddMaterialAPIView.as_view(), name="material"),
