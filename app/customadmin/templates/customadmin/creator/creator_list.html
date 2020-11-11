@@ -33,6 +33,7 @@
                             <th>Last Name</th>
                             <th>Profile Image</th>
                             <th>Key Skill</th>
+                            <th>Active</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -44,6 +45,7 @@
                             <th>Last Name</th>
                             <th>Profile Image</th>
                             <th>Key Skill</th>
+                            <th>Active</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -60,6 +62,14 @@
                             <td>No image</td>
                             {% endif %}
                             <td>{{ o.key_skill }}</td>
+                            <td>    
+                                {% show_check o.is_active %}
+                                <!-- {% if o.is_active %}
+                                <a href="#" class="btn btn-primary btn-xs" onclick="get_id('{{ o.pk }}')">Declined</a>    
+                                {% else %}
+                                <a href="#" class="btn btn-primary btn-xs" onclick="get_id('{{ o.pk }}')">Approved</a>
+                                {% endif %} -->
+                            </td>
                             </td>
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_actions.html" %}

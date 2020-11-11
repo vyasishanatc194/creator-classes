@@ -6,75 +6,76 @@ from customadmin.views.generic import (
     MyListView,
     MyLoginRequiredView,
     MyUpdateView,
+    MyView,
 )
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from customadmin.forms import TestimonialChangeForm, TestimonialCreationForm
+from customadmin.forms import AdminKeywordChangeForm, AdminKeywordCreationForm
 from django.shortcuts import reverse
 
-from ..models import Testimonial
+from ..models import AdminKeyword
 
 # -----------------------------------------------------------------------------
-# Testimonials
+# AdminKeywords
 # -----------------------------------------------------------------------------
 
-class TestimonialListView(MyListView):
-    """View for User listing"""
+class AdminKeywordListView(MyListView):
+    """View for AdminKeyword listing"""
 
     # paginate_by = 25
     ordering = ["id"]
-    model = Testimonial
+    model = AdminKeyword
     queryset = model.objects.all()
-    template_name = "customadmin/testimonials/testimonial_list.html"
-    permission_required = ("customadmin.view_testimonial",)
+    template_name = "customadmin/keywords/keyword_list.html"
+    permission_required = ("customadmin.view_admin_keyword",)
 
     def get_queryset(self):
         return self.model.objects.all().exclude(active=False)
 
-class TestimonialCreateView(MyCreateView):
+class AdminKeywordCreateView(MyCreateView):
     """View to create User"""
 
-    model = Testimonial
-    form_class = TestimonialCreationForm
-    template_name = "customadmin/testimonials/testimonial_form.html"
-    permission_required = ("customadmin.add_testimonial",)
+    model = AdminKeyword
+    form_class = AdminKeywordCreationForm
+    template_name = "customadmin/keywords/keyword_form.html"
+    permission_required = ("customadmin.add_admin_keyword",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:testimonial-list")
+        return reverse("customadmin:adminkeyword-list")
 
-class TestimonialUpdateView(MyUpdateView):
+class AdminKeywordUpdateView(MyUpdateView):
     """View to update User"""
 
-    model = Testimonial
+    model = AdminKeyword
 
-    form_class = TestimonialChangeForm
-    template_name = "customadmin/testimonials/testimonial_form.html"
-    permission_required = ("customadmin.change_testimonial",)
+    form_class = AdminKeywordChangeForm
+    template_name = "customadmin/keywords/keyword_form.html"
+    permission_required = ("customadmin.change_admin_keyword",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:testimonial-list")
+        return reverse("customadmin:adminkeyword-list")
 
-class TestimonialDeleteView(MyDeleteView):
+class AdminKeywordDeleteView(MyDeleteView):
     """View to delete User"""
 
-    model = Testimonial
+    model = AdminKeyword
     template_name = "customadmin/confirm_delete.html"
-    permission_required = ("customadmin.delete_testimonial",)
+    permission_required = ("customadmin.delete_admin_keyword",)
 
     def get_success_url(self):
         opts = self.model._meta
-        return reverse("customadmin:testimonial-list")
+        return reverse("customadmin:adminkeyword-list")
 
-class TestimonialAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class AdminKeywordAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
     """Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view."""
 
-    model = Testimonial
-    queryset = Testimonial.objects.all().order_by("created_at")
+    model = AdminKeyword
+    queryset = AdminKeyword.objects.all().order_by("created_at")
 
     def _get_is_superuser(self, obj):
         """Get boolean column markup."""

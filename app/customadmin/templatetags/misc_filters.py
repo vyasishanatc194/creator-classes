@@ -59,6 +59,8 @@ def admin_urlname(value, arg):
         pattern = "%s:%s-%s" % ('customadmin', 'materialcategory', arg)
     if value.model_name == 'material':
         pattern = "%s:%s-%s" % ('customadmin', 'material', arg)
+    if value.model_name == 'onetoonesession':
+        pattern = "%s:%s-%s" % ('customadmin', 'onetoonesession', arg)
     # print('---------------------------------------------------------------------------------',pattern)
     return pattern
 

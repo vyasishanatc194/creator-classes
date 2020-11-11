@@ -8,9 +8,9 @@
 {% block page_content %}
     {% csrf_token %}
 
+    
 
-
-    {% include "customadmin/includes/list_header_card.html" with title="Create a new user" subtitle="Create a new user and assign with individual or group permissions." show_button=True %}
+    {% include "customadmin/includes/list_header_card.html" with title="Create a new creator review" subtitle="Create a new creator review with rating." show_button=True %}
 
     <div class="ibox float-e-margins">
         {% comment %} <div class="ibox-title">
@@ -27,44 +27,23 @@
                 <table class="table table-striped table-bordered table-hover text-center" id="{{ opts.model_name }}-table">
                     <thead>
                         <tr>
-                            <th>Email</th>
-                            <th>Username</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Profile Image</th>
-                            <th>Active</th>
-                            <th>Superuser</th>
+                            <th>Creator</th>
+                            <th>Amount</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Email</th>
-                            <th>Username</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Profile Image</th>
-                            <th>Active</th>
-                            <th>Superuser</th>
+                            <th>Creator</th>
+                            <th>Amount</th>
                             <th></th>
                         </tr>
                     </tfoot>
                     <tbody>
                         {% for o in object_list %}
                         <tr>
-                            <td>{{ o.email }}</td>
-                            <td>{{ o.username }}</td>
-                            <td>{{ o.first_name }}</td>
-                            <td>{{ o.last_name }}</td>
-                            {% if o.profile_image %}
-                            <td><img src="{{MEDIA_URL}}{{ o.profile_image.url }}" alt="no image" height="80px" width="80px"></td>
-                            {% else %}
-                            <td>No image</td>
-                            {% endif %}
-                            <td>{% show_check o.is_active %}</td>
-                            <td>
-                                {% show_check o.is_superuser %}
-                            </td>
+                            <td>{{ o.creator }}</td>
+                            <td>{{ o.amount }}</td>
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_actions.html" %}
                             </td>
@@ -87,7 +66,7 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.users.index();
+        userroles.onetoonesessions.index();
     });
 </script>
 {% endblock %}

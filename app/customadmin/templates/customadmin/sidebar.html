@@ -55,6 +55,14 @@
                 </a>
             </li>
             {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'keywords/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:adminkeyword-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Keywords</span>
+                </a>
+            </li>
+            {% endif %}
             
             {% if perms.users or request.user.is_staff %}
             <li {% if 'classes/' in request.path %}class="active" {% endif %}>
@@ -104,6 +112,14 @@
                 <a href="{% url 'customadmin:testimonial-list' %}"> 
                     <i class="fa fa-user fa-fw fa-2x"></i>
                     <span class="nav-label">Testimonials</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'one-to-one-sessions/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:onetoonesession-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">OneToOne Sessions</span>
                 </a>
             </li>
             {% endif %}

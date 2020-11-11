@@ -5,13 +5,12 @@
 {% load misc_filters %}
 {% load crispy_forms_tags %}
 {% load i18n %}
-
+<!-- {% url 'customadmin:creatorclass-create' %} -->
 
 {% block page_content %}
     <form id="{{ opts.model_name }}-form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
 
         {% include "customadmin/partials/form_hidden_fields.html" %}
-
 
         <div class="ibox float-e-margins">
 
@@ -20,12 +19,14 @@
             <div class="ibox-content">
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" id="id_material">
                         {{ form.creator|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
                         {{ form.title|as_crispy_field }}
                     </div>
+                    
+                    
                 </div>
 
                 <br>
@@ -38,7 +39,6 @@
                         {{ form.class_file|as_crispy_field }}
                     </div>
                 </div>
-               
 
                 
             </div>
@@ -48,15 +48,17 @@
 
 
 
+
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Keywords & Covers" icon_class="fas fa-user" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Keywords" icon_class="fas fa-user" only %}
 
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-6">
                   
                         {% for formset in inlines %}
+                        {% if formset.prefix == 'keyword_for' %}
                         <div  class="form-group">
                             <table>
                                 
@@ -66,6 +68,7 @@
                                         <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
                                             {% for field in form.visible_fields %}
                                             <td>
+                                                
                                                 {# Include the hidden fields in the form #}
                                                 {% if forloop.first %}
                                                     {% for hidden in form.hidden_fields %}
@@ -81,33 +84,94 @@
                                 
                             </table>
                         </div>
+                        {% endif %}
                     {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
+        <div class="ibox float-e-margins">
 
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Covers" icon_class="fas fa-user" only %}
 
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                  
+                        {% for formset in inlines %}
+                        {% if formset.prefix == 'classcovers_set' %}
+                        <div  class="form-group">
+                            <table>
+                                
+                                {{ formset.management_form|crispy }}
+                                
+                                {% for form in formset.forms %}
+                                        <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
+                                            {% for field in form.visible_fields %}
+                                            <td>
+                                                
+                                                {# Include the hidden fields in the form #}
+                                                {% if forloop.first %}
+                                                    {% for hidden in form.hidden_fields %}
+                                                        {{ hidden }}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {{ field.errors.as_ul }}
+                                                {{ field|as_crispy_field }}
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                {% endfor %}
+                                
+                            </table>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ibox float-e-margins">
 
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Materials" icon_class="fas fa-user" only %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                  
+                        {% for formset in inlines %}
+                        {% if formset.prefix == 'classmaterial_set' %}
+                        <div  class="form-group">
+                            <table>
+                                
+                                {{ formset.management_form|crispy }}
+                                
+                                {% for form in formset.forms %}
+                                        <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
+                                            {% for field in form.visible_fields %}
+                                            <td>
+                                                
+                                                {# Include the hidden fields in the form #}
+                                                {% if forloop.first %}
+                                                    {% for hidden in form.hidden_fields %}
+                                                        {{ hidden }}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {{ field.errors.as_ul }}
+                                                {{ field|as_crispy_field }}
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                {% endfor %}
+                                
+                            </table>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
         {% include "customadmin/partials/form_footer.html" %}
 
     </form>
@@ -139,11 +203,42 @@
 
         });
     });
+    $(function() {
+        $('.formset_row-classmaterial_set').formset({
+            addText: 'Add Another',
+            deleteText: 'Remove',
+            prefix: 'creator',
+            addCssClass: 'add-row btn btn-success',
+            deleteCssClass: 'hidden btn-delete btn btn-danger',
+
+        });
+    });
 </script>
 <script src="{% static 'customadmin/js/userroles.js' %}"></script>
 <script>
     $(function() {
-        userroles.creators.details();
+        userroles.creatorclasses.details();
     });
+</script>
+<script>
+    $("#id_material").click(function () {
+        var url = "{% url opts|admin_urlname:'get-materials' %}"
+        var creatorId = document.getElementById('id_creator')
+      $.ajax({
+        url : url,
+        data: {
+          'creator_id': $(creatorId).val()
+        },
+        success: function (data) {
+            var select = $("tbody > tr> td> div > div > #id_classmaterial_set-0-class_material")
+            var i;
+            select.empty();
+            select.append(new Option("",""))
+            for(i=0; i<=data.length; i++){
+                $(`tbody > tr> td> div > div > #id_classmaterial_set-0-class_material`).append(new Option(data[i].title, data[i].title))
+            };
+        }
+    });
+});
 </script>
 {% endblock %}

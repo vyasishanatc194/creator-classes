@@ -1,76 +1,43 @@
 # -*- coding: utf-8 -*-
 from customadmin.mixins import HasPermissionsMixin
 from customadmin.views.generic import (
-    MyCreateView,
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView
 )
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AdminPasswordChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Group
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.template.loader import get_template
-from django.utils.text import Truncator
-from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
-from customadmin.forms import MyCreatorClassChangeForm, MyCreatorClassCreationForm, ClassKeywordCreationForm, ClassKeywordChangeForm, ClassCoversCreationForm, ClassCoversChangeForm
-from django.shortcuts import reverse
+from customadmin.forms import MyCreatorClassChangeForm, MyCreatorClassCreationForm, ClassKeywordCreationForm, ClassKeywordChangeForm, ClassCoversCreationForm, ClassCoversChangeForm, ClassMaterialCreationForm, ClassMaterialChangeForm
+from django.shortcuts import reverse, render
 
-from creator.models import CreatorClass, ClassKeyword, ClassCovers
+from creator.models import CreatorClass, ClassKeyword, ClassCovers, ClassMaterial
 
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
+from extra_views import InlineFormSetFactory
 
+from django.contrib import messages
 
-import csv
+MSG_CREATED = '"{}" created successfully.'
+MSG_UPDATED = '"{}" updated successfully.'
+MSG_DELETED = '"{}" deleted successfully.'
+MSG_CANCELED = '"{}" canceled successfully.'
 
-
-# User = get_user_model()
-
-
-# Export CSV FILE
-
-def creator_export_product_csv(request):
-
-    output = []
-    response = HttpResponse (content_type='text/csv')
-    filename = u"Creator.csv"
-    response['Content-Disposition'] = u'attachment; filename="{0}"'.format(filename)
-   
-    writer = csv.writer(response)
-    query_set = Creator.objects.all()
-
-    #Header
-    writer.writerow(['Email', "Username",'Firstname', 'Lastname', 'Profile Image','Description','is_active',"is_staff", "is_superuser","Key Skill","Instagram", "LinkedIn", "Twitter", "Google", "Facebook"])
-    for creator in query_set:
-        if creator.groups.all():
-            gp = creator.groups.all()[0].name
-        else:
-            gp = None 
-
-        if not creator.profile_image:
-            avatar = None
-        else:
-            avatar = creator.profile_image.url
-
-
-        output.append([creator.email, creator.username, creator.first_name, creator.last_name,request.build_absolute_uri(avatar), creator.description, creator.is_active, creator.is_staff, creator.is_superuser, creator.key_skill, creator.instagram_url, creator.linkedin_url, creator.twitter_url, creator.google_url, creator.facebook_url ,])
-    #CSV Data
-    writer.writerows(output)
-    return response
-
-
-
+from creator.models import Material
+import json
+def GetMaterials(request):
+    creator_id = request.GET.get('creator_id')
+    print(creator_id,'........................................')
+    materials = Material.objects.filter(creator=creator_id)
+    # materials = Material.objects.filter(creator=creator_id).values()/
+    return JsonResponse(materials, content_type="application/json", safe=False)
 
 # -----------------------------------------------------------------------------
-# Creators
+# Creator Classes
 # -----------------------------------------------------------------------------
 
 class CreatorClassListView(MyListView):
@@ -86,6 +53,13 @@ class CreatorClassListView(MyListView):
     def get_queryset(self):
         return self.model.objects.all().exclude(active=False)
 
+
+class ClassMaterialInline(InlineFormSetFactory):
+    """Inline view to show Newsimage within the Parent View"""
+
+    model = ClassMaterial
+    form_class = ClassMaterialCreationForm
+    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
 
 class ClassKeywordInline(InlineFormSetFactory):
     """Inline view to show Newsimage within the Parent View"""
@@ -106,21 +80,29 @@ class CreatorClassCreateView(MyNewFormsetCreateView):
 
     model = CreatorClass
 
-    inlines = [ClassKeywordInline,ClassCoversInline, ]
+    inlines = [ClassKeywordInline,ClassCoversInline, ClassMaterialInline]
 
     form_class = MyCreatorClassCreationForm
     template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.add_creator_class",)
 
     def get_success_url(self):
+        messages.success(self.request, MSG_CREATED.format(self.object))
         opts = self.model._meta
-        return reverse("customadmin:creatorclass-list")
+        return reverse("customadmin:creatorclass-list") 
 
 class ClassKeywordUpdateInline(InlineFormSetFactory):
     """View to update Newsimage which is a inline view"""
 
     model = ClassKeyword
     form_class = ClassKeywordChangeForm
+    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+
+class ClassMaterialUpdateInline(InlineFormSetFactory):
+    """View to update Newsimage which is a inline view"""
+
+    model = ClassMaterial
+    form_class = ClassMaterialChangeForm
     factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
 
 class ClassCoversUpdateInline(InlineFormSetFactory):
@@ -135,7 +117,7 @@ class CreatorClassUpdateView(MyNewFormsetUpdateView):
 
     model = CreatorClass
 
-    inlines = [ClassKeywordUpdateInline,ClassCoversUpdateInline, ]
+    inlines = [ClassKeywordUpdateInline,ClassCoversUpdateInline,ClassMaterialInline ]
 
 
     form_class = MyCreatorClassChangeForm
@@ -144,6 +126,7 @@ class CreatorClassUpdateView(MyNewFormsetUpdateView):
 
 
     def get_success_url(self):
+        messages.success(self.request, MSG_UPDATED.format(self.object))
         opts = self.model._meta
         return reverse("customadmin:creatorclass-list")
 

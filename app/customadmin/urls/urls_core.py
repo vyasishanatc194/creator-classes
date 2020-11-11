@@ -1,5 +1,4 @@
 from django.urls import path, include
-from django.views.generic import TemplateView
 from . import views
 
 app_name='customadmin'
@@ -8,7 +7,6 @@ urlpatterns = [
     
     path("", views.IndexView.as_view(), name="index"),
 
-    # path("", TemplateView.as_view(template_name="core/home.html"), name="home"),
 
     # User
     path("users/", views.UserListView.as_view(), name="user-detail"),
@@ -22,6 +20,8 @@ urlpatterns = [
 
     path("export_user_csv", views.export_user_csv, name="export_user_csv"),
 
+
+    
 
 ]
 
@@ -41,12 +41,22 @@ urlpatterns +=[
     path("ajax-creators", views.CreatorAjaxPagination.as_view(), name="creator-list-ajax"),
 #------------------------------------------------------------------------------------------------------
     
+    path("keywords/", views.AdminKeywordListView.as_view(), name="adminkeyword-detail"),
+    path("keywords/", views.AdminKeywordListView.as_view(), name="adminkeyword-list"),
+    path("keywords/create/", views.AdminKeywordCreateView.as_view(), name="adminkeyword-create"),
+    path("keywords/<int:pk>/update/", views.AdminKeywordUpdateView.as_view(), name="adminkeyword-update"),
+    path("keywords/<int:pk>/delete/", views.AdminKeywordDeleteView.as_view(), name="adminkeyword-delete"),
+    path("ajax-keywords", views.AdminKeywordAjaxPagination.as_view(), name="adminkeyword-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
     path("classes/", views.CreatorClassListView.as_view(), name="creatorclass-detail"),
     path("classes/", views.CreatorClassListView.as_view(), name="creatorclass-list"),
     path("classes/create/", views.CreatorClassCreateView.as_view(), name="creatorclass-create"),
     path("classes/<int:pk>/update/", views.CreatorClassUpdateView.as_view(), name="creatorclass-update"),
     path("classes/<int:pk>/delete/", views.CreatorClassDeleteView.as_view(), name="creatorclass-delete"),
     path("ajax-classes", views.CreatorClassAjaxPagination.as_view(), name="creatorclass-list-ajax"),
+    path("get-materials/", views.GetMaterials, name="creatorclass-get-materials"),
 #------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
     
@@ -92,6 +102,15 @@ urlpatterns +=[
     path("testimonials/<int:pk>/update/", views.TestimonialUpdateView.as_view(), name="testimonial-update"),
     path("testimonials/<int:pk>/delete/", views.TestimonialDeleteView.as_view(), name="testimonial-delete"),
     path("ajax-testimonials", views.TestimonialAjaxPagination.as_view(), name="testimonial-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("one-to-one-sessions/", views.OneToOneSessionListView.as_view(), name="onetoonesession-detail"),
+    path("one-to-one-sessions/", views.OneToOneSessionListView.as_view(), name="onetoonesession-list"),
+    path("one-to-one-sessions/create/", views.OneToOneSessionCreateView.as_view(), name="onetoonesession-create"),
+    path("one-to-one-sessions/<int:pk>/update/", views.OneToOneSessionUpdateView.as_view(), name="onetoonesession-update"),
+    path("one-to-one-sessions/<int:pk>/delete/", views.OneToOneSessionDeleteView.as_view(), name="onetoonesession-delete"),
+    path("ajax-one-to-one-sessions", views.OneToOneSessionAjaxPagination.as_view(), name="onetoonesession-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 
 ]

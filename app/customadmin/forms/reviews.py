@@ -15,8 +15,8 @@ class MyCreatorReviewCreationForm(forms.ModelForm):
     class Meta:
         model = CreatorReview
         fields = [
-            "user",
             "creator",
+            "user",
             "review",
             "rating",
         ]
@@ -28,11 +28,26 @@ class MyCreatorReviewCreationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MyCreatorReviewCreationForm, self).clean()
+        creator = cleaned_data.get("creator")
+        user = cleaned_data.get("user")
         rating = cleaned_data.get("rating")
+        review = cleaned_data.get("review")
 
-        if float(rating) < 0.0 or float(rating) > 10.0 :
+        if not creator :
             raise forms.ValidationError(
-                "Rating must be grater then and equal to 0 and less than and equal to 10."
+                "Please select creator."
+            )
+        if not user :
+            raise forms.ValidationError(
+                "Please select user."
+            )
+        if not review :
+            raise forms.ValidationError(
+                "Please add review for creator."
+            )
+        if float(rating) < 0.0 or float(rating) > 5.0 :
+            raise forms.ValidationError(
+                "Rating must be grater then and equal to 0 and less than and equal to 5."
             )
 
     def save(self, commit=True):
@@ -48,8 +63,8 @@ class MyCreatorReviewChangeForm(forms.ModelForm):
     class Meta:
         model = CreatorReview
         fields = (
-            "user",
             "creator",
+            "user",
             "review",
             "rating",
         )
@@ -61,11 +76,27 @@ class MyCreatorReviewChangeForm(forms.ModelForm):
     
     def clean(self):
         cleaned_data = super(MyCreatorReviewChangeForm, self).clean()
+        creator = cleaned_data.get("creator")
+        user = cleaned_data.get("user")
         rating = cleaned_data.get("rating")
+        review = cleaned_data.get("review")
 
-        if float(rating) < 0.0 or float(rating) > 10.0 :
+        if not creator :
             raise forms.ValidationError(
-                "Rating must be grater then and equal to 0 and less than and equal to 10."
+                "Please select creator."
+            )
+        if not user :
+            raise forms.ValidationError(
+                "Please select user."
+            )
+        if not review :
+            raise forms.ValidationError(
+                "Please add review for creator."
+            )
+
+        if float(rating) < 0.0 or float(rating) > 5.0 :
+            raise forms.ValidationError(
+                "Rating must be grater then and equal to 0 and less than and equal to 5."
             )
 
     def save(self, commit=True):
@@ -85,8 +116,8 @@ class MyClassReviewCreationForm(forms.ModelForm):
     class Meta:
         model = ClassReview
         fields = [
-            "user",
             "creator_class",
+            "user",
             "review",
             "rating",
         ]
@@ -98,11 +129,27 @@ class MyClassReviewCreationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MyClassReviewCreationForm, self).clean()
+        creator_class = cleaned_data.get("creator_class")
+        user = cleaned_data.get("user")
         rating = cleaned_data.get("rating")
+        review = cleaned_data.get("review")
+
+        if not creator_class :
+            raise forms.ValidationError(
+                "Please select creator class."
+            )
+        if not user :
+            raise forms.ValidationError(
+                "Please select user."
+            )
+        if not review :
+            raise forms.ValidationError(
+                "Please add review for creator."
+            )
 
         if float(rating) < 0.0 or float(rating) > 5.0 :
             raise forms.ValidationError(
-                "Rating must be grater then and equal to 0 and less than and equal to 5."
+                "Rating must be grater than and equal to 0 and less than and equal to 5."
             )
 
     def save(self, commit=True):
@@ -118,8 +165,8 @@ class MyClassReviewChangeForm(forms.ModelForm):
     class Meta:
         model = ClassReview
         fields = (
-            "user",
             "creator_class",
+            "user",
             "review",
             "rating",
         )
@@ -131,11 +178,27 @@ class MyClassReviewChangeForm(forms.ModelForm):
     
     def clean(self):
         cleaned_data = super(MyClassReviewChangeForm, self).clean()
+        creator_class = cleaned_data.get("creator_class")
+        user = cleaned_data.get("user")
         rating = cleaned_data.get("rating")
+        review = cleaned_data.get("review")
+
+        if not creator_class :
+            raise forms.ValidationError(
+                "Please select creator class."
+            )
+        if not user :
+            raise forms.ValidationError(
+                "Please select user."
+            )
+        if not review :
+            raise forms.ValidationError(
+                "Please add review for creator."
+            )
 
         if float(rating) < 0.0 or float(rating) > 5.0 :
             raise forms.ValidationError(
-                "Rating must be grater then and equal to 0 and less than and equal to 5."
+                "Rating must be grater than and equal to 0 and less than and equal to 5."
             )
 
     def save(self, commit=True):

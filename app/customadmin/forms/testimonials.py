@@ -15,9 +15,9 @@ class TestimonialCreationForm(forms.ModelForm):
     class Meta():
         model = Testimonial
         fields = [
-            "image",
             "name",
             "email",
+            "image",
             "testimonial_text",
             "rating",
         ]
@@ -29,11 +29,31 @@ class TestimonialCreationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(TestimonialCreationForm, self).clean()
+        name = cleaned_data.get("name")
+        email = cleaned_data.get("email")
+        image = cleaned_data.get("image")
+        testimonial_text = cleaned_data.get("testimonial_text")
         rating = cleaned_data.get("rating")
 
+        if not name :
+            raise forms.ValidationError(
+                "Please add name."
+            )
+        if not email :
+            raise forms.ValidationError(
+                "Please add email."
+            )
+        if not image :
+            raise forms.ValidationError(
+                "Please add profile image."
+            )
+        if not testimonial_text :
+            raise forms.ValidationError(
+                "Please add testimonial text."
+            )
         if float(rating) < 0.0 or float(rating) > 5.0 :
             raise forms.ValidationError(
-                "Rating must be grater then and equal to 0 and less than and equal to 5."
+                "Rating must be grater than and equal to 0 and less than and equal to 5."
             )
 
 
@@ -53,20 +73,40 @@ class TestimonialChangeForm(forms.ModelForm):
         model = Testimonial
 
         fields = [
-            "image",
             "name",
             "email",
+            "image",
             "testimonial_text",
             "rating",
         ]
 
     def clean(self):
-        cleaned_data = super(TestimonialChangeForm, self).clean()
+        cleaned_data = super(TestimonialCreationForm, self).clean()
+        name = cleaned_data.get("name")
+        email = cleaned_data.get("email")
+        image = cleaned_data.get("image")
+        testimonial_text = cleaned_data.get("testimonial_text")
         rating = cleaned_data.get("rating")
 
-        if float(rating) < 0.0 or float(rating) > 10.0 :
+        if not name :
             raise forms.ValidationError(
-                "Rating must be grater then and equal to 0 and less than and equal to 10."
+                "Please add name."
+            )
+        if not email :
+            raise forms.ValidationError(
+                "Please add email."
+            )
+        if not image :
+            raise forms.ValidationError(
+                "Please add profile image."
+            )
+        if not testimonial_text :
+            raise forms.ValidationError(
+                "Please add testimonial text."
+            )
+        if float(rating) < 0.0 or float(rating) > 5.0 :
+            raise forms.ValidationError(
+                "Rating must be grater than and equal to 0 and less than and equal to 5."
             )
 
     def save(self, commit=True):
