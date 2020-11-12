@@ -25,6 +25,8 @@ class MyCreatorReviewCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
         print(*args)
+        self.fields['creator'].required = False
+        self.fields['user'].required = False
 
     def clean(self):
         cleaned_data = super(MyCreatorReviewCreationForm, self).clean()
@@ -73,6 +75,8 @@ class MyCreatorReviewChangeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
         print(*args)
+        self.fields['creator'].required = False
+        self.fields['user'].required = False
     
     def clean(self):
         cleaned_data = super(MyCreatorReviewChangeForm, self).clean()
@@ -126,6 +130,8 @@ class MyClassReviewCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
         print(*args)
+        self.fields['creator_class'].required = False
+        self.fields['user'].required = False
 
     def clean(self):
         cleaned_data = super(MyClassReviewCreationForm, self).clean()
@@ -175,6 +181,8 @@ class MyClassReviewChangeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
         print(*args)
+        self.fields['creator_class'].required = False
+        self.fields['user'].required = False
     
     def clean(self):
         cleaned_data = super(MyClassReviewChangeForm, self).clean()

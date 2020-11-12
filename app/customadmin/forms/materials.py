@@ -27,6 +27,13 @@ class MyMaterialCategoryCreationForm(forms.ModelForm):
         cleaned_data = super(MyMaterialCategoryCreationForm, self).clean()
         category_title = cleaned_data.get("category_title")
         category_image = cleaned_data.get("category_image")
+
+        instance = MaterialCategory.objects.filter(category_title=category_title).first()
+
+        if instance:
+            raise forms.ValidationError(
+                "Category Title already exists."
+            )
         if not category_title:
             raise forms.ValidationError(
                 "Please add category title"
@@ -59,6 +66,11 @@ class MyMaterialCategoryChangeForm(forms.ModelForm):
         cleaned_data = super(MyMaterialCategoryChangeForm, self).clean()
         category_title = cleaned_data.get("category_title")
         category_image = cleaned_data.get("category_image")
+
+        if MaterialCategory.objects.filter(category_title=category_title).exclude(pk=self.instance.id).count() > 0:
+            raise forms.ValidationError(
+                "Material Category already exists."
+            )
         if not category_title:
             raise forms.ValidationError(
                 "Please add category title"
@@ -92,8 +104,11 @@ class MyMaterialCreationForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
+        # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         print(*args)
+        self.fields['creator'].required = False
+        self.fields['material_category'].required = False
 
     def clean(self):
         cleaned_data = super(MyMaterialCreationForm, self).clean()
@@ -102,13 +117,21 @@ class MyMaterialCreationForm(forms.ModelForm):
         title = cleaned_data.get("title")
         thumbnail_file = cleaned_data.get("thumbnail_file")
         material_file = cleaned_data.get("material_file")
+
+        instance = Material.objects.filter(title=title, creator=creator).first()
+
+        if instance:
+            raise forms.ValidationError(
+                "Enter title present in material list for selected creator.Please add another title."
+            )
+
         if not creator:
             raise forms.ValidationError(
-                "Please add creator for material"
+                "Please select creator for material"
             )
         if not material_category:
             raise forms.ValidationError(
-                "Please add material category for material"
+                "Please select material category for material"
             )
         if not title:
             raise forms.ValidationError(
@@ -142,6 +165,14 @@ class MyMaterialChangeForm(forms.ModelForm):
             "material_file",
         )
 
+    
+    def __init__(self, *args, **kwargs):
+        # self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+        print(*args)
+        self.fields['creator'].required = False
+        self.fields['material_category'].required = False
+
     def clean(self):
         cleaned_data = super(MyMaterialChangeForm, self).clean()
         creator = cleaned_data.get("creator")
@@ -149,13 +180,18 @@ class MyMaterialChangeForm(forms.ModelForm):
         title = cleaned_data.get("title")
         thumbnail_file = cleaned_data.get("thumbnail_file")
         material_file = cleaned_data.get("material_file")
+
+        if Material.objects.filter(creator=creator, title=title).exclude(pk=self.instance.id).count() > 0:
+            raise forms.ValidationError(
+                "Material already exists with this creator."
+            )
         if not creator:
             raise forms.ValidationError(
-                "Please add creator for material"
+                "Please select creator for material"
             )
         if not material_category:
             raise forms.ValidationError(
-                "Please add material category for material"
+                "Please select material category for material"
             )
         if not title:
             raise forms.ValidationError(

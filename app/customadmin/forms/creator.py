@@ -46,15 +46,47 @@ class MyCreatorCreationForm(forms.ModelForm):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         print(*args)
+        self.fields['username'].required = False
+        self.fields['password'].required = False
+        self.fields['confirm_password'].required = False
 
     def clean(self):
         cleaned_data = super(MyCreatorCreationForm, self).clean()
+        email = cleaned_data.get("email")
+        username = cleaned_data.get("username")
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
 
+
+        if not email:
+            raise forms.ValidationError(
+                "Please enter email"
+            )
+        if not username:
+            raise forms.ValidationError(
+                "Please enter username"
+            )
+        if not password:
+            raise forms.ValidationError(
+                "Please enter password"
+            )
+        if not confirm_password:
+            raise forms.ValidationError(
+                "Please enter confirm_password"
+            )
+        if not first_name:
+            raise forms.ValidationError(
+                "Please enter first name"
+            )
+        if not last_name:
+            raise forms.ValidationError(
+                "Please enter last name"
+            )
         if password != confirm_password:
             raise forms.ValidationError(
-                "password and confirm_password does not match"
+                "Password and Confirm_password does not match"
             )
 
     def save(self, commit=True):
@@ -93,6 +125,36 @@ class MyCreatorChangeForm(forms.ModelForm):
             "facebook_url",
         )
 
+    def __init__(self, *args, **kwargs):
+        # self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+        print(*args)
+        self.fields['username'].required = False
+
+    def clean(self):
+        cleaned_data = super(MyCreatorChangeForm, self).clean()
+        email = cleaned_data.get("email")
+        username = cleaned_data.get("username")
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
+
+        if not email:
+            raise forms.ValidationError(
+                "Please enter email"
+            )
+        if not username:
+            raise forms.ValidationError(
+                "Please enter username"
+            )
+        if not first_name:
+            raise forms.ValidationError(
+                "Please enter first name"
+            )
+        if not last_name:
+            raise forms.ValidationError(
+                "Please enter last name"
+            )
+
 # -----------------------------------------------------------------------------
 # Creator Skills
 # -----------------------------------------------------------------------------
@@ -107,8 +169,13 @@ class CreatorSkillCreationForm(forms.ModelForm):
             "creator",
         ]
 
+    def clean(self):
+        cleaned_data = super(CreatorSkillCreationForm, self).clean()
+        skill = cleaned_data.get("skill")
+        creator = cleaned_data.get("creator")
+        print(skill)
+        print(creator)
     
-
     def save(self, commit=True):
         instance = super().save(commit=False)
 

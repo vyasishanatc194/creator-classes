@@ -6,3 +6,4 @@ from .materials import MyMaterialCategoryCreationForm, MyMaterialCategoryChangeF
 from .testimonials import TestimonialCreationForm, TestimonialChangeForm
 from .onetoonesession import OneToOneSessionCreationForm, OneToOneSessionChangeForm, TimeSlotCreationForm, TimeSlotChangeForm
 from .keywords import AdminKeywordCreationForm, AdminKeywordChangeForm
+from .plans import PlanCreationForm, PlanChangeForm, PlanCoverCreationForm, PlanCoverChangeForm

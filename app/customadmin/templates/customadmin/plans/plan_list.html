@@ -10,7 +10,7 @@
 
     
 
-    {% include "customadmin/includes/list_header_card.html" with title="Create a new material category" subtitle="Create a new material category." show_button=True %}
+    {% include "customadmin/includes/list_header_card.html" with title="Create a new creator review" subtitle="Create a new creator review with rating." show_button=True %}
 
     <div class="ibox float-e-margins">
         {% comment %} <div class="ibox-title">
@@ -28,20 +28,16 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>Image</th>
-                            <th>Testimonial Text</th>
-                            <th>Rating</th>
+                            <th>Plan Amount</th>
+                            <th>Plan duration in month</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>Image</th>
-                            <th>Testimonial Text</th>
-                            <th>Rating</th>
+                            <th>Plan Amount</th>
+                            <th>Plan duration in month</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -49,14 +45,8 @@
                         {% for o in object_list %}
                         <tr>
                             <td>{{ o.name }}</td>
-                            <td>{{ o.email }}</td>
-                            {% if o.image %}
-                            <td><img src="{{MEDIA_URL}}{{ o.image.url }}" alt="" height="80px" width="80px"></td>
-                            {% else %}
-                            <td>No Image</td>
-                            {% endif %}
-                            <td>{{ o.testimonial_text }}</td>
-                            <td>{{ o.rating }}</td>
+                            <td>{{ o.plan_amount }}</td>
+                            <td>{{ o.duration_in_months }}</td>
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_actions.html" %}
                             </td>
@@ -79,7 +69,7 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.testimonials.index();
+        userroles.plans.index();
     });
 </script>
 {% endblock %}

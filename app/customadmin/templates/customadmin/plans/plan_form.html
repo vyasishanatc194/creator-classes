@@ -21,10 +21,13 @@
                 <div class="row">
                     <div class="col-sm-6">
                         
-                        {{ form.creator|as_crispy_field }}
+                        {{ form.name|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form.amount|as_crispy_field }}
+                        {{ form.plan_amount|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.duration_in_months|as_crispy_field }}
                     </div>
                 </div>             
             </div>
@@ -34,7 +37,7 @@
         <!-- /ibox --> 
         <div class="ibox float-e-margins">
             
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Other Skills" icon_class="fas fa-user" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Add Covers" icon_class="fas fa-user" only %}
             
             <div class="ibox-content">
                 <div class="row">
@@ -46,7 +49,7 @@
                                 
                                 {{ formset.management_form|crispy }}
                                 {% for form in formset.forms %}
-                                <tr class="formset_row-sessiontimeslot" id="formset_row-sessiontimeslot">
+                                <tr class="formset_row-{{formset.prefix}}">
                                     {% for field in form.visible_fields %}
                                     <td>
                                         {# Include the hidden fields in the form #}
@@ -85,7 +88,7 @@
 <script src="{% static 'customadmin/js/jquery.formset.js' %}"></script>
 <script>
     $(function() {
-        $('.formset_row-sessiontimeslot').formset({
+        $('.formset_row-plancover_set').formset({
             addText: 'Add Another',
             deleteText: 'Remove',
             prefix: 'creator',

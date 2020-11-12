@@ -3,7 +3,7 @@
 from django import forms
 
 from ..models import AdminKeyword
-
+from django.db.models import Count
 
 # -----------------------------------------------------------------------------
 # AdminKeywords
@@ -22,11 +22,19 @@ class AdminKeywordCreationForm(forms.ModelForm):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         print(*args)
+        self.fields['keyword'].required = False
 
 
     def clean(self):
         cleaned_data = super(AdminKeywordCreationForm, self).clean()
         keyword = cleaned_data.get("keyword")
+
+        instance = AdminKeyword.objects.filter(keyword=keyword).first()
+
+        if instance:
+            raise forms.ValidationError(
+                "Keyword already exists."
+            )
 
         if not keyword:
             raise forms.ValidationError(
@@ -52,10 +60,19 @@ class AdminKeywordChangeForm(forms.ModelForm):
             "keyword",
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print(*args)
+        self.fields['keyword'].required = False
+
     def clean(self):
         cleaned_data = super(AdminKeywordChangeForm, self).clean()
         keyword = cleaned_data.get("keyword")
-
+        
+        if AdminKeyword.objects.filter(keyword=keyword).exclude(pk=self.instance.id).count() > 0:
+            raise forms.ValidationError(
+                "Keyword already exists."
+            )
         if not keyword:
             raise forms.ValidationError(
                 "Please add keyword."

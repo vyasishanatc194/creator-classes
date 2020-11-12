@@ -24,14 +24,13 @@
 
         <div class="ibox-content">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover text-center" id="{{ opts.model_name }}-table">
+                <table class="table table-striped table-bordered table-hover" id="{{ opts.model_name }}-table">
                     <thead>
                         <tr>
                             <th>Creator</th>
                             <th>Material Category</th>
                             <th>Title</th>
                             <th>Thumbnail File</th>
-                            <th>Material File</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -41,7 +40,6 @@
                             <th>Material Category</th>
                             <th>Title</th>
                             <th>Thumbnail File</th>
-                            <th>Material File</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -55,11 +53,6 @@
                             <td><img src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" alt="" height="80px" width="80px"></td>
                             {% else %}
                             <td>No Thumbnail File</td>
-                            {% endif %}
-                            {% if o.material_file %}
-                            <td><img src="{{MEDIA_URL}}{{ o.material_file.url }}" alt="" height="80px" width="80px"></td>
-                            {% else %}
-                            <td>No Material File</td>
                             {% endif %}
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_actions.html" %}

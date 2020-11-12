@@ -26,6 +26,7 @@ class MyCreatorClassCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print(*args)
+        self.fields['creator'].required = False
 
     def clean(self):
         cleaned_data = super(MyCreatorClassCreationForm, self).clean()
@@ -120,6 +121,12 @@ class ClassKeywordCreationForm(forms.ModelForm):
             "creator_class",
         ]
         
+    def clean(self):
+        cleaned_data = super(ClassKeywordCreationForm, self).clean()
+        keyword = cleaned_data.get("keyword")
+        creator_class = cleaned_data.get("creator_class")
+        print(keyword)
+        print(creator_class)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -163,6 +170,13 @@ class ClassCoversCreationForm(forms.ModelForm):
             "creator_class",
         ]
 
+    def clean(self):
+        cleaned_data = super(ClassCoversCreationForm, self).clean()
+        covers = cleaned_data.get("covers")
+        creator_class = cleaned_data.get("creator_class")
+        print(covers)
+        print(creator_class)
+
     def save(self, commit=True):
         instance = super().save(commit=False)
 
@@ -198,8 +212,6 @@ class ClassCoversChangeForm(forms.ModelForm):
 class ClassMaterialCreationForm(forms.ModelForm):
     """Custom form to create Class Covers"""
 
-    class_material = ChoiceFieldNoValidation(choices=[('', '')])
-
     class Meta():
         model = ClassMaterial
         fields = [
@@ -210,22 +222,9 @@ class ClassMaterialCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print(*args)
-        # self.fields['class_material'].queryset = Material.objects.all()
-        # print(self.fields['class_material'].queryset)
-
-    # def clean(self):
-    #     cleaned_data = super(ClassMaterialCreationForm, self).clean()
-    #     class_material = cleaned_data.get("class_material")
-    #     print(class_material,'...')
-    #     class_material = Material.objects.filter(title=class_material).first()
-    #     print(class_material,'........')
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-        # cleaned_data = super(ClassMaterialCreationForm, self).clean()
-        # class_material = cleaned_data.get("class_material")
-        # print(class_material)
-        # instance.class_material = Material.objects.filter(title=class_material).first()
 
         if commit:
             instance.save()

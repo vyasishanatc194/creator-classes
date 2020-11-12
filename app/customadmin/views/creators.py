@@ -13,11 +13,12 @@ from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
 from customadmin.forms import MyCreatorChangeForm, MyCreatorCreationForm, CreatorSkillCreationForm, CreatorSkillChangeForm
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render
 
-from creator.models import Creator , CreatorSkill
-
+from creator.models import Creator , CreatorSkill, Material, CreatorClass, OneToOneSession, TimeSlot
+from user.models import CreatorReview, ClassReview
 from extra_views import InlineFormSetFactory
+from django.views.generic import DetailView
 
 
 import csv
@@ -69,6 +70,23 @@ def creator_export_product_csv(request):
 # -----------------------------------------------------------------------------
 # Creators
 # -----------------------------------------------------------------------------
+
+class CreatorDetailView(DetailView):
+    model = Creator
+    template_name = "customadmin/creator/creator_detail.html"
+    permission_required = ("customadmin.view_creator_detail",)
+    context = {}
+
+    def get(self, request, pk):
+        self.context['creator_id'] = pk
+        self.context['creator'] = Creator.objects.filter(pk=pk).first()
+        self.context['class_list'] = CreatorClass.objects.filter(creator=self.context['creator'].pk)
+        self.context['session_list'] = OneToOneSession.objects.filter(creator=self.context['creator'].pk)
+        self.context['material_list'] = Material.objects.filter(creator=self.context['creator'].pk)
+        self.context['creator_review_list'] = CreatorReview.objects.filter(creator=self.context['creator'].pk)
+        self.context['session_slot_list'] = TimeSlot.objects.all()
+        self.context['class_review_list'] = ClassReview.objects.all()
+        return render(request, self.template_name, self.context)
 
 
 class CreatorListView(MyListView):

@@ -81,7 +81,7 @@ class TestimonialChangeForm(forms.ModelForm):
         ]
 
     def clean(self):
-        cleaned_data = super(TestimonialCreationForm, self).clean()
+        cleaned_data = super(TestimonialChangeForm, self).clean()
         name = cleaned_data.get("name")
         email = cleaned_data.get("email")
         image = cleaned_data.get("image")

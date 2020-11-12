@@ -28,13 +28,10 @@ MSG_DELETED = '"{}" deleted successfully.'
 MSG_CANCELED = '"{}" canceled successfully.'
 
 from creator.models import Material
-import json
 def GetMaterials(request):
     creator_id = request.GET.get('creator_id')
-    print(creator_id,'........................................')
-    materials = Material.objects.filter(creator=creator_id)
-    # materials = Material.objects.filter(creator=creator_id).values()/
-    return JsonResponse(materials, content_type="application/json", safe=False)
+    materials = Material.objects.filter(creator=creator_id).values()
+    return JsonResponse(list(materials), content_type="application/json", safe=False)
 
 # -----------------------------------------------------------------------------
 # Creator Classes
@@ -59,28 +56,28 @@ class ClassMaterialInline(InlineFormSetFactory):
 
     model = ClassMaterial
     form_class = ClassMaterialCreationForm
-    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassKeywordInline(InlineFormSetFactory):
     """Inline view to show Newsimage within the Parent View"""
 
     model = ClassKeyword
     form_class = ClassKeywordCreationForm
-    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassCoversInline(InlineFormSetFactory):
     """Inline view to show Newsimage within the Parent View"""
 
     model = ClassCovers
     form_class = ClassCoversCreationForm
-    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class CreatorClassCreateView(MyNewFormsetCreateView):
     """View to create User"""
 
     model = CreatorClass
 
-    inlines = [ClassKeywordInline,ClassCoversInline, ClassMaterialInline]
+    inlines = [ClassKeywordInline,ClassCoversInline, ClassMaterialInline,]
 
     form_class = MyCreatorClassCreationForm
     template_name = "customadmin/classes/creator_class_form.html"
@@ -96,21 +93,21 @@ class ClassKeywordUpdateInline(InlineFormSetFactory):
 
     model = ClassKeyword
     form_class = ClassKeywordChangeForm
-    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassMaterialUpdateInline(InlineFormSetFactory):
     """View to update Newsimage which is a inline view"""
 
     model = ClassMaterial
     form_class = ClassMaterialChangeForm
-    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassCoversUpdateInline(InlineFormSetFactory):
     """View to update Newsimage which is a inline view"""
 
     model = ClassCovers
     form_class = ClassCoversChangeForm
-    factory_kwargs = {'extra': 1, 'max_num': 10, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class CreatorClassUpdateView(MyNewFormsetUpdateView):
     """View to update User"""
@@ -121,7 +118,7 @@ class CreatorClassUpdateView(MyNewFormsetUpdateView):
 
 
     form_class = MyCreatorClassChangeForm
-    template_name = "customadmin/classes/creator_class_form_update.html"
+    template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.change_creator_class",)
 
 

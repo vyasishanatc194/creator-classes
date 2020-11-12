@@ -230,12 +230,24 @@
           'creator_id': $(creatorId).val()
         },
         success: function (data) {
-            var select = $("tbody > tr> td> div > div > #id_classmaterial_set-0-class_material")
             var i;
-            select.empty();
-            select.append(new Option("",""))
+            var select1 = $("tbody> tr> td> div> div> #id_classmaterial_set-0-class_material")
+            var select2 = $("tbody> tr> td> div> div> #id_classmaterial_set-1-class_material")
+            var select3 = $("tbody> tr> td> div> div> #id_classmaterial_set-2-class_material")
+            var select4 = $("tbody> tr> td> div> div> #id_classmaterial_set-3-class_material")
+            select1.empty()
+            select2.empty();
+            select3.empty();
+            select4.empty();
+            select1.append(new Option("",""))
+            select2.append(new Option("",""))
+            select3.append(new Option("",""))
+            select4.append(new Option("",""))
             for(i=0; i<=data.length; i++){
-                $(`tbody > tr> td> div > div > #id_classmaterial_set-0-class_material`).append(new Option(data[i].title, data[i].title))
+                select1.append(new Option(data[i].title, data[i].id))
+                select2.append(new Option(data[i].title, data[i].id))
+                select3.append(new Option(data[i].title, data[i].id))
+                select4.append(new Option(data[i].title, data[i].id))
             };
         }
     });

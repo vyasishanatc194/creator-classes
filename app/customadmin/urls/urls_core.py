@@ -33,6 +33,7 @@ urlpatterns +=[
 #------------------------------------------------------------------------------------------------------
     path("creator_export_product_csv", views.creator_export_product_csv, name="creator_export_product_csv"),
     
+    path("creators/<int:pk>/detail/", views.CreatorDetailView.as_view(), name="creator-detailview"),
     path("creators/", views.CreatorListView.as_view(), name="creator-detail"),
     path("creators/", views.CreatorListView.as_view(), name="creator-list"),
     path("creators/create/", views.CreatorCreateView.as_view(), name="creator-create"),
@@ -111,6 +112,15 @@ urlpatterns +=[
     path("one-to-one-sessions/<int:pk>/update/", views.OneToOneSessionUpdateView.as_view(), name="onetoonesession-update"),
     path("one-to-one-sessions/<int:pk>/delete/", views.OneToOneSessionDeleteView.as_view(), name="onetoonesession-delete"),
     path("ajax-one-to-one-sessions", views.OneToOneSessionAjaxPagination.as_view(), name="onetoonesession-list-ajax"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+    
+    path("plans/", views.PlanListView.as_view(), name="plan-detail"),
+    path("plans/", views.PlanListView.as_view(), name="plan-list"),
+    path("plans/create/", views.PlanCreateView.as_view(), name="plan-create"),
+    path("plans/<int:pk>/update/", views.PlanUpdateView.as_view(), name="plan-update"),
+    path("plans/<int:pk>/delete/", views.PlanDeleteView.as_view(), name="plan-delete"),
+    path("ajax-plans", views.PlanAjaxPagination.as_view(), name="plan-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 
 ]

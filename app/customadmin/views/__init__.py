@@ -12,6 +12,7 @@ from .creators import (
     CreatorAjaxPagination,
     CreatorCreateView,
     CreatorDeleteView,
+    CreatorDetailView,
     CreatorListView,
     CreatorUpdateView,
     creator_export_product_csv,
@@ -77,5 +78,12 @@ from .streams import(
     StreamListView,
 )
 
+from .plans import (
+    PlanAjaxPagination,
+    PlanCreateView,
+    PlanDeleteView,
+    PlanListView,
+    PlanUpdateView,
+)
 
 from .user import export_user_csv
