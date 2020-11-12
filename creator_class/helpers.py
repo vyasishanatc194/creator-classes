@@ -2,7 +2,6 @@ import datetime
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from rest_framework.pagination import PageNumberPagination
-from smtplib import SMTPException
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -38,7 +37,7 @@ def dict_obj_list_to_str(data):
 
 def send_email(user, subject):
     user_obj= Account.objects.get(email=user.email)
-    
+
     user_obj.link_expired_at = datetime.datetime.now() + datetime.timedelta(days=1)
    
     from_email= settings.EMAIL_HOST_USER

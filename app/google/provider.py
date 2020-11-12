@@ -45,7 +45,7 @@ class GoogleProvider(OAuth2Provider):
         except KeyError:
             return str(data['user_id'])
 
-            
+
     def extract_common_fields(self, data):
         return dict(email=data.get('email'),
                     last_name=data.get('family_name'),

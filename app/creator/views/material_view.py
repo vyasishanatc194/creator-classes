@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from ..serializers import MaterialCategorySerializer, MaterialSerializer
 from ..models import MaterialCategory, Material
-from creator_class.helpers import custom_response, serialized_response, get_object
-from rest_framework import status, parsers, renderers
+from creator_class.helpers import custom_response, serialized_response
+from rest_framework import status, parsers
 from creator_class.permissions import IsAccountOwner, IsCreator
 
 NOT_FOUND_MESSAGE = "Material not found!"
@@ -53,7 +53,7 @@ class AddMaterialAPIView(APIView):
         material_exists = Material.objects.filter(pk=pk, active=True)
         if not material_exists:
             return custom_response(False, status.HTTP_400_BAD_REQUEST, NOT_FOUND_MESSAGE)
-        
+
         material_exists[0].active=False
         material_exists[0].save()
         message = "Material deleted successfully!"

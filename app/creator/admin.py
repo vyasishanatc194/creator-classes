@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, Material, MaterialCategory, ClassMaterial
+from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, Material, MaterialCategory, ClassMaterial, OneToOneSession
 
 # Register your models here.
 
@@ -42,4 +42,4 @@ admin.site.register(ClassCovers, ClassCoversAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(MaterialCategory, MaterialCategoryAdmin)
 admin.site.register(ClassMaterial)
-    
+admin.site.register(OneToOneSession)

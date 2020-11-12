@@ -1,4 +1,4 @@
-from rest_framework import permissions, status, authentication
+from rest_framework import permissions, status
 from rest_framework.exceptions import APIException
 from rest_framework.pagination import PageNumberPagination
 

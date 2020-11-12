@@ -1,7 +1,5 @@
 from django.db import models
-from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
-from . import Creator
 
 class OneToOneSession(ActivityTracking):
     creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="sessioncreator")

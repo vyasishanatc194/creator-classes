@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from ..serializers import CreatorProfileSerializer, CreatorProfileDisplaySerializer, CreatorListingSerializer
 from ..models import Creator
 from creator_class.helpers import custom_response, serialized_response, get_object
-from rest_framework import status, parsers, renderers
+from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
 from creator_class.permissions import IsAccountOwner
 

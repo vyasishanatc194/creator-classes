@@ -22,7 +22,7 @@ class Material(ActivityTracking):
     title = models.CharField(max_length=80, blank=True, null=True, default='')
     thumbnail_file = models.FileField(upload_to="materials", null=True,  blank=True, verbose_name=_("material thumbnail"))
     material_file = models.FileField(upload_to="materials", null=True,  blank=True, verbose_name=_("material file"))
-    
+
     def __str__(self):
         return f"{self.title}"
 

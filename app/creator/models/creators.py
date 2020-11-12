@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
 from user.models import User
 

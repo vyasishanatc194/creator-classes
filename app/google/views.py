@@ -15,7 +15,7 @@ class GoogleOAuth2Adapter(OAuth2Adapter):
     authorize_url = 'https://accounts.google.com/o/oauth2/auth'
     profile_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
     token_url = 'https://www.googleapis.com/oauth2/v1/tokeninfo'
-    
+
 
     def complete_login(self, request, app, token, **kwargs):
         if 'social-login/google' in request.path:

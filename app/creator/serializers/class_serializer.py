@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import Creator, CreatorClass, ClassKeyword, ClassCovers, Material, ClassMaterial
-from user.models import User, ClassReview, FavouriteClass
+from user.models import ClassReview, FavouriteClass
 from django.db.models import Sum
 from customadmin.models import AdminKeyword
 from . import CreatorListingSerializer
@@ -73,7 +73,7 @@ class AddClassSerializer(serializers.ModelSerializer):
             for covers in class_covers:
                 ClassCovers.objects.create(covers=covers, creator_class=instance)
 
-        if class_materials: 
+        if class_materials:
             class_materials = class_materials.split(',')
             ClassMaterial.objects.filter(creator_class=instance).delete()
             for class_material in class_materials:

@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status, parsers, renderers
-from creator.serializers import ClassListingSerializer, PopularClassListingSerializer
+from creator.serializers import ClassListingSerializer
 from creator.models import CreatorClass, ClassKeyword
 from ..models import ClassReview
-from django.db.models import Avg
 
 CLASSES_FETCHED_MESSAGE = "Classes fetched Successfully!"
+
 
 class ClassFilterAPIView(APIView):
     """
@@ -42,7 +42,7 @@ class ClassFilterAPIView(APIView):
             class_reviews = ClassReview.objects.filter(creator_class__active=True).order_by('-rating')
             for classes in class_reviews:
                 popular_classes.append(classes.creator_class)
-            
+
             for classes in creator_classes:
                 if classes not in popular_classes:
                     popular_classes.append(classes)
@@ -77,7 +77,7 @@ class ClassSearchAPIView(APIView):
                 if classes.creator_class in creator_classes and classes.creator_class not in keyword_classes:
                     keyword_classes.append(classes.creator_class)
             serializer = ClassListingSerializer(keyword_classes, many=True, context={"request": request})
-            return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, serializer.data)    
+            return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, serializer.data) 
 
 
         serializer = ClassListingSerializer(creator_classes, many=True, context={"request": request})

@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ..serializers import UserProfileSerializer
+from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer
 from ..models import User
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status, parsers, renderers
@@ -12,10 +12,9 @@ from rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
 from rest_auth.social_serializers import TwitterLoginSerializer
 
-from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-
 from google.views import GoogleOAuth2Adapter
+from rest_framework import generics
+from customadmin.models import Testimonial, Plan
 
 
 
@@ -31,7 +30,7 @@ class SignUpApiView(APIView):
             if email_check.exists():
                 message = "Email already exists!"
                 return custom_response(True, status.HTTP_400_BAD_REQUEST, message)
-            
+
             if 'username' not in request.data or not request.data['username']:
                 request.data['username']=request.data['email'].split('@')[0]
             
@@ -107,3 +106,11 @@ class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
 
+class TestimonialsListingAPIView(generics.ListCreateAPIView):
+    queryset = Testimonial.objects.filter(active=True)
+    serializer_class = TestimonialListingSerializer
+
+
+class PlansListingAPIView(generics.ListCreateAPIView):
+    queryset = Plan.objects.filter(active=True)
+    serializer_class = PlanListingSerializer

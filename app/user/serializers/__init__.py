@@ -1,3 +1,3 @@
-from .user_serializer import UserProfileSerializer
+from .user_serializer import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer
 from . review_serializer import CreatorReviewSerializer, ClassReviewSerializer
 from .favourite_serializer import FavouriteClassSerializer, FavouriteCreatorSerializer, FavouriteClassListSerializer, FavouriteCreatorListSerializer

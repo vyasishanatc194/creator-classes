@@ -1,6 +1,7 @@
 from rest_framework import fields, serializers
 from ..models import User
 from rest_framework.authtoken.models import Token
+from customadmin.models import Testimonial, Plan, PlanCover
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -35,3 +36,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
+
+
+class TestimonialListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Testimonial
+        fields = ['id', 'created_at', 'image', 'name', 'email', 'testimonial_text', 'rating']
+
+
+class PlanListingSerializer(serializers.ModelSerializer):
+    plan_covers = serializers.SerializerMethodField()
+    class Meta:
+        model = Plan
+        fields = ['id', 'name', 'plan_amount', 'duration_in_months', 'plan_covers']
+
+    def get_plan_covers(self, instance):
+        plan_covers = PlanCover.objects.filter(plan=instance)
+        return [plan_cover.covers for plan_cover in plan_covers]
+
+

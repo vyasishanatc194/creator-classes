@@ -18,7 +18,7 @@ class CreatorReviewAPIView(APIView):
     def post(self, request, format=None):
         request_copy = request.data.copy()
         request_copy["user"] = request.user.pk
-        
+
         if "rating" in request_copy:
             if int(request_copy['rating']) > 5 or int(request_copy['rating']) < 1:
                 message = "Enter valid rating!"

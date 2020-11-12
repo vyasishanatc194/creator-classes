@@ -10,7 +10,7 @@ class FavouriteCreatorSerializer(serializers.ModelSerializer):
         model = FavouriteCreator
         fields = ('id','user', 'creator',)
 
-    
+
 class FavouriteClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavouriteClass

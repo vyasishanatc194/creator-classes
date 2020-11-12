@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Testimonial, AdminKeyword
+from .models import Testimonial, AdminKeyword, Plan, PlanCover
 
 # Register your models here.
 class TestimonialAdmin(admin.ModelAdmin):
@@ -13,3 +13,5 @@ class AdminKeywordAdmin(admin.ModelAdmin):
     list_display = ["pk", "keyword",]
 
 admin.site.register(AdminKeyword, AdminKeywordAdmin)
+admin.site.register(Plan)
+admin.site.register(PlanCover)
