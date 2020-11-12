@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from ..serializers import OneToOneSessionSerializer
-from ..models import Creator, CreatorClass
+from ..models import Creator, CreatorClass, OneToOneSession
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsCreator

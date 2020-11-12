@@ -1,6 +1,5 @@
 from rest_framework import fields, serializers
-from ..models import Creator, StreamKeyword, StreamCovers, Stream
-from django.db.models import Sum
+from ..models import StreamKeyword, StreamCovers, Stream
 from customadmin.models import AdminKeyword
 
 

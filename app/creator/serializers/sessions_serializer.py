@@ -31,7 +31,7 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
             for slot in time_slots:
                 print("inside for loop")
                 session_timings.add({"session": session.pk, "slot_datetime": slot})
-        
+
         print(session_timings)
         # serializer = TimeSlotSerializer(data=session_timings, many=True)
         # if serializer.is_valid():
