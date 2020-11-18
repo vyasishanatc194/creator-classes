@@ -16,8 +16,8 @@ from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
 from customadmin.forms import MyMaterialCategoryCreationForm, MyMaterialCategoryChangeForm, MyMaterialCreationForm, MyMaterialChangeForm
-from django.shortcuts import reverse
-
+from django.shortcuts import reverse, render
+from django.views.generic import DetailView
 from creator.models import MaterialCategory , Material
 
 
@@ -51,11 +51,11 @@ class MaterialCategoryCreateView(MyCreateView):
 
     # def get_form_kwargs(self):
     #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user 
+    #     kwargs["user"] = self.request.user
     #     return kwargs
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:materialcategory-list")
 
 class MaterialCategoryUpdateView(MyUpdateView):
@@ -73,7 +73,7 @@ class MaterialCategoryUpdateView(MyUpdateView):
     #     return kwargs
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:materialcategory-list")
 
 class MaterialCategoryDeleteView(MyDeleteView):
@@ -84,7 +84,7 @@ class MaterialCategoryDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_material_category",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:materialcategory-list")
 
 class MaterialCategoryAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
@@ -143,6 +143,18 @@ class MaterialCategoryAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLogi
 # =================================================================================
 # =================================================================================
 
+class MaterialDetailView(DetailView):
+    model = Material
+    template_name = "customadmin/materials/material_detail.html"
+    permission_required = ("customadmin.view_material_detail",)
+    context = {}
+
+    def get(self, request, pk):
+        self.context['material_detail'] = Material.objects.filter(pk=pk).first()
+        self.context['material_file_url'] = request.build_absolute_uri(self.context['material_detail'].material_file) 
+        self.context['material_file_url'] = self.context['material_file_url'][:22] + 'media' + self.context['material_file_url'][51:]
+        return render(request, self.template_name, self.context)
+
 class MaterialListView(MyListView):
     """View for User listing"""
 
@@ -171,7 +183,7 @@ class MaterialCreateView(MyCreateView):
     #     return kwargs
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:material-list")
 
 class MaterialUpdateView(MyUpdateView):
@@ -183,13 +195,9 @@ class MaterialUpdateView(MyUpdateView):
     template_name = "customadmin/materials/material_form.html"
     permission_required = ("customadmin.change_material",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:material-list")
 
 class MaterialDeleteView(MyDeleteView):
@@ -200,7 +208,7 @@ class MaterialDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_material",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:material-list")
 
 class MaterialAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

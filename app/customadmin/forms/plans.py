@@ -4,7 +4,7 @@ from django import forms
 
 from ..models import Plan, PlanCover
 # -----------------------------------------------------------------------------
-# Creator's OneToOne Sessions
+# Plans
 # -----------------------------------------------------------------------------
 
 
@@ -21,7 +21,7 @@ class PlanCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
+        self.fields['duration_in_months'].required = False
 
     def clean(self):
         cleaned_data = super(PlanCreationForm, self).clean()
@@ -43,9 +43,9 @@ class PlanCreationForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Amount must be grater than zero."
             )
-        if float(duration_in_months) < 1:
+        if int(duration_in_months) < 1:
             raise forms.ValidationError(
-                "Duration of Plan is more than 1."
+                "Duration of Plan is grater than and equal to 1."
             )
 
     def save(self, commit=True):
@@ -68,8 +68,7 @@ class PlanChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
-        # self.fields['creator'].required = False
+        self.fields['duration_in_months'].required = False
 
 
     def clean(self):
@@ -82,7 +81,6 @@ class PlanChangeForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Plan already exists."
             )
-
         if not name:
             raise forms.ValidationError(
                 "Please enter plan name."
@@ -91,7 +89,7 @@ class PlanChangeForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Amount must be grater than zero."
             )
-        if float(duration_in_months) < 1:
+        if int(duration_in_months) < 1:
             raise forms.ValidationError(
                 "Duration of Plan is more than 1."
             )
@@ -103,7 +101,7 @@ class PlanChangeForm(forms.ModelForm):
         return instance
 
 # -----------------------------------------------------------------------------
-# Creator's TimeSlots
+# Plan's Covers
 # -----------------------------------------------------------------------------
 
 
@@ -120,21 +118,6 @@ class PlanCoverCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print(*args)
-
-    # def clean(self):
-    #     cleaned_data = super(PlanCoverCreationForm, self).clean()
-    #     slot_datetime = cleaned_data.get("slot_datetime")
-        
-    #     today_date = timezone.now()
-    #     if today_date > slot_datetime:
-    #         raise forms.ValidationError(
-    #             "Please add valid date."
-    #         )
-
-    #     if not slot_datetime:
-    #         raise forms.ValidationError(
-    #             "Please add slot date time."
-    #         )
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -157,15 +140,6 @@ class PlanCoverChangeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         print(*args)
 
-    # def clean(self):
-    #     cleaned_data = super(PlanCoverCreationForm, self).clean()
-    #     slot_datetime = cleaned_data.get("slot_datetime")
-
-    #     if not slot_datetime:
-    #         raise forms.ValidationError(
-    #             "Please add slot date time."
-    #         )
-        
     def save(self, commit=True):
         instance = super().save(commit=False)
         if commit:

@@ -15,10 +15,10 @@ from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
 from customadmin.forms import PlanChangeForm, PlanCreationForm, PlanCoverCreationForm, PlanCoverChangeForm
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render
 
 from ..models import Plan , PlanCover
-
+from django.views.generic import DetailView
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
 
 from django.contrib import messages
@@ -31,6 +31,18 @@ MSG_CANCELED = '"{}" canceled successfully.'
 # -----------------------------------------------------------------------------
 # OneToOneSessions
 # -----------------------------------------------------------------------------
+
+class PlanDetailView(DetailView):
+    model = Plan
+    template_name = "customadmin/plans/plan_detail.html"
+    permission_required = ("customadmin.view_plan_detail",)
+    context = {}
+
+    def get(self, request, pk):
+        self.context['plan'] = pk
+        self.context['plan_detail'] = Plan.objects.filter(pk=pk).first()
+        self.context['plan_cover_list'] = PlanCover.objects.filter(plan=self.context['plan_detail'].pk)
+        return render(request, self.template_name, self.context)
 
 class PlanListView(MyListView):
     """View for OneToOneSession listing"""
@@ -67,7 +79,7 @@ class PlanCreateView(MyNewFormsetCreateView):
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:plan-list")
 
 class PlanCoverUpdateInline(InlineFormSetFactory):
@@ -91,7 +103,7 @@ class PlanUpdateView(MyNewFormsetUpdateView):
 
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:plan-list")
 
 class PlanDeleteView(MyDeleteView):
@@ -102,7 +114,7 @@ class PlanDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_plan",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:plan-list")
 
 class PlanAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

@@ -19,8 +19,8 @@ from django_datatables_too.mixins import DataTableMixin
 from ..forms import MyUserChangeForm, MyUserCreationForm
 from django.shortcuts import reverse, render
 
-from user.models import User 
-from creator.models import Creator 
+from user.models import User
+from creator.models import Creator
 
 import csv
 
@@ -36,7 +36,7 @@ def export_user_csv(request):
     response = HttpResponse (content_type='text/csv')
     filename = u"User.csv"
     response['Content-Disposition'] = u'attachment; filename="{0}"'.format(filename)
-   
+
     writer = csv.writer(response)
     query_set = User.objects.all()
 
@@ -46,7 +46,7 @@ def export_user_csv(request):
         if user.groups.all():
             gp = user.groups.all()[0].name
         else:
-            gp = None 
+            gp = None
 
         if not user.profile_image:
             avatar = None
@@ -63,7 +63,7 @@ def export_user_csv(request):
 
 
 
-class IndexView(LoginRequiredMixin, TemplateView): 
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "customadmin/index.html"
     context = {}
 
@@ -101,11 +101,11 @@ class UserCreateView(MyCreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user 
+        kwargs["user"] = self.request.user
         return kwargs
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:user-list")
 
 class UserUpdateView(MyUpdateView):
@@ -122,7 +122,7 @@ class UserUpdateView(MyUpdateView):
         return kwargs
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:user-list")
 
 class UserDeleteView(MyDeleteView):
@@ -133,8 +133,8 @@ class UserDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_user",)
 
     def get_success_url(self):
-        opts = self.model._meta
-        return reverse("customadmin:user-list") 
+        # opts = self.model._meta
+        return reverse("customadmin:user-list")
 
 class UserPasswordView(MyUpdateView):
     """View to change User Password"""

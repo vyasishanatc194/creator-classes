@@ -2,7 +2,7 @@
 
 from django import forms
 
-from creator.models import MaterialCategory, Material
+from creator.models import MaterialCategory, Material, Creator
 
 # -----------------------------------------------------------------------------
 # Material Categories
@@ -28,7 +28,7 @@ class MyMaterialCategoryCreationForm(forms.ModelForm):
         category_title = cleaned_data.get("category_title")
         category_image = cleaned_data.get("category_image")
 
-        instance = MaterialCategory.objects.filter(category_title=category_title).first()
+        instance = MaterialCategory.objects.filter(category_title__iexact=category_title).first()
 
         if instance:
             raise forms.ValidationError(
@@ -61,13 +61,12 @@ class MyMaterialCategoryChangeForm(forms.ModelForm):
             "category_image",
         )
 
-    
     def clean(self):
         cleaned_data = super(MyMaterialCategoryChangeForm, self).clean()
         category_title = cleaned_data.get("category_title")
         category_image = cleaned_data.get("category_image")
 
-        if MaterialCategory.objects.filter(category_title=category_title).exclude(pk=self.instance.id).count() > 0:
+        if MaterialCategory.objects.filter(category_title__iexact=category_title).exclude(pk=self.instance.id).count() > 0:
             raise forms.ValidationError(
                 "Material Category already exists."
             )
@@ -106,7 +105,7 @@ class MyMaterialCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-        print(*args)
+        self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
         self.fields['material_category'].required = False
 
@@ -118,7 +117,7 @@ class MyMaterialCreationForm(forms.ModelForm):
         thumbnail_file = cleaned_data.get("thumbnail_file")
         material_file = cleaned_data.get("material_file")
 
-        instance = Material.objects.filter(title=title, creator=creator).first()
+        instance = Material.objects.filter(title__iexact=title, creator=creator).first()
 
         if instance:
             raise forms.ValidationError(
@@ -144,7 +143,7 @@ class MyMaterialCreationForm(forms.ModelForm):
         if not material_file:
             raise forms.ValidationError(
                 "Please add material file"
-            )    
+            )
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -169,7 +168,7 @@ class MyMaterialChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-        print(*args)
+        self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
         self.fields['material_category'].required = False
 
@@ -181,7 +180,7 @@ class MyMaterialChangeForm(forms.ModelForm):
         thumbnail_file = cleaned_data.get("thumbnail_file")
         material_file = cleaned_data.get("material_file")
 
-        if Material.objects.filter(creator=creator, title=title).exclude(pk=self.instance.id).count() > 0:
+        if Material.objects.filter(creator=creator, title__iexact=title).exclude(pk=self.instance.id).count() > 0:
             raise forms.ValidationError(
                 "Material already exists with this creator."
             )

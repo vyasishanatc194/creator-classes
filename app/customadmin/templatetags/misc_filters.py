@@ -4,7 +4,6 @@ from django import template
 from django.conf import settings
 from django.contrib.admin.utils import quote
 from django.utils.safestring import mark_safe
-from django.core.exceptions import ImproperlyConfigured
 
 
 # -----------------------------------------------------------------------------
@@ -42,7 +41,6 @@ def as_json(obj):
 
 @register.filter
 def admin_urlname(value, arg):
-    
     # print('---------------------------------------------------------------------------------',value)
     pattern = "%s:%s-%s" % (value.app_label, value.model_name, arg)
     if value.model_name == 'user':
@@ -51,6 +49,8 @@ def admin_urlname(value, arg):
         pattern = "%s:%s-%s" % ('customadmin', 'creator', arg)
     if value.model_name == 'creatorclass':
         pattern = "%s:%s-%s" % ('customadmin', 'creatorclass', arg)
+    if value.model_name == 'stream':
+        pattern = "%s:%s-%s" % ('customadmin', 'stream', arg)
     if value.model_name == 'creatorreview':
         pattern = "%s:%s-%s" % ('customadmin', 'creatorreview', arg)
     if value.model_name == 'classreview':

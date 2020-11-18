@@ -43,7 +43,7 @@ class AdminKeywordCreateView(MyCreateView):
     permission_required = ("customadmin.add_admin_keyword",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:adminkeyword-list")
 
 class AdminKeywordUpdateView(MyUpdateView):
@@ -56,7 +56,7 @@ class AdminKeywordUpdateView(MyUpdateView):
     permission_required = ("customadmin.change_admin_keyword",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:adminkeyword-list")
 
 class AdminKeywordDeleteView(MyDeleteView):
@@ -67,7 +67,7 @@ class AdminKeywordDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_admin_keyword",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:adminkeyword-list")
 
 class AdminKeywordAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

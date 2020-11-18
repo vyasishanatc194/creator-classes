@@ -74,6 +74,15 @@
             {% endif %}
 
             {% if perms.users or request.user.is_staff %}
+            <li {% if 'streams/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:stream-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Streams</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
             <li {% if 'material-category/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:materialcategory-list' %}"> 
                     <i class="fa fa-user fa-fw fa-2x"></i>
@@ -129,15 +138,6 @@
                 <a href="{% url 'customadmin:plan-list' %}"> 
                     <i class="fa fa-user fa-fw fa-2x"></i>
                     <span class="nav-label">Plans</span>
-                </a>
-            </li>
-            {% endif %}
-
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'streams/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'customadmin:stream-list' %}"> 
-                    <i class="fas fa-stream fa-fw fa-2x"></i>
-                    <span class="nav-label">Streams</span>
                 </a>
             </li>
             {% endif %}

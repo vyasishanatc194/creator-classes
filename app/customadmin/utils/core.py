@@ -81,7 +81,7 @@ def admin_urlname(value, arg):
 
     elif value.model_name == 'eventinvitation' :
         pattern = "%s:%s-%s" % (value.app_label, 'event', arg)
-    
+
     else:
         pattern = "%s:%s-%s" % (value.app_label, value.model_name, arg)
 

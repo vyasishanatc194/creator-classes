@@ -3,6 +3,7 @@
 from django import forms
 
 from user.models import CreatorReview, ClassReview, User
+from creator.models import Creator
 
 # -----------------------------------------------------------------------------
 # Creator Reviews
@@ -24,7 +25,7 @@ class MyCreatorReviewCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
-        print(*args)
+        self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
         self.fields['user'].required = False
 
@@ -74,10 +75,10 @@ class MyCreatorReviewChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
-        print(*args)
+        self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
         self.fields['user'].required = False
-    
+
     def clean(self):
         cleaned_data = super(MyCreatorReviewChangeForm, self).clean()
         creator = cleaned_data.get("creator")

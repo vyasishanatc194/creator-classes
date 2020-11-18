@@ -67,7 +67,7 @@ class OneToOneSessionCreateView(MyNewFormsetCreateView):
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:onetoonesession-list")
 
 class TimeSlotUpdateInline(InlineFormSetFactory):
@@ -90,14 +90,10 @@ class OneToOneSessionUpdateView(MyNewFormsetUpdateView):
     template_name = "customadmin/sessions/session_form.html"
     permission_required = ("customadmin.change_session",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
 
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:onetoonesession-list")
 
 class OneToOneSessionDeleteView(MyDeleteView):
@@ -108,7 +104,7 @@ class OneToOneSessionDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_sessions",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:onetoonesession-list")
 
 class OneToOneSessionAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

@@ -9,6 +9,8 @@ from .user import (
 )
 
 from .creators import (
+    CreatorRejectRequestAjax,
+    CreatorAcceptRequestAjax,
     CreatorAjaxPagination,
     CreatorCreateView,
     CreatorDeleteView,
@@ -19,6 +21,7 @@ from .creators import (
 )
 from .classes import (
     GetMaterials,
+    ClassDetailView,
     CreatorClassAjaxPagination,
     CreatorClassCreateView,
     CreatorClassDeleteView,
@@ -66,6 +69,7 @@ from .materials import (
     MaterialCategoryListView,
     MaterialCategoryUpdateView,
 
+    MaterialDetailView,
     MaterialAjaxPagination,
     MaterialCreateView,
     MaterialDeleteView,
@@ -73,12 +77,16 @@ from .materials import (
     MaterialUpdateView,
 )
 
-
-from .streams import(
+from .streams import (
+    StreamDetailView,
+    StreamAjaxPagination,
+    StreamCreateView,
+    StreamDeleteView,
     StreamListView,
+    StreamUpdateView,
 )
-
 from .plans import (
+    PlanDetailView,
     PlanAjaxPagination,
     PlanCreateView,
     PlanDeleteView,

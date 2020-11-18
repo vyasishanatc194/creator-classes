@@ -60,6 +60,9 @@
                     <div class="col-sm-6">
                         {{ form.description|as_crispy_field }}
                     </div>
+                    <div class="col-sm-6">
+                        {{ form.status|as_crispy_field }}
+                    </div>
                 </div>
                
 
@@ -72,27 +75,7 @@
 
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Permissions" icon_class="fas fa-key" only %}
-
-            <div class="ibox-content">
-
-                <div class="row">
-                    <div class="col-sm-4">
-                    {% input_icheck form.is_active %}
-                    </div>
-                    {% if request.user.is_superuser %}
-                    <div class="col-sm-4">
-                        {% input_icheck form.is_staff %}
-                    </div>
-                    <div class="col-sm-4">
-                        {% input_icheck form.is_superuser %}
-                    </div>
-                    {% endif%}
-                    
-                </div>
-            </div>
-
-
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Other Info" icon_class="fas fa-user" only %} 
             <div class="ibox-content">
 
                 <div class="row">

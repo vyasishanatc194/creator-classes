@@ -1,0 +1,85 @@
+{% extends 'customadmin/change_list.html' %}
+{% load static %}
+{% load admin_extras %}
+{% load misc_filters %}
+{% load i18n %}
+
+
+{% block page_content %}
+    {% csrf_token %}
+
+    <div class="ibox float-e-margins">
+        
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="{{ opts.model_name }}-table">
+                    <thead>
+                        <tr>
+                            <td colspan="2" class="h5 text-left border-white">{{stream_detail.title|capfirst}}</td>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <td class="h5 text-left" colspan="2">Stream Detail</td>
+                        </tr>
+                        <tr class="text-left">
+                            <td class="text-center"><img src="{{MEDIA_URL}}{{stream_detail.thumbnail_file.url}}" alt="" height="160px" widtd="160px"></td>
+                            <td class="h6">
+                                Title : {{stream_detail.title|capfirst}} <br>
+                                <hr>
+                                Creator : <a href="{% url 'customadmin:creator-detailview' stream_detail.creator.pk %}">{{stream_detail.creator.username}}</a>
+                                <hr>
+                                Sneak Peak File :<a href="{{sneak_peak_file_url}}" download>{{stream_detail.sneak_peak_file}}</a>
+                                <hr>
+                                Date Time : {{stream_detail.stream_datetime|date:'d-m-Y, H:i'}}
+                                <hr>
+                                Amount : {{stream_detail.stream_amount}}
+                                <hr>
+                                Total Seats : {{stream_detail.total_seats}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="h5 text-left" colspan="2">Stream Keyword Detail</td>
+                        </tr>
+                        <tr class="text-left">
+                            {% if stream_keyword_list %}
+                            <td colspan="2" class="h6">
+                                Keyword : 
+                                <ul>
+                                    {% for keyword in stream_keyword_list %}
+                                    <li>{{keyword.keyword}}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            {% else %}
+                            <td colspan="2" class="h6">No stream keyword yet</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td class="h5 text-left" colspan="2">Stream Cover Detail</td>
+                        </tr>
+                        <tr class="text-left">
+                            {% if stream_cover_list %}
+                            <td colspan="2" class="h6">
+                                Covers : 
+                                <ul>
+                                    {% for cover in stream_cover_list %}
+                                    <li>{{cover.covers}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            {% else %}
+                            <td colspan="2" class="h6">No stream cover yet</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

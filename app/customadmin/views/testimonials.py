@@ -42,7 +42,7 @@ class TestimonialCreateView(MyCreateView):
     permission_required = ("customadmin.add_testimonial",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:testimonial-list")
 
 class TestimonialUpdateView(MyUpdateView):
@@ -55,7 +55,7 @@ class TestimonialUpdateView(MyUpdateView):
     permission_required = ("customadmin.change_testimonial",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:testimonial-list")
 
 class TestimonialDeleteView(MyDeleteView):
@@ -66,7 +66,7 @@ class TestimonialDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_testimonial",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:testimonial-list")
 
 class TestimonialAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

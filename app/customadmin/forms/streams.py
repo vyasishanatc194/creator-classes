@@ -2,38 +2,43 @@
 
 from django import forms
 
-from creator.models import CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Creator
-
+from creator.models import Stream, StreamKeyword, StreamCovers, Creator
+from django.utils import timezone
 # -----------------------------------------------------------------------------
-# Creator Classes
+# Creator Streams
 # -----------------------------------------------------------------------------
-class ChoiceFieldNoValidation(forms.ChoiceField):
-    def validate(self, value):
-        pass
 
-class MyCreatorClassCreationForm(forms.ModelForm):
+class StreamCreationForm(forms.ModelForm):
     """Custom CreatorCreationForm."""
 
     class Meta:
-        model = CreatorClass
+        model = Stream
         fields = [
             "creator",
             "title",
             "thumbnail_file",
-            "class_file",        
+            "sneak_peak_file",        
+            "stream_datetime",        
+            "stream_amount",        
+            "total_seats",        
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        print(*args)
         self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
 
     def clean(self):
-        cleaned_data = super(MyCreatorClassCreationForm, self).clean()
+        cleaned_data = super(StreamCreationForm, self).clean()
         creator = cleaned_data.get("creator")
         title = cleaned_data.get("title")
         thumbnail_file = cleaned_data.get("thumbnail_file")
-        class_file = cleaned_data.get("class_file")
+        sneak_peak_file = cleaned_data.get("sneak_peak_file")
+        stream_datetime = cleaned_data.get("stream_datetime")
+        stream_amount = cleaned_data.get("stream_amount")
+        total_seats = cleaned_data.get("total_seats")
+        today_date = timezone.now()
 
         if not creator :
             raise forms.ValidationError(
@@ -45,11 +50,23 @@ class MyCreatorClassCreationForm(forms.ModelForm):
             )
         if not thumbnail_file :
             raise forms.ValidationError(
-                "Please add thumbnail file for class."
+                "Please add thumbnail file for stream."
             )
-        if not class_file :
+        if not sneak_peak_file :
             raise forms.ValidationError(
-                "Please add class file."
+                "Please add Sneak Peak file for stream."
+            )
+        if today_date > stream_datetime:
+            raise forms.ValidationError(
+                "Please add valid date and time."
+            )
+        if stream_amount < 0.0 :
+            raise forms.ValidationError(
+                "Stream amount must be grater than 0."
+            )
+        if total_seats < 0.0 :
+            raise forms.ValidationError(
+                "Stream total seats must be grater than 0."
             )
 
     def save(self, commit=True):
@@ -60,32 +77,42 @@ class MyCreatorClassCreationForm(forms.ModelForm):
 
 
 
-class MyCreatorClassChangeForm(forms.ModelForm):
+class StreamChangeForm(forms.ModelForm):
     """Custom CreatorChangeForm."""
 
     class Meta:
-        model = CreatorClass
+        model = Stream
         fields = (
             "creator",
             "title",
             "thumbnail_file",
-            "class_file",
+            "sneak_peak_file",        
+            "stream_datetime",        
+            "stream_amount",        
+            "total_seats",  
         )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        print(*args)
         self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
+        self.fields['creator'].required = False
 
     def clean(self):
-        cleaned_data = super(MyCreatorClassChangeForm, self).clean()
+        cleaned_data = super(StreamChangeForm, self).clean()
         creator = cleaned_data.get("creator")
         title = cleaned_data.get("title")
         thumbnail_file = cleaned_data.get("thumbnail_file")
-        class_file = cleaned_data.get("class_file")
+        sneak_peak_file = cleaned_data.get("sneak_peak_file")
+        stream_datetime = cleaned_data.get("stream_datetime")
+        stream_amount = cleaned_data.get("stream_amount")
+        total_seats = cleaned_data.get("total_seats")
+
+        today_date = timezone.now()
 
         if not creator :
             raise forms.ValidationError(
-                "Please select creator"
+                "Please select creator."
             )
         if not title :
             raise forms.ValidationError(
@@ -93,11 +120,23 @@ class MyCreatorClassChangeForm(forms.ModelForm):
             )
         if not thumbnail_file :
             raise forms.ValidationError(
-                "Please add thumbnail file for class."
+                "Please add thumbnail file for stream."
             )
-        if not class_file :
+        if not sneak_peak_file :
             raise forms.ValidationError(
-                "Please add class file."
+                "Please add Sneak Peak file for stream."
+            )
+        if today_date > stream_datetime:
+            raise forms.ValidationError(
+                "Please add valid date and time."
+            )
+        if stream_amount < 0.0 :
+            raise forms.ValidationError(
+                "Stream amount must be grater than 0."
+            )
+        if total_seats < 0.0 :
+            raise forms.ValidationError(
+                "Stream total seats must be grater than 0."
             )
 
     def save(self, commit=True):
@@ -111,15 +150,22 @@ class MyCreatorClassChangeForm(forms.ModelForm):
 # Creator Keywords
 # -----------------------------------------------------------------------------
 
-class ClassKeywordCreationForm(forms.ModelForm):
+class StreamKeywordCreationForm(forms.ModelForm):
     """Custom form to create Class Keyword"""
 
     class Meta():
-        model = ClassKeyword
+        model = StreamKeyword
         fields = [
             "keyword",
-            "creator_class",
+            "stream",
         ]
+
+    # def clean(self):
+    #     cleaned_data = super(ClassKeywordCreationForm, self).clean()
+    #     keyword = cleaned_data.get("keyword")
+    #     creator_class = cleaned_data.get("creator_class")
+    #     print(keyword)
+    #     print(creator_class)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -130,15 +176,15 @@ class ClassKeywordCreationForm(forms.ModelForm):
         return instance
 
 
-class ClassKeywordChangeForm(forms.ModelForm):
+class StreamKeywordChangeForm(forms.ModelForm):
     """Custom form to change Class Keyword"""
 
     class Meta():
-        model = ClassKeyword
+        model = StreamKeyword
 
         fields = [
             "keyword",
-            "creator_class",
+            "stream",
         ]
 
     def save(self, commit=True):
@@ -153,16 +199,15 @@ class ClassKeywordChangeForm(forms.ModelForm):
 # Creator Covers
 # -----------------------------------------------------------------------------
 
-class ClassCoversCreationForm(forms.ModelForm):
+class StreamCoversCreationForm(forms.ModelForm):
     """Custom form to create Class Covers"""
 
     class Meta():
-        model = ClassCovers
+        model = StreamCovers
         fields = [
             "covers",
-            "creator_class",
+            "stream",
         ]
-
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -173,67 +218,16 @@ class ClassCoversCreationForm(forms.ModelForm):
         return instance
 
 
-class ClassCoversChangeForm(forms.ModelForm):
+class StreamCoversChangeForm(forms.ModelForm):
     """Custom form to change Class Covers"""
 
     class Meta():
-        model = ClassCovers
+        model = StreamCovers
 
         fields = [
             "covers",
-            "creator_class",
+            "stream",
         ]
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-
-        if commit:
-            instance.save()
-
-        return instance
-
-
-# -----------------------------------------------------------------------------
-# Class Materials
-# -----------------------------------------------------------------------------
-
-class ClassMaterialCreationForm(forms.ModelForm):
-    """Custom form to create Class Covers"""
-
-    class Meta():
-        model = ClassMaterial
-        fields = [
-            "creator_class",
-            "class_material",
-        ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        print(*args)
-
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-
-        if commit:
-            instance.save()
-
-        return instance
-
-
-class ClassMaterialChangeForm(forms.ModelForm):
-    """Custom form to change Class Covers"""
-
-    class Meta():
-        model = ClassMaterial
-
-        fields = [
-            "creator_class",
-            "class_material",
-        ]
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        print(*args)
-
     def save(self, commit=True):
         instance = super().save(commit=False)
 

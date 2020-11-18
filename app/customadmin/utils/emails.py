@@ -14,7 +14,7 @@ class Emails:
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-         
+
         if self.from_email == "":
             self.from_email = 'from@example.com'
 

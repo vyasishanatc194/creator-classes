@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material, MaterialCategory, OneToOneSession, TimeSlot
+from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material, MaterialCategory, OneToOneSession, TimeSlot, Stream, StreamCovers, StreamKeyword
 
 # Register your models here.
 
@@ -29,6 +29,18 @@ class ClassMaterialAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "creator_class", "class_material",]
 
+class StreamAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "creator", "title","total_seats",]
+
+class StreamKeywordAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "stream", "keyword",]
+
+class StreamCoversAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "stream", "covers",]
+
 class MaterialAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "creator", "material_category", "title"]
@@ -56,4 +68,6 @@ admin.site.register(Material, MaterialAdmin)
 admin.site.register(MaterialCategory, MaterialCategoryAdmin)
 admin.site.register(OneToOneSession, OneToOneSessionAdmin)
 admin.site.register(TimeSlot, TimeSlotAdmin)
-    
+admin.site.register(Stream, StreamAdmin)
+admin.site.register(StreamKeyword, StreamKeywordAdmin)
+admin.site.register(StreamCovers, StreamCoversAdmin)

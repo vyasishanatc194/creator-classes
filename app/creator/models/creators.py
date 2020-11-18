@@ -1,9 +1,15 @@
 from django.db import models
 from creator_class.models import ActivityTracking
+from django.utils.translation import gettext as _
 from user.models import User
 
-
+STATUS_CHOICE = (
+    ('REJECT', "Rejected"),
+    ('PENDING', "Pending"),
+    ('ACCEPT', "Accepted")
+)
 class Creator(User):
+    status = models.CharField(max_length=7,choices=STATUS_CHOICE, default='PENDING')
     key_skill = models.CharField(max_length=40, blank=True, null=True, default='')
     instagram_url = models.CharField(max_length=40, blank=True, null=True, default='')
     linkedin_url = models.CharField(max_length=40, blank=True, null=True, default='')
@@ -31,6 +37,3 @@ class CreatorSkill(ActivityTracking):
         verbose_name = "Creator skill"
         verbose_name_plural = "Creator skills"
         ordering = ["-created_at"]
-
-    def __str__(self):
-        return str(self.creator.email)

@@ -129,7 +129,7 @@
                     if (this._config.showArrows && this._$galleryItems.length > 1) {
                         this._$lightboxContainer.append('<div class="ekko-lightbox-nav-overlay"><a href="#">' + this._config.leftArrow + '</a><a href="#">' + this._config.rightArrow + '</a></div>');
                         this._$modalArrows = this._$lightboxContainer.find('div.ekko-lightbox-nav-overlay').first();
-                        this._$lightboxContainer.on('click', 'a:first-child', function (event) {
+                        this._$lightboxContainer.on("click", 'a:first-child', function (event) {
                             event.preventDefault();
                             return _this.navigateLeft();
                         });
@@ -147,7 +147,7 @@
                     return _this._config.onShown.call(_this);
                 }).on('hide.bs.modal', this._config.onHide.bind(this)).on('hidden.bs.modal', function () {
                     if (_this._galleryName) {
-                        $(document).off('keydown.ekkoLightbox');
+                        $(document).off("keydown.ekkoLightbox");
                         $(window).off('resize.ekkoLightbox');
                     }
                     _this._$modal.remove();

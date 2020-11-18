@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group, Permission
 
 from ..utils import filter_perms
 
-from customadmin.utils import Emails
-from django.template import loader
 
 # -----------------------------------------------------------------------------
 # Users
@@ -38,9 +34,9 @@ class MyUserCreationForm(UserCreationForm):
 
         ]
         labels = {
-        "is_staff": "Client Admin",         
-        "is_superuser": "TF Admin",         
-        "groups": "User Role",         
+        "is_staff": "Client Admin",    
+        "is_superuser": "TF Admin",
+        "groups": "User Role",
         }
 
     def __init__(self, user, *args, **kwargs):
@@ -118,7 +114,6 @@ class MyUserChangeForm(UserChangeForm):
             "is_active",
             "is_superuser",
             "is_staff",
-            
         )
 
     def __init__(self, user, *args, **kwargs):

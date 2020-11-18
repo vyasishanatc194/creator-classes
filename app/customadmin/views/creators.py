@@ -8,14 +8,14 @@ from customadmin.views.generic import (
     MyNewFormsetUpdateView
 )
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
 from customadmin.forms import MyCreatorChangeForm, MyCreatorCreationForm, CreatorSkillCreationForm, CreatorSkillChangeForm
 from django.shortcuts import reverse, render
 
-from creator.models import Creator , CreatorSkill, Material, CreatorClass, OneToOneSession, TimeSlot
+from creator.models import Creator , CreatorSkill, Material, CreatorClass, OneToOneSession, TimeSlot, Stream
 from user.models import CreatorReview, ClassReview
 from extra_views import InlineFormSetFactory
 from django.views.generic import DetailView
@@ -41,18 +41,12 @@ def creator_export_product_csv(request):
     response = HttpResponse (content_type='text/csv')
     filename = u"Creator.csv"
     response['Content-Disposition'] = u'attachment; filename="{0}"'.format(filename)
-   
     writer = csv.writer(response)
     query_set = Creator.objects.all()
 
     #Header
     writer.writerow(['Email', "Username",'Firstname', 'Lastname', 'Profile Image','Description','is_active',"is_staff", "is_superuser","Key Skill","Instagram", "LinkedIn", "Twitter", "Google", "Facebook"])
     for creator in query_set:
-        if creator.groups.all():
-            gp = creator.groups.all()[0].name
-        else:
-            gp = None 
-
         if not creator.profile_image:
             avatar = None
         else:
@@ -71,6 +65,34 @@ def creator_export_product_csv(request):
 # Creators
 # -----------------------------------------------------------------------------
 
+def CreatorRejectRequestAjax(request):
+    pk = request.GET.get('creator_id',False)
+    creator_obj = Creator.objects.get(pk=pk)
+    if creator_obj:
+        creator_obj.status = 'REJECT'
+        if creator_obj.is_active:
+            creator_obj.is_active = False
+        creator_obj.save()
+        # email = Emails(subject="Request rejected !!!", recipient_list=creator_obj.email, )
+        # email.set_html_message('request_reject.html', {'creator': creator_obj})
+        # email.send()
+        messages.success(request, "'Request rejected successfully'")
+    return JsonResponse({"success": True})
+
+def CreatorAcceptRequestAjax(request):
+    pk = request.GET.get('creator_id',False)
+    creator_obj = Creator.objects.get(pk=pk)
+    if creator_obj:  
+        creator_obj.status = 'ACCEPT'
+        if not creator_obj.is_active:
+            creator_obj.is_active = True
+        creator_obj.save()
+        # email = Emails(subject="Request rejected !!!", recipient_list=creator_obj.email, )
+        # email.set_html_message('request_reject.html', {'creator': creator_obj})
+        # email.send()
+        messages.success(request, "'Request accept successfully'")
+    return JsonResponse({"success": True})
+
 class CreatorDetailView(DetailView):
     model = Creator
     template_name = "customadmin/creator/creator_detail.html"
@@ -78,14 +100,13 @@ class CreatorDetailView(DetailView):
     context = {}
 
     def get(self, request, pk):
-        self.context['creator_id'] = pk
         self.context['creator'] = Creator.objects.filter(pk=pk).first()
-        self.context['class_list'] = CreatorClass.objects.filter(creator=self.context['creator'].pk)
-        self.context['session_list'] = OneToOneSession.objects.filter(creator=self.context['creator'].pk)
-        self.context['material_list'] = Material.objects.filter(creator=self.context['creator'].pk)
-        self.context['creator_review_list'] = CreatorReview.objects.filter(creator=self.context['creator'].pk)
+        self.context['class_list'] = CreatorClass.objects.filter(creator=pk)
+        self.context['session_list'] = OneToOneSession.objects.filter(creator=pk)
+        self.context['material_list'] = Material.objects.filter(creator=pk)
+        self.context['creator_review_list'] = CreatorReview.objects.filter(creator=pk)
         self.context['session_slot_list'] = TimeSlot.objects.all()
-        self.context['class_review_list'] = ClassReview.objects.all()
+        self.context['stream_list'] = Stream.objects.filter(creator=pk)
         return render(request, self.template_name, self.context)
 
 
@@ -124,7 +145,7 @@ class CreatorCreateView(MyNewFormsetCreateView):
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creator-list")
 
 class CreatorSkillUpdateInline(InlineFormSetFactory):
@@ -147,14 +168,9 @@ class CreatorUpdateView(MyNewFormsetUpdateView):
     template_name = "customadmin/creator/creator_form_update.html"
     permission_required = ("customadmin.change_creator",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
-
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creator-list")
 
 class CreatorDeleteView(MyDeleteView):
@@ -165,7 +181,7 @@ class CreatorDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_creator",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creator-list")
 
 class CreatorAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

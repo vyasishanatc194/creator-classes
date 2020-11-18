@@ -33,7 +33,7 @@
                             <th>Last Name</th>
                             <th>Profile Image</th>
                             <th>Key Skill</th>
-                            <th>Active</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -45,14 +45,14 @@
                             <th>Last Name</th>
                             <th>Profile Image</th>
                             <th>Key Skill</th>
-                            <th>Active</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </tfoot>
                     <tbody>
                         {% for o in object_list %}
                         <tr>
-                            <td><a href="{% url 'customadmin:creator-detailview' o.pk %}" class="btn text-info">{{ o.username }}</a></td>
+                            <td>{{ o.username }}</td>
                             <td>{{ o.email }}</td>
                             <td>{{ o.first_name }}</td>
                             <td>{{ o.last_name }}</td>
@@ -62,17 +62,18 @@
                             <td>No image</td>
                             {% endif %}
                             <td>{{ o.key_skill }}</td>
-                            <td>    
-                                {% show_check o.is_active %}
-                                <!-- {% if o.is_active %}
-                                <a href="#" class="btn btn-primary btn-xs" onclick="get_id('{{ o.pk }}')">Declined</a>    
-                                {% else %}
-                                <a href="#" class="btn btn-primary btn-xs" onclick="get_id('{{ o.pk }}')">Approved</a>
-                                {% endif %} -->
-                            </td>
+                            <td>
+                                {% if o.get_status_display == 'Pending' %}
+                                <a href="#" class="btn btn-danger btn-xs" onclick="reject_creator('{{ o.pk }}')">Reject</a>    
+                                <a href="#" class="btn btn-success btn-xs" onclick="accept_creator('{{ o.pk }}')">Accept</a>
+                                {% elif o.get_status_display == 'Accepted' %}
+                                Accepted
+                                {% elif o.get_status_display == 'Rejected' %}
+                                Rejected
+                                {% endif %}
                             </td>
                             <td class="row-actions">
-                                {% include "customadmin/partials/list_row_actions.html" %}
+                                {% include "customadmin/partials/list_row_more_actions.html" %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -95,5 +96,29 @@
     $(function () {
         userroles.creators.index();
     });
+    function accept_creator(creator_id){
+        $.ajax({
+            url: "{% url opts|admin_urlname:'accept' %}",
+            data: {
+            'creator_id': creator_id
+            },
+            dataType: 'json',
+            success: function (data) { 
+                setTimeout(location.reload(true),200)
+            }
+        });
+    }
+    function reject_creator(creator_id){
+        $.ajax({
+            url: "{% url opts|admin_urlname:'reject' %}",
+            data: {
+            'creator_id': creator_id
+            },
+            dataType: 'json',
+            success: function (data) { 
+                setTimeout(location.reload(true),200)
+            }
+        });
+    }
 </script>
 {% endblock %}

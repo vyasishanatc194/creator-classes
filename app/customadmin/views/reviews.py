@@ -51,7 +51,7 @@ class CreatorReviewCreateView(MyCreateView):
         return self.model.objects.all().exclude(user.is_creator == true)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creatorreview-list")
 
 
@@ -65,7 +65,7 @@ class CreatorReviewUpdateView(MyUpdateView):
     permission_required = ("customadmin.change_creator_review",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creatorreview-list")
 
 class CreatorReviewDeleteView(MyDeleteView):
@@ -76,7 +76,7 @@ class CreatorReviewDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_creator_review",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creatorreview-list")
 
 class CreatorReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
@@ -161,7 +161,7 @@ class ClassReviewCreateView(MyCreateView):
         return self.model.objects.all().exclude(user.is_creator == true)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:classreview-list")
 
 
@@ -175,7 +175,7 @@ class ClassReviewUpdateView(MyUpdateView):
     permission_required = ("customadmin.change_class_review",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:classreview-list")
 
 class ClassReviewDeleteView(MyDeleteView):
@@ -186,7 +186,7 @@ class ClassReviewDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_class_review",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:classreview-list")
 
 class ClassReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

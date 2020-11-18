@@ -30,7 +30,10 @@
                             <th>Creator</th>
                             <th>Title</th>
                             <th>Thumbnail File</th>
-                            <th>Class File</th>
+                            <th>Sneak Peak File</th>
+                            <th>Stream DateTime</th>
+                            <th>Stream Amount</th>
+                            <th>Stream Total Seats</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -39,7 +42,10 @@
                             <th>Creator</th>
                             <th>Title</th>
                             <th>Thumbnail File</th>
-                            <th>Class File</th>
+                            <th>Sneak Peak File</th>
+                            <th>Stream DateTime</th>
+                            <th>Stream Amount</th>
+                            <th>Stream Total Seats</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -53,43 +59,42 @@
                             {% else %}
                             <td>No Thumbnail File</td>
                             {% endif %}
-                            {% if o.class_file %}
-                            {% if o.class_file %}
-                                {% if '.jpg' in o.class_file.url %}
-                                    <td>jpg file</td>
-                                {% elif '.jpeg' in o.class_file.url %}
-                                    <td>jpeg file</td>
-                                {% elif '.png' in o.class_file.url %}
-                                    <td>png file</td>
-                                {% elif '.mp3' in o.class_file.url %}
-                                    <td>mp3 file</td>
-                                {% elif '.pdf' in o.class_file.url %}
-                                    <td>pdf file</td>
-                                {% elif '.mkv' in o.class_file.url %}
-                                    <td>mkv file</td>
-                                {% elif '.rar' in o.class_file.url %}
-                                    <td>rar file</td>
-                                {% elif '.zip' in o.class_file.url %}
-                                    <td>zip file</td>
-                                {% elif '.csv' in o.class_file.url %}
-                                    <td>csv file</td>
-                                {% elif '.gif' in o.class_file.url %}
-                                    <td>gif file</td>
-                                {% elif '.ico' in o.class_file.url %}
-                                    <td>ico file</td>
-                                {% elif '.svg' in o.class_file.url %}
-                                    <td>svg file</td>
-                                {% elif '.psd' in o.class_file.url %}
-                                    <td>psd file</td>
+                            {% if o.sneak_peak_file %}
+                                {% if '.jpg' in o.sneak_peak_file.url %}
+                                    <td>uploaded jpg file</td>
+                                {% elif '.jpeg' in o.sneak_peak_file.url %}
+                                    <td>uploaded jpeg file</td>
+                                {% elif '.png' in o.sneak_peak_file.url %}
+                                    <td>uploaded png file</td>
+                                {% elif '.mp3' in o.sneak_peak_file.url %}
+                                    <td>uploaded mp3 file</td>
+                                {% elif '.pdf' in o.sneak_peak_file.url %}
+                                    <td>uploaded pdf file</td>
+                                {% elif '.mkv' in o.sneak_peak_file.url %}
+                                    <td>uploaded mkv file</td>
+                                {% elif '.rar' in o.sneak_peak_file.url %}
+                                    <td>uploaded rar file</td>
+                                {% elif '.zip' in o.sneak_peak_file.url %}
+                                    <td>uploaded zip file</td>
+                                {% elif '.csv' in o.sneak_peak_file.url %}
+                                    <td>uploaded csv file</td>
+                                {% elif '.gif' in o.sneak_peak_file.url %}
+                                    <td>uploaded gif file</td>
+                                {% elif '.ico' in o.sneak_peak_file.url %}
+                                    <td>uploaded ico file</td>
+                                {% elif '.svg' in o.sneak_peak_file.url %}
+                                    <td>uploaded svg file</td>
+                                {% elif '.psd' in o.sneak_peak_file.url %}
+                                    <td>uploadedpsd file</td>
                                 {% else %}
-                                    <td>other file</td>
+                                    <td>uploaded other file</td>
                                 {% endif %}
                             {% else %}
-                            <td>No class File</td>
+                            <td>No Sneak Peak File</td>
                             {% endif %}
-                            {% else %}
-                            <td>No Class File</td>
-                            {% endif %}
+                            <td>{{ o.stream_datetime|date:'d-m-Y, H:i' }}</td>
+                            <td>{{ o.stream_amount }}</td>
+                            <td>{{ o.total_seats }}</td>
                             </td>
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_more_actions.html" %}
@@ -113,7 +118,8 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.creatorclasses.index();
+        userroles.streams.index();
     });
 </script>
+
 {% endblock %}

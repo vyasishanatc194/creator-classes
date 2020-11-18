@@ -1,12 +1,10 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 app_name='customadmin'
 
 urlpatterns = [
-    
     path("", views.IndexView.as_view(), name="index"),
-
 
     # User
     path("users/", views.UserListView.as_view(), name="user-detail"),
@@ -19,17 +17,9 @@ urlpatterns = [
     path("ajax-users", views.UserAjaxPagination.as_view(), name="user-list-ajax"),
 
     path("export_user_csv", views.export_user_csv, name="export_user_csv"),
-
-
-    
-
 ]
 
 urlpatterns +=[
-#     # path("creators/", views.CreatorListView.as_view(), name="creator-list"),
-    path("streams/", views.StreamListView.as_view(), name="stream-list"),
-
-
 #------------------------------------------------------------------------------------------------------
     path("creator_export_product_csv", views.creator_export_product_csv, name="creator_export_product_csv"),
     
@@ -40,6 +30,8 @@ urlpatterns +=[
     path("creators/<int:pk>/update/", views.CreatorUpdateView.as_view(), name="creator-update"),
     path("creators/<int:pk>/delete/", views.CreatorDeleteView.as_view(), name="creator-delete"),
     path("ajax-creators", views.CreatorAjaxPagination.as_view(), name="creator-list-ajax"),
+    path("creators-accept/", views.CreatorAcceptRequestAjax, name="creator-accept"),
+    path("creators-reject/", views.CreatorRejectRequestAjax, name="creator-reject"),
 #------------------------------------------------------------------------------------------------------
     
     path("keywords/", views.AdminKeywordListView.as_view(), name="adminkeyword-detail"),
@@ -50,7 +42,8 @@ urlpatterns +=[
     path("ajax-keywords", views.AdminKeywordAjaxPagination.as_view(), name="adminkeyword-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
-    
+    path("classes/<int:pk>/detail/", views.ClassDetailView.as_view(), name="creatorclass-detailview"),
+
     path("classes/", views.CreatorClassListView.as_view(), name="creatorclass-detail"),
     path("classes/", views.CreatorClassListView.as_view(), name="creatorclass-list"),
     path("classes/create/", views.CreatorClassCreateView.as_view(), name="creatorclass-create"),
@@ -58,6 +51,16 @@ urlpatterns +=[
     path("classes/<int:pk>/delete/", views.CreatorClassDeleteView.as_view(), name="creatorclass-delete"),
     path("ajax-classes", views.CreatorClassAjaxPagination.as_view(), name="creatorclass-list-ajax"),
     path("get-materials/", views.GetMaterials, name="creatorclass-get-materials"),
+#------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+
+    path("streams/<int:pk>/detail/", views.StreamDetailView.as_view(), name="stream-detailview"),
+    path("streams/", views.StreamListView.as_view(), name="stream-detail"),
+    path("streams/", views.StreamListView.as_view(), name="stream-list"),
+    path("streams/create/", views.StreamCreateView.as_view(), name="stream-create"),
+    path("streams/<int:pk>/update/", views.StreamUpdateView.as_view(), name="stream-update"),
+    path("streams/<int:pk>/delete/", views.StreamDeleteView.as_view(), name="stream-delete"),
+    path("ajax-streams", views.StreamAjaxPagination.as_view(), name="stream-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
     
@@ -87,6 +90,7 @@ urlpatterns +=[
     path("ajax-material-category", views.MaterialCategoryAjaxPagination.as_view(), name="materialcategory-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
+    path("material/<int:pk>/detail/", views.MaterialDetailView.as_view(), name="material-detailview"),
     
     path("material/", views.MaterialListView.as_view(), name="material-detail"),
     path("material/", views.MaterialListView.as_view(), name="material-list"),
@@ -114,7 +118,8 @@ urlpatterns +=[
     path("ajax-one-to-one-sessions", views.OneToOneSessionAjaxPagination.as_view(), name="onetoonesession-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
-    
+    path("plans/<int:pk>/detail/", views.PlanDetailView.as_view(), name="plan-detailview"),
+
     path("plans/", views.PlanListView.as_view(), name="plan-detail"),
     path("plans/", views.PlanListView.as_view(), name="plan-list"),
     path("plans/create/", views.PlanCreateView.as_view(), name="plan-create"),

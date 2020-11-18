@@ -100,7 +100,7 @@ CodeMirror.defineMode("asterisk", function() {
     if(ch == '$'){
       var ch1 = stream.peek();
       if(ch1 == '{'){
-        stream.skipTo('}');
+        stream.skipTo("}");
         stream.eat('}');
         return "variable-3";
       }

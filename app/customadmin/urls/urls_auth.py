@@ -2,10 +2,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
 
 app_name='auth'
- 
 urlpatterns = [
 
-  
     # Login / Logout
     path("login/", auth_views.LoginView.as_view(), name="auth_login"),
     path(

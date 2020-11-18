@@ -10,7 +10,6 @@ from django.conf import settings
 class Firebase(firebase_admin):
 
     def __init__(self):
-         
         json_path = os.path.join(settings.BASE_DIR, "night-market-752c4-firebase-adminsdk-2k061-6b40f9d7bf.json")
         cred = self.credentials.Certificate(json_path)
         self.initialize_app(cred)

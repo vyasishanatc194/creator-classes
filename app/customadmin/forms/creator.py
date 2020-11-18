@@ -26,11 +26,6 @@ class MyCreatorCreationForm(forms.ModelForm):
             "last_name",
             "profile_image",
             "description",
-            "is_active",
-            "is_superuser",
-            "is_staff",
-            "groups",
-            "user_permissions",
             "password",
             "confirm_password",
 
@@ -43,7 +38,6 @@ class MyCreatorCreationForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         print(*args)
         self.fields['username'].required = False
@@ -58,7 +52,6 @@ class MyCreatorCreationForm(forms.ModelForm):
         confirm_password = cleaned_data.get("confirm_password")
         first_name = cleaned_data.get("first_name")
         last_name = cleaned_data.get("last_name")
-
 
         if not email:
             raise forms.ValidationError(
@@ -94,13 +87,10 @@ class MyCreatorCreationForm(forms.ModelForm):
 
         if commit:
             instance.is_creator = True
+            instance.is_active = False
             instance.password = make_password(instance.password)
             instance.save()
-
-
         return instance
-
-
 
 class MyCreatorChangeForm(forms.ModelForm):
     """Custom CreatorChangeForm."""
@@ -113,9 +103,7 @@ class MyCreatorChangeForm(forms.ModelForm):
             "last_name",
             "profile_image",
             "description",
-            "is_active",
-            "is_superuser",
-            "is_staff",
+            "status",
 
             "key_skill",
             "instagram_url",
@@ -155,6 +143,20 @@ class MyCreatorChangeForm(forms.ModelForm):
                 "Please enter last name"
             )
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if commit:
+            if instance.status=='PENDING':
+                instance.is_active = False
+            if instance.status=='ACCEPT':
+                instance.is_active = True
+            if instance.status=='REJECT':
+                instance.is_active = False
+            instance.password = make_password(instance.password)
+            instance.save()
+        return instance
+
 # -----------------------------------------------------------------------------
 # Creator Skills
 # -----------------------------------------------------------------------------
@@ -169,13 +171,6 @@ class CreatorSkillCreationForm(forms.ModelForm):
             "creator",
         ]
 
-    def clean(self):
-        cleaned_data = super(CreatorSkillCreationForm, self).clean()
-        skill = cleaned_data.get("skill")
-        creator = cleaned_data.get("creator")
-        print(skill)
-        print(creator)
-    
     def save(self, commit=True):
         instance = super().save(commit=False)
 

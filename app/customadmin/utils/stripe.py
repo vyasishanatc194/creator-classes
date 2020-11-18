@@ -14,10 +14,10 @@ class MyStripe():
         # name
         # payment_method
         # phone
-        # shipping    
+        # shipping
 
         return stripe.Customer.create(email=user.email,name=user.name,phone=user.mobile)
-        
+
     def updateCustomer(self,customerId,user):
 
         # description

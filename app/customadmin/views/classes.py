@@ -12,12 +12,13 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
+from django.views.generic import DetailView
 
 from customadmin.forms import MyCreatorClassChangeForm, MyCreatorClassCreationForm, ClassKeywordCreationForm, ClassKeywordChangeForm, ClassCoversCreationForm, ClassCoversChangeForm, ClassMaterialCreationForm, ClassMaterialChangeForm
 from django.shortcuts import reverse, render
 
 from creator.models import CreatorClass, ClassKeyword, ClassCovers, ClassMaterial
-
+from user.models import ClassReview
 from extra_views import InlineFormSetFactory
 
 from django.contrib import messages
@@ -36,6 +37,22 @@ def GetMaterials(request):
 # -----------------------------------------------------------------------------
 # Creator Classes
 # -----------------------------------------------------------------------------
+
+class ClassDetailView(DetailView):
+    model = CreatorClass
+    template_name = "customadmin/classes/class_detail.html"
+    permission_required = ("customadmin.view_class_detail",)
+    context = {}
+
+    def get(self, request, pk):
+        self.context['class_detail'] = CreatorClass.objects.filter(pk=pk).first()
+        self.context['class_file_url'] = request.build_absolute_uri(self.context['class_detail'].class_file) 
+        self.context['class_file_url'] = self.context['class_file_url'][:22] + 'media' + self.context['class_file_url'][50:]
+        self.context['class_keyword_list'] = ClassKeyword.objects.filter(creator_class=pk)
+        self.context['class_cover_list'] = ClassCovers.objects.filter(creator_class=pk)
+        self.context['class_material_list'] = ClassMaterial.objects.filter(creator_class=pk)
+        self.context['class_review_list'] = ClassReview.objects.filter(creator_class=pk)
+        return render(request, self.template_name, self.context)
 
 class CreatorClassListView(MyListView):
     """View for Creator Class listing"""
@@ -85,7 +102,7 @@ class CreatorClassCreateView(MyNewFormsetCreateView):
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creatorclass-list") 
 
 class ClassKeywordUpdateInline(InlineFormSetFactory):
@@ -124,7 +141,7 @@ class CreatorClassUpdateView(MyNewFormsetUpdateView):
 
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creatorclass-list")
 
 class CreatorClassDeleteView(MyDeleteView):
@@ -135,7 +152,7 @@ class CreatorClassDeleteView(MyDeleteView):
     permission_required = ("customadmin.delete_creator_class",)
 
     def get_success_url(self):
-        opts = self.model._meta
+        # opts = self.model._meta
         return reverse("customadmin:creatorclass-list")
 
 class CreatorClassAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

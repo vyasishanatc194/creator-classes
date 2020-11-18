@@ -2,8 +2,9 @@
 
 from django import forms
 
-from creator.models import OneToOneSession, TimeSlot
+from creator.models import OneToOneSession, TimeSlot, Creator
 from django.utils import timezone
+import datetime
 # -----------------------------------------------------------------------------
 # Creator's OneToOne Sessions
 # -----------------------------------------------------------------------------
@@ -21,7 +22,7 @@ class OneToOneSessionCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
+        self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
 
     def clean(self):
@@ -63,7 +64,7 @@ class OneToOneSessionChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
+        self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
 
 
@@ -115,11 +116,10 @@ class TimeSlotCreationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(TimeSlotCreationForm, self).clean()
         slot_datetime = cleaned_data.get("slot_datetime")
-        
         today_date = timezone.now()
         if today_date > slot_datetime:
             raise forms.ValidationError(
-                "Please add valid date."
+                "Please add valid date and time."
             )
 
         if not slot_datetime:
@@ -150,8 +150,13 @@ class TimeSlotChangeForm(forms.ModelForm):
         print(*args)
 
     def clean(self):
-        cleaned_data = super(TimeSlotCreationForm, self).clean()
+        cleaned_data = super(TimeSlotChangeForm, self).clean()
         slot_datetime = cleaned_data.get("slot_datetime")
+        today_date = timezone.now()
+        if today_date > slot_datetime:
+            raise forms.ValidationError(
+                "Please add valid date and time."
+            )
 
         if not slot_datetime:
             raise forms.ValidationError(

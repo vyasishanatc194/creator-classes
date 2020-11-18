@@ -9,11 +9,7 @@ urlpatterns = [
 
 
     path("", views.IndexView.as_view(), name="index"),
-    
     path("", include(urls_auth)),
     path("", include(urls_core)),
-
-    # User management 
-    # path("accounts/", include("allauth.urls")),
 
 ]
