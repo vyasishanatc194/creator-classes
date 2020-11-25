@@ -4,12 +4,11 @@ from customadmin.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyView,
+    MyDetailView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView
 )
 from django.db.models import Q
-from django.http import JsonResponse
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 from django.views.generic import DetailView
@@ -18,6 +17,7 @@ from customadmin.forms import StreamChangeForm, StreamCreationForm, StreamKeywor
 from django.shortcuts import reverse, render
 
 from creator.models import Stream, StreamKeyword, StreamCovers
+from user.models import StreamBooking
 from extra_views import InlineFormSetFactory
 
 from django.contrib import messages
@@ -32,7 +32,7 @@ MSG_CANCELED = '"{}" canceled successfully.'
 # -----------------------------------------------------------------------------
 
 
-class StreamDetailView(DetailView):
+class StreamDetailView(MyDetailView):
     model = Stream
     template_name = "customadmin/streams/stream_detail.html"
     permission_required = ("customadmin.view_stream_detail",)
@@ -40,16 +40,16 @@ class StreamDetailView(DetailView):
 
     def get(self, request, pk):
         self.context['stream_detail'] = Stream.objects.filter(pk=pk).first()
-        self.context['sneak_peak_file_url'] = request.build_absolute_uri(self.context['stream_detail'].sneak_peak_file) 
+        self.context['sneak_peak_file_url'] = request.build_absolute_uri(self.context['stream_detail'].sneak_peak_file)
         self.context['sneak_peak_file_url'] = self.context['sneak_peak_file_url'][:22] + 'media' + self.context['sneak_peak_file_url'][50:]
         self.context['stream_keyword_list'] = StreamKeyword.objects.filter(stream=pk)
         self.context['stream_cover_list'] = StreamCovers.objects.filter(stream=pk)
+        self.context['user_list'] = StreamBooking.objects.filter(stream=pk)
         return render(request, self.template_name, self.context)
 
 class StreamListView(MyListView):
-    """View for Creator Class listing"""
+    """View for Creator Stream listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = Stream
     queryset = model.objects.all()
@@ -60,76 +60,67 @@ class StreamListView(MyListView):
         return self.model.objects.all().exclude(active=False)
 
 class StreamKeywordInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
+    """Inline view to show Keyword within the Parent View"""
 
     model = StreamKeyword
     form_class = StreamKeywordCreationForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class StreamCoversInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
+    """Inline view to show Cover within the Parent View"""
 
     model = StreamCovers
     form_class = StreamCoversCreationForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class StreamCreateView(MyNewFormsetCreateView):
-    """View to create User"""
+    """View to create Stream"""
 
     model = Stream
-
     inlines = [StreamKeywordInline,StreamCoversInline,]
-
     form_class = StreamCreationForm
     template_name = "customadmin/streams/stream_form.html"
     permission_required = ("customadmin.add_stream",)
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        # opts = self.model._meta
-        return reverse("customadmin:stream-list") 
+        return reverse("customadmin:stream-list")
 
 class StreamKeywordUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update Keyword which is a inline view"""
 
     model = StreamKeyword
     form_class = StreamKeywordChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class StreamCoversUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update Cover which is a inline view"""
 
     model = StreamCovers
     form_class = StreamCoversChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class StreamUpdateView(MyNewFormsetUpdateView):
-    """View to update User"""
+    """View to update Stream"""
 
     model = Stream
-
     inlines = [StreamKeywordUpdateInline,StreamCoversUpdateInline, ]
-
-
     form_class = StreamChangeForm
     template_name = "customadmin/streams/stream_form.html"
     permission_required = ("customadmin.change_stream",)
 
-
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        # opts = self.model._meta
         return reverse("customadmin:stream-list")
 
 class StreamDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete Stream"""
 
     model = Stream
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_stream",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:stream-list")
 
 class StreamAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

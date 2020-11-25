@@ -3,6 +3,7 @@ from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
 
 
+
 class CreatorClass(ActivityTracking):
     creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="class_by")
     title = models.CharField(max_length=200, blank=True, null=True, default='')
@@ -10,7 +11,7 @@ class CreatorClass(ActivityTracking):
     class_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class video"))
 
     def __str__(self):
-        return f"{self.creator.username} | {self.title} "
+        return f"{self.creator.username} | {self.title}"
 
     class Meta:
         verbose_name = "Creator Class"
@@ -42,7 +43,6 @@ class ClassCovers(ActivityTracking):
         verbose_name = "Class Cover"
         verbose_name_plural = "Class Covers"
         ordering = ["-created_at"]
-
 
 class ClassMaterial(ActivityTracking):
     creator_class = models.ForeignKey("CreatorClass", on_delete=models.CASCADE)

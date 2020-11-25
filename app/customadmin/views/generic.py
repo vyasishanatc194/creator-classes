@@ -75,7 +75,7 @@ class MyListView(
         if(self.request.user.is_staff == True):
             return True
         else:
-            return super().has_permission() 
+            return super().has_permission()
 
     # def get_permission_required(self):
     #     """Default to view and change perms."""
@@ -95,7 +95,15 @@ class MyDetailView(
 ):
     """DetailView CBV with LoginRequiredMixin and PermissionRequiredMixin."""
 
-    pass
+    def has_permission(self):
+
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission()
 
 
 class MyCreateView(

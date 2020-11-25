@@ -320,7 +320,7 @@ CodeMirror.defineMode('jade', function (config) {
       if (state.lastTag === 'script') {
         state.scriptType = 'application/javascript';
       }
-      return 'tag';
+      return "tag";
     }
   }
 
@@ -333,7 +333,7 @@ CodeMirror.defineMode('jade', function (config) {
       if (!innerMode) {
         innerMode = stream.current().substring(1);
       }
-      if (typeof innerMode === 'string') {
+      if (typeof innerMode === "string") {
         innerMode = CodeMirror.getMode(config, innerMode);
       }
       setInnerMode(stream, state, innerMode);

@@ -55,13 +55,13 @@
                             <td>{{ o.first_name }}</td>
                             <td>{{ o.last_name }}</td>
                             {% if o.profile_image %}
-                            <td><img src="{{MEDIA_URL}}{{ o.profile_image.url }}" alt="no image" height="80px" width="80px"></td>
+                            <td height="80px" width="180px"><img src="{{MEDIA_URL}}{{ o.profile_image.url }}" alt="no image" height="80x" width="180px"></td>
                             {% else %}
                             <td>No image</td>
                             {% endif %}
                             <td>{% show_check o.is_active %}</td>
                             <td class="row-actions">
-                                {% include "customadmin/partials/list_row_actions.html" %}
+                                {% include "customadmin/partials/list_row_more_actions.html" %}
                             </td>
                         </tr>
                         {% endfor %}

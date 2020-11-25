@@ -43,7 +43,7 @@
           <div class="ibox-tools">
             <span class="label label-info float-right">Annual</span>
           </div>
-          <h5>Creators</h5>
+          <h5>ApprovedCreators</h5>
         </div>
         <div class="ibox-content">
           <h3 class="no-margins">{{ creator_count }}</h3>
@@ -58,10 +58,10 @@
           <div class="ibox-tools">
             <span class="label label-primary float-right">Today</span>
           </div>
-          <h5>Groups</h5>
+          <h5>PendingCreators</h5>
         </div>
         <div class="ibox-content">
-          <h3 class="no-margins">8</h3>
+          <h3 class="no-margins">{{pending_creator_count}}</h3>
           <div class="stat-percent font-bold text-navy">44% <i class="fa fa-thumbs-up"></i></div>
           <small>Recently created</small>
         </div>
@@ -73,10 +73,10 @@
           <div class="ibox-tools">
             <span class="label label-danger float-right">Low value</span>
           </div>
-          <h5>Events</h5>
+          <h5>RejectedCreators</h5>
         </div>
         <div class="ibox-content">
-          <h3 class="no-margins">10</h3>
+          <h3 class="no-margins">{{rejected_creator_count}}</h3>
           <div class="stat-percent font-bold text-danger">38% <i class="fa fa-angle-down"></i></div>
           <small>Newly registered</small>
         </div>

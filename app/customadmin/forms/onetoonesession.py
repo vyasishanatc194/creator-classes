@@ -4,7 +4,6 @@ from django import forms
 
 from creator.models import OneToOneSession, TimeSlot, Creator
 from django.utils import timezone
-import datetime
 # -----------------------------------------------------------------------------
 # Creator's OneToOne Sessions
 # -----------------------------------------------------------------------------
@@ -111,7 +110,6 @@ class TimeSlotCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def clean(self):
         cleaned_data = super(TimeSlotCreationForm, self).clean()
@@ -147,7 +145,6 @@ class TimeSlotChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def clean(self):
         cleaned_data = super(TimeSlotChangeForm, self).clean()
@@ -162,7 +159,7 @@ class TimeSlotChangeForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Please add slot date time."
             )
-        
+
     def save(self, commit=True):
         instance = super().save(commit=False)
         if commit:

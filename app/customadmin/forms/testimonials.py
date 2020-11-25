@@ -23,9 +23,7 @@ class TestimonialCreationForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def clean(self):
         cleaned_data = super(TestimonialCreationForm, self).clean()

@@ -14,21 +14,31 @@
 
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Admin Keyword Details" icon_class="fas fa-sign-in-alt" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="User Card Details" icon_class="fas fa-sign-in-alt" only %}
 
             <div class="ibox-content">
+
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ form.keyword|as_crispy_field }}
+                        {{ form.user|as_crispy_field }}
                     </div>
-                </div> 
+                    <div class="col-sm-6">
+                        {{ form.card_number|as_crispy_field }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form.expiry_month_year|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.stripe_token|as_crispy_field }}
+                    </div>
+                </div>
             </div>
             <!-- /ibox-content -->
-
         </div>
-        <!-- /ibox --> 
 
-        
         {% include "customadmin/partials/form_footer.html" %}
 
     </form>
@@ -38,11 +48,11 @@
 
 {% block js %}
 {{ block.super }}
-
 <script src="{% static 'customadmin/js/userroles.js' %}"></script>
+
 <script>
     $(function() {
-        userroles.adminkeywords.details();
+        userroles.users.details();
     });
 </script>
 {% endblock %}

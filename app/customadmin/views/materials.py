@@ -4,33 +4,26 @@ from customadmin.views.generic import (
     MyCreateView,
     MyDeleteView,
     MyListView,
+    MyDetailView,
     MyLoginRequiredView,
     MyUpdateView,
 )
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AdminPasswordChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Group
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
 from customadmin.forms import MyMaterialCategoryCreationForm, MyMaterialCategoryChangeForm, MyMaterialCreationForm, MyMaterialChangeForm
 from django.shortcuts import reverse, render
-from django.views.generic import DetailView
-from creator.models import MaterialCategory , Material
-
-
-
+from creator.models import MaterialCategory, Material
 
 # -----------------------------------------------------------------------------
 # Material Category
 # -----------------------------------------------------------------------------
 
 class MaterialCategoryListView(MyListView):
-    """View for User listing"""
+    """View for Material Category listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = MaterialCategory
     queryset = model.objects.all()
@@ -41,50 +34,35 @@ class MaterialCategoryListView(MyListView):
         return self.model.objects.all().exclude(active=False)
 
 class MaterialCategoryCreateView(MyCreateView):
-    """View to create User"""
+    """View to create Material Category"""
 
     model = MaterialCategory
-
     form_class = MyMaterialCategoryCreationForm
     template_name = "customadmin/materials/material_category_form.html"
     permission_required = ("customadmin.add_material_category",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
-
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:materialcategory-list")
 
 class MaterialCategoryUpdateView(MyUpdateView):
-    """View to update User"""
+    """View to update Material Category"""
 
     model = MaterialCategory
-
     form_class = MyMaterialCategoryChangeForm
     template_name = "customadmin/materials/material_category_form.html"
     permission_required = ("customadmin.change_material_category",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user
-    #     return kwargs
-
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:materialcategory-list")
 
 class MaterialCategoryDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete Material Category"""
 
     model = MaterialCategory
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_material_category",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:materialcategory-list")
 
 class MaterialCategoryAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
@@ -141,9 +119,8 @@ class MaterialCategoryAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLogi
 # =========================      Material        ==================================
 # =================================================================================
 # =================================================================================
-# =================================================================================
 
-class MaterialDetailView(DetailView):
+class MaterialDetailView(MyDetailView):
     model = Material
     template_name = "customadmin/materials/material_detail.html"
     permission_required = ("customadmin.view_material_detail",)
@@ -151,12 +128,12 @@ class MaterialDetailView(DetailView):
 
     def get(self, request, pk):
         self.context['material_detail'] = Material.objects.filter(pk=pk).first()
-        self.context['material_file_url'] = request.build_absolute_uri(self.context['material_detail'].material_file) 
+        self.context['material_file_url'] = request.build_absolute_uri(self.context['material_detail'].material_file)
         self.context['material_file_url'] = self.context['material_file_url'][:22] + 'media' + self.context['material_file_url'][51:]
         return render(request, self.template_name, self.context)
 
 class MaterialListView(MyListView):
-    """View for User listing"""
+    """View for Material listing"""
 
     # paginate_by = 25
     ordering = ["id"]
@@ -169,7 +146,7 @@ class MaterialListView(MyListView):
         return self.model.objects.all().exclude(active=False)
 
 class MaterialCreateView(MyCreateView):
-    """View to create User"""
+    """View to create Material"""
 
     model = Material
 
@@ -177,38 +154,28 @@ class MaterialCreateView(MyCreateView):
     template_name = "customadmin/materials/material_form.html"
     permission_required = ("customadmin.add_material",)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["user"] = self.request.user 
-    #     return kwargs
-
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:material-list")
 
 class MaterialUpdateView(MyUpdateView):
-    """View to update User"""
+    """View to update Material"""
 
     model = Material
-
     form_class = MyMaterialChangeForm
     template_name = "customadmin/materials/material_form.html"
     permission_required = ("customadmin.change_material",)
 
-
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:material-list")
 
 class MaterialDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete Material"""
 
     model = Material
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_material",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:material-list")
 
 class MaterialAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

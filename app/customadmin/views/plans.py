@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from customadmin.mixins import HasPermissionsMixin
 from customadmin.views.generic import (
-    MyCreateView,
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
     MyUpdateView,
-    MyView,
+    MyDetailView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView
 )
@@ -18,7 +17,6 @@ from customadmin.forms import PlanChangeForm, PlanCreationForm, PlanCoverCreatio
 from django.shortcuts import reverse, render
 
 from ..models import Plan , PlanCover
-from django.views.generic import DetailView
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
 
 from django.contrib import messages
@@ -29,10 +27,10 @@ MSG_DELETED = '"{}" deleted successfully.'
 MSG_CANCELED = '"{}" canceled successfully.'
 
 # -----------------------------------------------------------------------------
-# OneToOneSessions
+# Plan
 # -----------------------------------------------------------------------------
 
-class PlanDetailView(DetailView):
+class PlanDetailView(MyDetailView):
     model = Plan
     template_name = "customadmin/plans/plan_detail.html"
     permission_required = ("customadmin.view_plan_detail",)
@@ -45,9 +43,8 @@ class PlanDetailView(DetailView):
         return render(request, self.template_name, self.context)
 
 class PlanListView(MyListView):
-    """View for OneToOneSession listing"""
+    """View for Plan listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = Plan
     queryset = model.objects.all()
@@ -58,63 +55,55 @@ class PlanListView(MyListView):
         return self.model.objects.all()
 
 class PlanCoverInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
+    """Inline view to show Cover within the Parent View"""
 
     model = PlanCover
     form_class = PlanCoverCreationForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
-
 class PlanCreateView(MyNewFormsetCreateView):
-    """View to create User"""
+    """View to create Plan"""
 
     model = Plan
-
     inline_model = PlanCover
     inlines = [PlanCoverInline, ]
-
     form_class = PlanCreationForm
     template_name = "customadmin/plans/plan_form.html"
     permission_required = ("customadmin.add_plan",)
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        # opts = self.model._meta
         return reverse("customadmin:plan-list")
 
 class PlanCoverUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update Cover which is a inline view"""
 
     model = PlanCover
     form_class = PlanCoverChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class PlanUpdateView(MyNewFormsetUpdateView):
-    """View to update User"""
+    """View to update Plan"""
 
     model = Plan
-
     inline_model = PlanCover
     inlines = [PlanCoverInline, ]
-
     form_class = PlanChangeForm
     template_name = "customadmin/plans/plan_form.html"
     permission_required = ("customadmin.change_plan",)
 
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        # opts = self.model._meta
         return reverse("customadmin:plan-list")
 
 class PlanDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete Plan"""
 
     model = Plan
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_plan",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:plan-list")
 
 class PlanAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

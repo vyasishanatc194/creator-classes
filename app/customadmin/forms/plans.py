@@ -6,8 +6,6 @@ from ..models import Plan, PlanCover
 # -----------------------------------------------------------------------------
 # Plans
 # -----------------------------------------------------------------------------
-
-
 class PlanCreationForm(forms.ModelForm):
     """Custom OneToOneSessionCreationForm."""
 
@@ -117,7 +115,6 @@ class PlanCoverCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -138,7 +135,6 @@ class PlanCoverChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def save(self, commit=True):
         instance = super().save(commit=False)

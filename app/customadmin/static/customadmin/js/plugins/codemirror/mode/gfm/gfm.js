@@ -56,7 +56,7 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
       if (stream.peek() === '`') {
         stream.next();
         var before = stream.pos;
-        stream.eatWhile('`');
+        stream.eatWhile("`");
         var difference = 1 + stream.pos - before;
         if (!state.code) {
           codeDepth = difference;

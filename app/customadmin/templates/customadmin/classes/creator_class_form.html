@@ -14,12 +14,12 @@
 
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Personal Info" icon_class="fas fa-user" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Class Info" icon_class="fas fa-user" only %}
 
             <div class="ibox-content">
 
                 <div class="row">
-                    <div class="col-sm-6" id="id_material">
+                    <div class="col-sm-6" id="creator_id">
                         {{ form.creator|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
@@ -221,7 +221,7 @@
     });
 </script>
 <script>
-    $("#id_material").click(function () {
+    $("#creator_id").click(function () {
         var url = "{% url opts|admin_urlname:'get-materials' %}"
         var creatorId = document.getElementById('id_creator')
       $.ajax({

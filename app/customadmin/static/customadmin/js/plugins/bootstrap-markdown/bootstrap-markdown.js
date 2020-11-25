@@ -106,7 +106,7 @@
           for (z=0;z<buttons.length;z++) {
             var button = buttons[z],
                 buttonContainer, buttonIconContainer,
-                buttonHandler = ns+'-'+button.name,
+                buttonHandler = ns+"-"+button.name,
                 buttonIcon = this.__getIcon(button.icon),
                 btnText = button.btnText ? button.btnText : '',
                 btnClass = button.btnClass ? button.btnClass : 'btn',

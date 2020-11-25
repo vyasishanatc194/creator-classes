@@ -6,7 +6,6 @@ from customadmin.views.generic import (
     MyListView,
     MyLoginRequiredView,
     MyUpdateView,
-    MyView,
 )
 from django.db.models import Q
 from django.template.loader import get_template
@@ -24,7 +23,6 @@ from ..models import AdminKeyword
 class AdminKeywordListView(MyListView):
     """View for AdminKeyword listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = AdminKeyword
     queryset = model.objects.all()
@@ -35,7 +33,7 @@ class AdminKeywordListView(MyListView):
         return self.model.objects.all().exclude(active=False)
 
 class AdminKeywordCreateView(MyCreateView):
-    """View to create User"""
+    """View to create AdminKeyword"""
 
     model = AdminKeyword
     form_class = AdminKeywordCreationForm
@@ -43,31 +41,27 @@ class AdminKeywordCreateView(MyCreateView):
     permission_required = ("customadmin.add_admin_keyword",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:adminkeyword-list")
 
 class AdminKeywordUpdateView(MyUpdateView):
-    """View to update User"""
+    """View to update AdminKeyword"""
 
     model = AdminKeyword
-
     form_class = AdminKeywordChangeForm
     template_name = "customadmin/keywords/keyword_form.html"
     permission_required = ("customadmin.change_admin_keyword",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:adminkeyword-list")
 
 class AdminKeywordDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete AdminKeyword"""
 
     model = AdminKeyword
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_admin_keyword",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:adminkeyword-list")
 
 class AdminKeywordAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

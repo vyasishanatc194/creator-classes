@@ -50,10 +50,80 @@
                             <td>{{ o.material_category }}</td>
                             <td>{{ o.title }}</td>
                             {% if o.thumbnail_file %}
-                            <td><img src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" alt="" height="80px" width="80px"></td>
+                            {% if '.jpg' in o.thumbnail_file.url or '.JPG' in o.thumbnail_file.url %}
+                                <td width="180px" height="80px">
+                                    <img src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" height="100px" width="180px">
+                                </td>
+                                {% elif '.jpeg' in o.thumbnail_file.url or '.JPEG' in o.thumbnail_file.url %}
+                                <td width="180px" height="80px">
+                                    <img src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" height="100px" width="180px">
+                                </td>
+                                {% elif '.png' in o.thumbnail_file.url or '.PNG' in o.thumbnail_file.url %}
+                                <td width="180px" height="80px">
+                                    <img src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" height="100px" width="180px">
+                                </td>
+                                {% elif '.mp4' in o.thumbnail_file.url or '.mp3' in o.thumbnail_file.url %}
+                                <td width="180px" height="80px">
+                                <video width="80px" height="80px" controls autoplay>
+                                    <source src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" type="video/mp4"> </source>
+                                </video>
+                                </td>
+                                {% elif '.pdf' in o.thumbnail_file.url %}
+                                    <td>PDF file</td>
+                                {% elif '.mkv' in o.thumbnail_file.url %}
+                                    <td>MKV file</td>
+                                {% elif '.rar' in o.thumbnail_file.url %}
+                                    <td>RAR file</td>
+                                {% elif '.zip' in o.thumbnail_file.url %}
+                                    <td>ZIP file</td>
+                                {% elif '.csv' in o.thumbnail_file.url %}
+                                    <td>CSV file</td>
+                                {% elif '.gif' in o.thumbnail_file.url %}
+                                    <td>GIF file</td>
+                                {% else %}
+                                    <td>Other file</td>
+                                {% endif %}
                             {% else %}
                             <td>No Thumbnail File</td>
                             {% endif %}
+                            {% if o.material_file %}
+                            {% if '.jpg' in o.material_file.url or '.JPG' in o.material_file.url %}
+                                <td width="180px" height="80px">
+                                    <img src="{{MEDIA_URL}}{{ o.material_file.url }}" height="100px" width="180px">
+                                </td>
+                                {% elif '.jpeg' in o.material_file.url or '.JPEG' in o.material_file.url %}
+                                <td width="180px" height="80px">
+                                    <img src="{{MEDIA_URL}}{{ o.material_file.url }}" height="100px" width="180px">
+                                </td>
+                                {% elif '.png' in o.material_file.url or '.PNG' in o.material_file.url %}
+                                <td width="180px" height="80px">
+                                    <img src="{{MEDIA_URL}}{{ o.material_file.url }}" height="100px" width="180px">
+                                </td>
+                                {% elif '.mp4' in o.material_file.url or '.mp3' in o.material_file.url %}
+                                <td width="180px" height="80px">
+                                <video width="80px" height="80px" controls autoplay>
+                                    <source src="{{MEDIA_URL}}{{ o.material_file.url }}" type="video/mp4"> </source>
+                                </video>
+                                </td>
+                                {% elif '.pdf' in o.material_file.url %}
+                                    <td>PDF file</td>
+                                {% elif '.mkv' in o.material_file.url %}
+                                    <td>MKV file</td>
+                                {% elif '.rar' in o.material_file.url %}
+                                    <td>RAR file</td>
+                                {% elif '.zip' in o.material_file.url %}
+                                    <td>ZIP file</td>
+                                {% elif '.csv' in o.material_file.url %}
+                                    <td>CSV file</td>
+                                {% elif '.gif' in o.material_file.url %}
+                                    <td>GIF file</td>
+                                {% else %}
+                                    <td>Other file</td>
+                                {% endif %}
+                            {% else %}
+                            <td>No Thumbnail File</td>
+                            {% endif %}
+
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_more_actions.html" %}
                             </td>

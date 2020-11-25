@@ -23,7 +23,43 @@
                             <td class="h5 text-left" colspan="2">Material Detail</td>
                         </tr>
                         <tr class="text-left">
-                            <td class="text-center"><img src="{{MEDIA_URL}}{{material_detail.thumbnail_file.url}}" alt="" height="160px" widtd="160px"></td>
+                            {% if material_detail.thumbnail_file %}
+                            {% if '.jpg' in material_detail.thumbnail_file.url or '.JPG' in material_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                    <img src="{{MEDIA_URL}}{{ material_detail.thumbnail_file.url }}" height="240px" width="480px">
+                                </td>
+                                {% elif '.jpeg' in material_detail.thumbnail_file.url or '.JPEG' in material_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                    <img src="{{MEDIA_URL}}{{ material_detail.thumbnail_file.url }}" width="480px" height="240px">
+                                </td>
+                                {% elif '.png' in material_detail.thumbnail_file.url or '.PNG' in material_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                    <img src="{{MEDIA_URL}}{{ material_detail.thumbnail_file.url }}" width="480px" height="240px">
+                                </td>
+                                {% elif '.mp4' in material_detail.thumbnail_file.url or '.mp3' in material_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                <video width="80px" height="80px" controls autoplay>
+                                    <source src="{{MEDIA_URL}}{{ material_detail.thumbnail_file.url }}" type="video/mp4"> </source>
+                                </video>
+                                </td>
+                                {% elif '.pdf' in material_detail.thumbnail_file.url %}
+                                    <td>PDF file</td>
+                                {% elif '.mkv' in material_detail.thumbnail_file.url %}
+                                    <td>MKV file</td>
+                                {% elif '.rar' in material_detail.thumbnail_file.url %}
+                                    <td>RAR file</td>
+                                {% elif '.zip' in material_detail.thumbnail_file.url %}
+                                    <td>ZIP file</td>
+                                {% elif '.csv' in material_detail.thumbnail_file.url %}
+                                    <td>CSV file</td>
+                                {% elif '.gif' in material_detail.thumbnail_file.url %}
+                                    <td>GIF file</td>
+                                {% else %}
+                                    <td>Other file</td>
+                                {% endif %}
+                            {% else %}
+                            <td>No Thumbnail File</td>    
+                            {% endif %}
                             <td class="h6">
                                 Title : {{material_detail.title|capfirst}} <br>
                                 <hr>

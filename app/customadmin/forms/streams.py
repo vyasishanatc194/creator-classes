@@ -17,15 +17,14 @@ class StreamCreationForm(forms.ModelForm):
             "creator",
             "title",
             "thumbnail_file",
-            "sneak_peak_file",        
-            "stream_datetime",        
-            "stream_amount",        
-            "total_seats",        
+            "sneak_peak_file",
+            "stream_datetime",
+            "stream_amount",
+            "total_seats",
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
         self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
 
@@ -94,7 +93,6 @@ class StreamChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
         self.fields['creator'].queryset = Creator.objects.filter(status='ACCEPT')
         self.fields['creator'].required = False
 
@@ -147,7 +145,7 @@ class StreamChangeForm(forms.ModelForm):
         return instance
 
 # -----------------------------------------------------------------------------
-# Creator Keywords
+# Stream Keywords
 # -----------------------------------------------------------------------------
 
 class StreamKeywordCreationForm(forms.ModelForm):
@@ -159,13 +157,6 @@ class StreamKeywordCreationForm(forms.ModelForm):
             "keyword",
             "stream",
         ]
-
-    # def clean(self):
-    #     cleaned_data = super(ClassKeywordCreationForm, self).clean()
-    #     keyword = cleaned_data.get("keyword")
-    #     creator_class = cleaned_data.get("creator_class")
-    #     print(keyword)
-    #     print(creator_class)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -196,7 +187,7 @@ class StreamKeywordChangeForm(forms.ModelForm):
         return instance
 
 # -----------------------------------------------------------------------------
-# Creator Covers
+# Stream Covers
 # -----------------------------------------------------------------------------
 
 class StreamCoversCreationForm(forms.ModelForm):

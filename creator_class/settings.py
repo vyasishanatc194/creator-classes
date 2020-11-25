@@ -167,7 +167,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -214,3 +214,20 @@ LOGIN_URL = "auth:auth_login"
 LOGOUT_REDIRECT_URL = "auth:auth_login"
 
 SITE_ID = 1
+
+# EMAIL
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# EMAIL_BACKEND = (
+#     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+# )
+
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+# EMAIL_TIMEOUT = 5
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "webmaster.citrusbug@gmail.com"
+EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
+EMAIL_USE_TLS = True

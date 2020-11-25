@@ -1,0 +1,102 @@
+{% extends 'customadmin/change_form.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load admin_extras %}
+{% load misc_filters %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+{% block page_content %}
+    <form id="{{ opts.model_name }}-form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+
+        {% include "customadmin/partials/form_hidden_fields.html" %}
+
+        <div class="ibox float-e-margins">
+
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Session Booking Details" icon_class="fas fa-sign-in-alt" only %}
+
+            <div class="ibox-content">
+
+                <div class="row">
+                    <div class="col-sm-6" id="user_id">
+                        {{ form.user|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6" id="creator_id">
+                        {{ form.creator|as_crispy_field }}
+                    </div>
+                </div>             
+                <div class="row">
+                    <div class="col-sm-12">
+                        {{ form.time_slot|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-12">
+                        {{ form.user_card|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+            <!-- /ibox-content -->
+
+        </div>
+        <!-- /ibox --> 
+
+        
+        {% include "customadmin/partials/form_footer.html" %}
+
+    </form>
+
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+
+<script src="{% static 'customadmin/js/userroles.js' %}"></script>
+<script>
+    $(function() {
+        userroles.materialcategories.details();
+    });
+</script>
+<script>
+    $("#creator_id").click(function () {
+        var url = "{% url opts|admin_urlname:'get-slots' %}"
+        var creatorId = document.getElementById('id_creator')
+      $.ajax({
+        url : url,
+        data: {
+          'creator_id': $(creatorId).val()
+        },
+        success: function (data) {
+            var i;
+            var select1 = $("div> div> #div_id_time_slot > div > #id_time_slot")
+            console.log(select1)
+            select1.empty();
+            for(i=0; i<=data.length; i++){
+                select1.append(new Option(data[i].slot_datetime, data[i].id))
+            };
+        }
+    });
+});
+</script>
+<script>
+    $("#user_id").click(function () {
+        var url = "{% url opts|admin_urlname:'get-cards' %}"
+        var userId = document.getElementById('id_user')
+      $.ajax({
+        url : url,
+        data: {
+          'user_id': $(userId).val()
+        },
+        success: function (data) {
+            var i;
+            var select1 = $("div> div> #div_id_user_card > div > #id_user_card")
+            console.log(select1)
+            select1.empty();
+            for(i=0; i<=data.length; i++){
+                select1.append(new Option(data[i].card_number, data[i].id))
+            };
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -21,9 +21,8 @@ from ..models import Testimonial
 # -----------------------------------------------------------------------------
 
 class TestimonialListView(MyListView):
-    """View for User listing"""
+    """View for Testimonial listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = Testimonial
     queryset = model.objects.all()
@@ -34,7 +33,7 @@ class TestimonialListView(MyListView):
         return self.model.objects.all().exclude(active=False)
 
 class TestimonialCreateView(MyCreateView):
-    """View to create User"""
+    """View to create Testimonial"""
 
     model = Testimonial
     form_class = TestimonialCreationForm
@@ -42,31 +41,27 @@ class TestimonialCreateView(MyCreateView):
     permission_required = ("customadmin.add_testimonial",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:testimonial-list")
 
 class TestimonialUpdateView(MyUpdateView):
-    """View to update User"""
+    """View to update Testimonial"""
 
     model = Testimonial
-
     form_class = TestimonialChangeForm
     template_name = "customadmin/testimonials/testimonial_form.html"
     permission_required = ("customadmin.change_testimonial",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:testimonial-list")
 
 class TestimonialDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete Testimonial"""
 
     model = Testimonial
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_testimonial",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:testimonial-list")
 
 class TestimonialAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

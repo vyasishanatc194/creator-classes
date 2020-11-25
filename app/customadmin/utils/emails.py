@@ -20,7 +20,7 @@ class Emails:
 
         if type(self.recipient_list) != list:
             self.recipient_list = [self.recipient_list]
-            
+
     def set_subject(self, subject):
         self.subject = subject
 

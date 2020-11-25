@@ -1,11 +1,18 @@
 from .user import (
     IndexView,
+    UserDetailView,
     UserAjaxPagination,
     UserCreateView,
     UserDeleteView,
     UserListView,
     UserPasswordView,
     UserUpdateView,
+
+    UserCardAjaxPagination,
+    UserCardCreateView,
+    UserCardDeleteView,
+    UserCardListView,
+    UserCardUpdateView,
 )
 
 from .creators import (
@@ -55,6 +62,7 @@ from .keywords import (
     AdminKeywordUpdateView,
 )
 from .onetoonesession import (
+    OneToOneSessionDetailView,
     OneToOneSessionAjaxPagination,
     OneToOneSessionCreateView,
     OneToOneSessionDeleteView,
@@ -92,6 +100,20 @@ from .plans import (
     PlanDeleteView,
     PlanListView,
     PlanUpdateView,
+)
+from .bookings import (
+    StreamBookingAjaxPagination,
+    StreamBookingCreateView,
+    StreamBookingDeleteView,
+    StreamBookingListView,
+    StreamBookingUpdateView,
+    GetSlots,
+    GetCards,
+    SessionBookingAjaxPagination,
+    SessionBookingCreateView,
+    SessionBookingDeleteView,
+    SessionBookingListView,
+    SessionBookingUpdateView,
 )
 
 from .user import export_user_csv

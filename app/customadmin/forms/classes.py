@@ -20,7 +20,7 @@ class MyCreatorClassCreationForm(forms.ModelForm):
             "creator",
             "title",
             "thumbnail_file",
-            "class_file",        
+            "class_file",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -108,7 +108,7 @@ class MyCreatorClassChangeForm(forms.ModelForm):
         return instance
 
 # -----------------------------------------------------------------------------
-# Creator Keywords
+# Class Keywords
 # -----------------------------------------------------------------------------
 
 class ClassKeywordCreationForm(forms.ModelForm):
@@ -150,7 +150,7 @@ class ClassKeywordChangeForm(forms.ModelForm):
         return instance
 
 # -----------------------------------------------------------------------------
-# Creator Covers
+# Class Covers
 # -----------------------------------------------------------------------------
 
 class ClassCoversCreationForm(forms.ModelForm):
@@ -208,7 +208,6 @@ class ClassMaterialCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -229,10 +228,9 @@ class ClassMaterialChangeForm(forms.ModelForm):
             "creator_class",
             "class_material",
         ]
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def save(self, commit=True):
         instance = super().save(commit=False)

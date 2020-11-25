@@ -121,7 +121,7 @@
 
                 this._galleryName = this._$element.data('gallery');
                 if (this._galleryName) {
-                    this._$galleryItems = $(document.body).find('*[data-gallery="' + this._galleryName + '"]');
+                    this._$galleryItems = $(document.body).find(`*[data-gallery="` + this._galleryName + `"]`);
                     this._galleryIndex = this._$galleryItems.index(this._$element);
                     $(document).on('keydown.ekkoLightbox', this._navigationalBinder.bind(this));
 

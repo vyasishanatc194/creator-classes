@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import gettext as _
-
+from creator_class.models import ActivityTracking
 # Create your models here.
 
 
@@ -36,7 +36,7 @@ class AccountManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(null=True, blank=True, unique=True)
-    username = models.CharField(max_length=40, blank=True, null=True)
+    username = models.CharField(max_length=40, blank=True, null=True,default='')
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
     profile_image = models.ImageField(upload_to="profile_image", default="sample.jpg", null=True,  blank=True, verbose_name=_("Profile Image"))
@@ -72,3 +72,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return reverse("customadmin:user-list")
+
+class UserCard(ActivityTracking):
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="user_credit_card_detail")
+    card_number = models.CharField(max_length=19, blank=True, null=True)
+    expiry_month_year = models.CharField(max_length=7, blank=True, null=True)
+    stripe_token = models.CharField(max_length=255,blank=True, null=True)
+
+    def __str__(self):
+        return self.card_number
+
+    class Meta:
+        verbose_name = "User Card Detail"
+        verbose_name_plural = "User Card Details"
+        ordering = ["-created_at"]
+

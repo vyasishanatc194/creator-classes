@@ -60,7 +60,7 @@ class HasPermissionsMixin(object):
         """
         opts = self.model._meta
         codename = get_permission_codename("add", opts)
-        
+
         return request.user.has_perm("%s.%s" % (opts.app_label, codename)) or request.user.is_staff
 
     def has_change_permission(self, request, obj=None):

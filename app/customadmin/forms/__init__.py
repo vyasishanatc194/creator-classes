@@ -1,4 +1,4 @@
-from .user import MyUserCreationForm, MyUserChangeForm
+from .user import MyUserCreationForm, MyUserChangeForm, UserCardCreationForm, UserCardChangeForm
 from .creator import MyCreatorCreationForm, MyCreatorChangeForm, CreatorSkillCreationForm, CreatorSkillChangeForm
 from .classes import MyCreatorClassCreationForm, MyCreatorClassChangeForm, ClassKeywordCreationForm, ClassKeywordChangeForm, ClassCoversCreationForm, ClassCoversChangeForm, ClassMaterialCreationForm, ClassMaterialChangeForm
 from .reviews import MyCreatorReviewCreationForm, MyCreatorReviewChangeForm, MyClassReviewCreationForm, MyClassReviewChangeForm
@@ -8,3 +8,4 @@ from .onetoonesession import OneToOneSessionCreationForm, OneToOneSessionChangeF
 from .keywords import AdminKeywordCreationForm, AdminKeywordChangeForm
 from .plans import PlanCreationForm, PlanChangeForm, PlanCoverCreationForm, PlanCoverChangeForm
 from .streams import StreamCreationForm, StreamChangeForm, StreamKeywordCreationForm, StreamKeywordChangeForm, StreamCoversCreationForm, StreamCoversChangeForm
+from .bookings import StreamBookingCreationForm, StreamBookingChangeForm,SessionBookingCreationForm, SessionBookingChangeForm

@@ -21,7 +21,6 @@ class MyMaterialCategoryCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
 
     def clean(self):
         cleaned_data = super(MyMaterialCategoryCreationForm, self).clean()
@@ -153,7 +152,7 @@ class MyMaterialCreationForm(forms.ModelForm):
 
 class MyMaterialChangeForm(forms.ModelForm):
     """Custom MaterialChangeForm."""
-    
+
     class Meta:
         model = Material
         fields = (
@@ -203,5 +202,4 @@ class MyMaterialChangeForm(forms.ModelForm):
         if not material_file:
             raise forms.ValidationError(
                 "Please add material file"
-            )      
-
+            )

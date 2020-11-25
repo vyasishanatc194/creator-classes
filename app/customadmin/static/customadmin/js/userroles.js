@@ -7,7 +7,6 @@ var userroles = {
     // Users
     // ------------------------------------------------------------------------
     users: {
-
         index: function () {
             $('#user-table').DataTable({
                 pageLength: 25,
@@ -16,26 +15,8 @@ var userroles = {
                     orderable: false,
                     targets: -1
                 },],
-
-                // Ajax for pagination
-                // processing: true,
-                // serverSide: true,
-                // ajax: {
-                //     url: window.pagination_url,
-                //     type: 'get',
-                // },
-                // columns: [
-                //     { data: 'username', name: 'username' },
-                //     { data: 'first_name', name: 'first_name' },
-                //     { data: 'last_name', name: 'last_name' },
-                //     { data: 'is_superuser', name: 'is_superuser' },
-                //     // { data: 'modified', name: 'modified' },
-                //     { data: 'actions', name: 'actions' }
-                // ],
             });
-
         },
-
         details: function () {
             $('.groups-select').bootstrapDualListbox({
                 nonSelectedListLabel: 'Available groups',
@@ -43,7 +24,30 @@ var userroles = {
                 preserveSelectionOnMove: 'moved',
                 moveOnSelect: false
             });
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+    },
+    // ------------------------------------------------------------------------
+    // User Card
+    // ------------------------------------------------------------------------
+    usercards: {
+        index: function () {
+            $('#usercard-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
 
+        details: function () {
             $('.permissions-select').bootstrapDualListbox({
                 nonSelectedListLabel: 'Available user permissions',
                 selectedListLabel: 'Chosen user permissions',
@@ -53,7 +57,6 @@ var userroles = {
         }
 
     },
-
     // ------------------------------------------------------------------------
     // Creators
     // ------------------------------------------------------------------------
@@ -80,9 +83,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // Admin Keywords
     // ------------------------------------------------------------------------
@@ -109,9 +109,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // Testimonials
     // ------------------------------------------------------------------------
@@ -164,9 +161,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // streams
     // ------------------------------------------------------------------------
@@ -193,9 +187,58 @@ var userroles = {
         }
 
     },
-
-
     // ------------------------------------------------------------------------
+    // stream booking
+    // ------------------------------------------------------------------------
+    streambookings: {
+
+        index: function () {
+            $('#streambooking-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
+    // ------------------------------------------------------------------------
+    // session booking
+    // ------------------------------------------------------------------------
+    sessionbookings: {
+
+        index: function () {
+            $('#sessionbooking-table').DataTable({
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
     // ------------------------------------------------------------------------
     // ClassReviews
     // ------------------------------------------------------------------------
@@ -222,9 +265,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // ClassReviews
     // ------------------------------------------------------------------------
@@ -251,9 +291,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // CreatorReviews
     // ------------------------------------------------------------------------
@@ -280,9 +317,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // Material
     // ------------------------------------------------------------------------
@@ -309,9 +343,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // MaterialCategory
@@ -339,9 +370,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // Plan
     // ------------------------------------------------------------------------
@@ -368,10 +396,6 @@ var userroles = {
         }
 
     },
-
-
-    // ------------------------------------------------------------------------
-
     // ------------------------------------------------------------------------
     // Groups
     // ------------------------------------------------------------------------

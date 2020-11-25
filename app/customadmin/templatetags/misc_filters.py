@@ -1,7 +1,7 @@
 import json
 
 from django import template
-from django.conf import settings
+# from django.conf import settings
 from django.contrib.admin.utils import quote
 from django.utils.safestring import mark_safe
 
@@ -45,6 +45,8 @@ def admin_urlname(value, arg):
     pattern = "%s:%s-%s" % (value.app_label, value.model_name, arg)
     if value.model_name == 'user':
         pattern = "%s:%s-%s" % ('customadmin', 'user', arg)
+    if value.model_name == 'usercard':
+        pattern = "%s:%s-%s" % ('customadmin', 'usercard', arg)
     if value.model_name == 'creator':
         pattern = "%s:%s-%s" % ('customadmin', 'creator', arg)
     if value.model_name == 'creatorclass':
@@ -61,6 +63,10 @@ def admin_urlname(value, arg):
         pattern = "%s:%s-%s" % ('customadmin', 'material', arg)
     if value.model_name == 'onetoonesession':
         pattern = "%s:%s-%s" % ('customadmin', 'onetoonesession', arg)
+    if value.model_name == 'streambooking':
+        pattern = "%s:%s-%s" % ('customadmin', 'streambooking', arg)
+    if value.model_name == 'sessionbooking':
+        pattern = "%s:%s-%s" % ('customadmin', 'sessionbooking', arg)
     # print('---------------------------------------------------------------------------------',pattern)
     return pattern
 

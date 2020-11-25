@@ -134,7 +134,7 @@
         var ch = stream.next();
 
         // LINECOMMENT
-        if(ch == '/' && stream.eat('/')) {
+        if(ch == "/" && stream.eat("/")) {
           state.tokenize = tokenLineComment;
         }
         // BLOCKCOMMENT

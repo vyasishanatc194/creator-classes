@@ -10,7 +10,7 @@
 
     
 
-    {% include "customadmin/includes/list_header_card.html" with title="Create a new material category" subtitle="Create a new material category." show_button=True %}
+    {% include "customadmin/includes/list_header_card.html" with title="Create a new testimonial" subtitle="Create a new testimonial." show_button=True %}
 
     <div class="ibox float-e-margins">
         {% comment %} <div class="ibox-title">
@@ -51,7 +51,7 @@
                             <td>{{ o.name }}</td>
                             <td>{{ o.email }}</td>
                             {% if o.image %}
-                            <td><img src="{{MEDIA_URL}}{{ o.image.url }}" alt="" height="80px" width="80px"></td>
+                            <td height="80px" width="180px"><img src="{{MEDIA_URL}}{{ o.image.url }}" alt="no image" height="80x" width="180px"></td>
                             {% else %}
                             <td>No Image</td>
                             {% endif %}

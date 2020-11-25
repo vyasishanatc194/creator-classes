@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from customadmin.mixins import HasPermissionsMixin
 from customadmin.views.generic import (
-    MyCreateView,
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
     MyUpdateView,
-    MyView,
+    MyDetailView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView
 )
@@ -15,12 +14,12 @@ from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
 from customadmin.forms import OneToOneSessionChangeForm, OneToOneSessionCreationForm, TimeSlotCreationForm, TimeSlotChangeForm
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render
 
 from creator.models import OneToOneSession , TimeSlot
+from user.models import SessionBooking
 
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
-
+from extra_views import InlineFormSetFactory
 from django.contrib import messages
 
 MSG_CREATED = '"{}" created successfully.'
@@ -32,10 +31,21 @@ MSG_CANCELED = '"{}" canceled successfully.'
 # OneToOneSessions
 # -----------------------------------------------------------------------------
 
+class OneToOneSessionDetailView(MyDetailView):
+    model = OneToOneSession
+    template_name = "customadmin/sessions/session_detail.html"
+    permission_required = ("customadmin.view_session_detail",)
+    context = {}
+
+    def get(self, request, pk):
+        self.context['session_detail'] = OneToOneSession.objects.filter(pk=pk).first()
+        self.context['slot_detail'] = TimeSlot.objects.filter(session=pk)
+        self.context['session_booking_detail'] = SessionBooking.objects.all()
+        return render(request, self.template_name, self.context)
+
 class OneToOneSessionListView(MyListView):
     """View for OneToOneSession listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = OneToOneSession
     queryset = model.objects.all()
@@ -46,65 +56,55 @@ class OneToOneSessionListView(MyListView):
         return self.model.objects.all()
 
 class TimeSlotInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
+    """Inline view to show TimeSlot within the Parent View"""
 
     model = TimeSlot
     form_class = TimeSlotCreationForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
-
 class OneToOneSessionCreateView(MyNewFormsetCreateView):
-    """View to create User"""
+    """View to create OneToOneSessions"""
 
     model = OneToOneSession
-
     inline_model = TimeSlot
     inlines = [TimeSlotInline, ]
-
     form_class = OneToOneSessionCreationForm
     template_name = "customadmin/sessions/session_form.html"
     permission_required = ("customadmin.add_session",)
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        # opts = self.model._meta
         return reverse("customadmin:onetoonesession-list")
 
 class TimeSlotUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update TimeSlot which is a inline view"""
 
     model = TimeSlot
     form_class = TimeSlotChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class OneToOneSessionUpdateView(MyNewFormsetUpdateView):
-    """View to update User"""
+    """View to update OneToOneSessions"""
 
     model = OneToOneSession
-
     inline_model = TimeSlot
     inlines = [TimeSlotInline, ]
-
-
     form_class = OneToOneSessionChangeForm
     template_name = "customadmin/sessions/session_form.html"
     permission_required = ("customadmin.change_session",)
 
-
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        # opts = self.model._meta
         return reverse("customadmin:onetoonesession-list")
 
 class OneToOneSessionDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete OneToOneSessions"""
 
     model = OneToOneSession
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_sessions",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:onetoonesession-list")
 
 class OneToOneSessionAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

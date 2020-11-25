@@ -39,7 +39,6 @@ class MyCreatorCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(*args)
         self.fields['username'].required = False
         self.fields['password'].required = False
         self.fields['confirm_password'].required = False
@@ -114,9 +113,7 @@ class MyCreatorChangeForm(forms.ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-        print(*args)
         self.fields['username'].required = False
 
     def clean(self):

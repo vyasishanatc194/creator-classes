@@ -44,7 +44,7 @@
                         <tr>
                             <td>{{ o.category_title }}</td>
                             {% if o.category_image %}
-                            <td><img src="{{MEDIA_URL}}{{ o.category_image.url }}" alt="" height="80px" width="80px"></td>
+                            <td height="80px" width="320px"><img src="{{MEDIA_URL}}{{ o.category_image.url }}" alt="no image" height="80x" width="180px"></td>
                             {% else %}
                             <td>No Image</td>
                             {% endif %}

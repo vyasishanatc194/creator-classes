@@ -14,31 +14,22 @@
 
         <div class="ibox float-e-margins">
 
-            {% include "customadmin/partials/ibox_title.html" with ibox_title="Creator Class Review Details" icon_class="fas fa-sign-in-alt" only %}
+            {% include "customadmin/partials/ibox_title.html" with ibox_title="Stream Booking Details" icon_class="fas fa-sign-in-alt" only %}
 
             <div class="ibox-content">
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" id="user_id">
 
-                        {{ form.creator_class|as_crispy_field }}
-                    </div>
-                    <div class="col-sm-6">
                         {{ form.user|as_crispy_field }}
                     </div>
-                </div>
-                <br>
-                <div class="row">
                     <div class="col-sm-6">
-                        {{ form.review|as_crispy_field }}
+                        {{ form.stream|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form.rating|as_crispy_field }}
+                        {{ form.user_card|as_crispy_field }}
                     </div>
-                    
                 </div>
-                
-
 
             </div>
             <!-- /ibox-content -->
@@ -60,7 +51,28 @@
 <script src="{% static 'customadmin/js/userroles.js' %}"></script>
 <script>
     $(function() {
-        userroles.creators.details();
+        userroles.materialcategories.details();
     });
+</script>
+<script>
+    $("#user_id").click(function () {
+        var url = "{% url opts|admin_urlname:'get-cards' %}"
+        var userId = document.getElementById('id_user')
+      $.ajax({
+        url : url,
+        data: {
+          'user_id': $(userId).val()
+        },
+        success: function (data) {
+            var i;
+            var select1 = $("div> div> #div_id_user_card > div > #id_user_card")
+            console.log(select1)
+            select1.empty();
+            for(i=0; i<=data.length; i++){
+                select1.append(new Option(data[i].card_number, data[i].id))
+            };
+        }
+    });
+});
 </script>
 {% endblock %}

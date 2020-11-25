@@ -6,7 +6,7 @@ class CreatorReview(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="review_by_user")
     creator = models.ForeignKey("creator.Creator", on_delete=models.CASCADE, related_name="review_for_creator")
     review = models.CharField(max_length=255, blank=True, null=True, default='')
-    rating = models.FloatField(blank=True, null=True, default=1)
+    rating = models.FloatField(blank=True, null=True, default=0)
 
     def __str__(self):
         return f"{self.user.email}"

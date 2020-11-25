@@ -46,20 +46,21 @@
             </li>
 
             {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'user-cards/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:usercard-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">User Cards</span>
+                </a>
+            </li>
+
+            {% endif %}
             
             {% if perms.users or request.user.is_staff %}
             <li {% if 'creators/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:creator-list' %}"> 
                     <i class="fa fa-user fa-fw fa-2x"></i>
                     <span class="nav-label">Creators</span>
-                </a>
-            </li>
-            {% endif %}
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'keywords/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'customadmin:adminkeyword-list' %}"> 
-                    <i class="fa fa-user fa-fw fa-2x"></i>
-                    <span class="nav-label">Keywords</span>
                 </a>
             </li>
             {% endif %}
@@ -81,7 +82,31 @@
                 </a>
             </li>
             {% endif %}
-
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'one-to-one-sessions/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:onetoonesession-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">OneToOne Sessions</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'stream-bookings/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:streambooking-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Stream Bookings</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'session-bookings/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:sessionbooking-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Session Bookings</span>
+                </a>
+            </li>
+            {% endif %}
+            
             {% if perms.users or request.user.is_staff %}
             <li {% if 'material-category/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:materialcategory-list' %}"> 
@@ -98,7 +123,6 @@
                 </a>
             </li>
             {% endif %}
-
             {% if perms.users or request.user.is_staff %}
             <li {% if 'creator-reviews/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:creatorreview-list' %}"> 
@@ -115,24 +139,7 @@
                 </a>
             </li>
             {% endif %}
-
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'testimonials/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'customadmin:testimonial-list' %}"> 
-                    <i class="fa fa-user fa-fw fa-2x"></i>
-                    <span class="nav-label">Testimonials</span>
-                </a>
-            </li>
-            {% endif %}
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'one-to-one-sessions/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'customadmin:onetoonesession-list' %}"> 
-                    <i class="fa fa-user fa-fw fa-2x"></i>
-                    <span class="nav-label">OneToOne Sessions</span>
-                </a>
-            </li>
-            {% endif %}
-
+            
             {% if perms.users or request.user.is_staff %}
             <li {% if 'plans/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'customadmin:plan-list' %}"> 
@@ -141,10 +148,26 @@
                 </a>
             </li>
             {% endif %}
-
-
+            
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'keywords/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:adminkeyword-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Keywords</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'testimonials/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:testimonial-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Testimonials</span>
+                </a>
+            </li>
+            {% endif %}
+            
 
         </ul>
-
+        
     </div>
 </nav>

@@ -30,7 +30,7 @@
                 <form class="m-t" role="form" action="{% url 'auth:auth_login' %}?next={{ next }}" accept-charset="UTF-8" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        {{ form.username|attr:"required"|attr:"autofocus"|attr:"placeholder:Username"|attr:"class:form-control" }}
+                        {{ form.username|attr:"required"|attr:"autofocus"|attr:"placeholder:Email"|attr:"class:form-control" }}
                     </div>
                     <div class="form-group">
                         {{ form.password|attr:"required"|attr:"placeholder:Password"|attr:"class:form-control" }}

@@ -5,6 +5,7 @@ from customadmin.views.generic import (
     MyListView,
     MyLoginRequiredView,
     MyView,
+    MyDetailView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView
 )
@@ -12,12 +13,11 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
-from django.views.generic import DetailView
 
 from customadmin.forms import MyCreatorClassChangeForm, MyCreatorClassCreationForm, ClassKeywordCreationForm, ClassKeywordChangeForm, ClassCoversCreationForm, ClassCoversChangeForm, ClassMaterialCreationForm, ClassMaterialChangeForm
 from django.shortcuts import reverse, render
 
-from creator.models import CreatorClass, ClassKeyword, ClassCovers, ClassMaterial
+from creator.models import CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material
 from user.models import ClassReview
 from extra_views import InlineFormSetFactory
 
@@ -28,7 +28,6 @@ MSG_UPDATED = '"{}" updated successfully.'
 MSG_DELETED = '"{}" deleted successfully.'
 MSG_CANCELED = '"{}" canceled successfully.'
 
-from creator.models import Material
 def GetMaterials(request):
     creator_id = request.GET.get('creator_id')
     materials = Material.objects.filter(creator=creator_id).values()
@@ -38,26 +37,34 @@ def GetMaterials(request):
 # Creator Classes
 # -----------------------------------------------------------------------------
 
-class ClassDetailView(DetailView):
+class ClassDetailView(MyDetailView):
+    """Detail View for Creator Class"""
+
     model = CreatorClass
     template_name = "customadmin/classes/class_detail.html"
     permission_required = ("customadmin.view_class_detail",)
     context = {}
 
     def get(self, request, pk):
+        avg_class_review=0
         self.context['class_detail'] = CreatorClass.objects.filter(pk=pk).first()
-        self.context['class_file_url'] = request.build_absolute_uri(self.context['class_detail'].class_file) 
+        self.context['class_file_url'] = request.build_absolute_uri(self.context['class_detail'].class_file)
         self.context['class_file_url'] = self.context['class_file_url'][:22] + 'media' + self.context['class_file_url'][50:]
         self.context['class_keyword_list'] = ClassKeyword.objects.filter(creator_class=pk)
         self.context['class_cover_list'] = ClassCovers.objects.filter(creator_class=pk)
         self.context['class_material_list'] = ClassMaterial.objects.filter(creator_class=pk)
         self.context['class_review_list'] = ClassReview.objects.filter(creator_class=pk)
+        if self.context['class_review_list']:
+            for review in self.context['class_review_list']:
+                avg_class_review += review.rating
+            self.context['avg_class_review']= avg_class_review/len(self.context['class_review_list'])
+        else:
+            self.context['avg_class_review']= 0
         return render(request, self.template_name, self.context)
 
 class CreatorClassListView(MyListView):
     """View for Creator Class listing"""
 
-    # paginate_by = 25
     ordering = ["id"]
     model = CreatorClass
     queryset = model.objects.all()
@@ -68,91 +75,82 @@ class CreatorClassListView(MyListView):
         return self.model.objects.all().exclude(active=False)
 
 
-class ClassMaterialInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
-
-    model = ClassMaterial
-    form_class = ClassMaterialCreationForm
-    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
-
 class ClassKeywordInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
+    """Inline view to show Keyword within the Parent View"""
 
     model = ClassKeyword
     form_class = ClassKeywordCreationForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassCoversInline(InlineFormSetFactory):
-    """Inline view to show Newsimage within the Parent View"""
+    """Inline view to show Cover within the Parent View"""
 
     model = ClassCovers
     form_class = ClassCoversCreationForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
+class ClassMaterialInline(InlineFormSetFactory):
+    """Inline view to show Material within the Parent View"""
+
+    model = ClassMaterial
+    form_class = ClassMaterialCreationForm
+    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
+
 class CreatorClassCreateView(MyNewFormsetCreateView):
-    """View to create User"""
+    """View to create class"""
 
     model = CreatorClass
-
     inlines = [ClassKeywordInline,ClassCoversInline, ClassMaterialInline,]
-
     form_class = MyCreatorClassCreationForm
     template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.add_creator_class",)
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
-        # opts = self.model._meta
-        return reverse("customadmin:creatorclass-list") 
+        return reverse("customadmin:creatorclass-list")
 
 class ClassKeywordUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update Keyword which is a inline view"""
 
     model = ClassKeyword
     form_class = ClassKeywordChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassMaterialUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update Material which is a inline view"""
 
     model = ClassMaterial
     form_class = ClassMaterialChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class ClassCoversUpdateInline(InlineFormSetFactory):
-    """View to update Newsimage which is a inline view"""
+    """View to update Cover which is a inline view"""
 
     model = ClassCovers
     form_class = ClassCoversChangeForm
     factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
 
 class CreatorClassUpdateView(MyNewFormsetUpdateView):
-    """View to update User"""
+    """View to update class"""
 
     model = CreatorClass
-
     inlines = [ClassKeywordUpdateInline,ClassCoversUpdateInline,ClassMaterialInline ]
-
-
     form_class = MyCreatorClassChangeForm
     template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.change_creator_class",)
 
-
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
-        # opts = self.model._meta
         return reverse("customadmin:creatorclass-list")
 
 class CreatorClassDeleteView(MyDeleteView):
-    """View to delete User"""
+    """View to delete class"""
 
     model = CreatorClass
     template_name = "customadmin/confirm_delete.html"
     permission_required = ("customadmin.delete_creator_class",)
 
     def get_success_url(self):
-        # opts = self.model._meta
         return reverse("customadmin:creatorclass-list")
 
 class CreatorClassAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):

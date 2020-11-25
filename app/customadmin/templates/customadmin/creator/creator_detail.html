@@ -25,7 +25,7 @@
                             <td class="h5 text-left" colspan="2">Personal Detail</td>
                         </tr>
                         <tr class="text-left">
-                            <td class="text-center"><img class="pt-5" src="{{MEDIA_URL}}{{creator.profile_image.url}}" alt="" height="180px" widtd="180px"></td>
+                            <td height="240px" width="360px"><img src="{{MEDIA_URL}}{{creator.profile_image.url}}" alt="" height="300px" width="360px"></td>
                             <td class="h6">
                                 Username : {{creator.username|capfirst}} <br>
                                 <hr>
@@ -39,6 +39,20 @@
                                 <hr>
                                 Status : {{ creator.get_status_display }} by Admin
                             </td>
+                        </tr>
+                        <tr>
+                            <td class="h5 text-left" colspan="2">Other Skill Detail</td>
+                        </tr>
+                        <tr class="text-left">
+                            {% if other_skill %}
+                            <td colspan="2" class="h6">
+                                {% for skill in other_skill %}
+                                <li>{{skill.skill}}</li>
+                                {% endfor %}
+                            </td>
+                            {% else %}
+                            <td colspan="2" class="h6">No other skills yet</td>
+                            {% endif %}
                         </tr>
                         <tr>
                             <td class="h5 text-left" colspan="2">Class Detail</td>
@@ -62,7 +76,7 @@
                             {% if material_list %}
                             <td colspan="2" class="h6">
                                 {% for material in material_list %}
-                                Title : {{material.title}} <br>
+                                <li><a href="{% url 'customadmin:material-detailview' material.pk %}">{{material.title}}</a></li>
                                 <hr>
                                 {% endfor %}
                             </td>
@@ -112,8 +126,11 @@
                             {% endif %}
                         </tr>
                         <tr>
-                            <td class="h5 text-center" colspan="2"> Creator Review Detail</td>
+                            <td class="h5 text-left" colspan="2"> Creator Review Detail</td>
                         </tr>
+                        {% if avg_class_review %}
+                        <tr><td class="h6" colspan="2">Average Rating: {{avg_class_review}} </td></tr>
+                        {% endif %}
                         <tr class="text-left">
                             {% if creator_review_list %}
                             <td colspan="2" class="h6">
@@ -130,7 +147,7 @@
                                             <tr>
                                                 <td>{{review.user.email}}</td>
                                                 <td>{{review.review}}</td>
-                                                <td>{{review.rating}}/5.0</td>
+                                                <td>{{review.rating}}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>

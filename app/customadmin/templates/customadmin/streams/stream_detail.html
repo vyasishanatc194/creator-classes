@@ -25,7 +25,43 @@
                             <td class="h5 text-left" colspan="2">Stream Detail</td>
                         </tr>
                         <tr class="text-left">
-                            <td class="text-center"><img src="{{MEDIA_URL}}{{stream_detail.thumbnail_file.url}}" alt="" height="160px" widtd="160px"></td>
+                            {% if stream_detail.thumbnail_file %}
+                            {% if '.jpg' in stream_detail.thumbnail_file.url or '.JPG' in stream_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                    <img src="{{MEDIA_URL}}{{ stream_detail.thumbnail_file.url }}" height="260px" width="480px">
+                                </td>
+                                {% elif '.jpeg' in stream_detail.thumbnail_file.url or '.JPEG' in stream_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                    <img src="{{MEDIA_URL}}{{ stream_detail.thumbnail_file.url }}" width="480px" height="260px">
+                                </td>
+                                {% elif '.png' in stream_detail.thumbnail_file.url or '.PNG' in stream_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                    <img src="{{MEDIA_URL}}{{ stream_detail.thumbnail_file.url }}" width="480px" height="260px">
+                                </td>
+                                {% elif '.mp4' in stream_detail.thumbnail_file.url or '.mp3' in stream_detail.thumbnail_file.url %}
+                                <td width="480px" height="240px">
+                                <video width="80px" height="80px" controls autoplay>
+                                    <source src="{{MEDIA_URL}}{{ stream_detail.thumbnail_file.url }}" type="video/mp4"> </source>
+                                </video>
+                                </td>
+                                {% elif '.pdf' in stream_detail.thumbnail_file.url %}
+                                    <td>PDF file</td>
+                                {% elif '.mkv' in stream_detail.thumbnail_file.url %}
+                                    <td>MKV file</td>
+                                {% elif '.rar' in stream_detail.thumbnail_file.url %}
+                                    <td>RAR file</td>
+                                {% elif '.zip' in stream_detail.thumbnail_file.url %}
+                                    <td>ZIP file</td>
+                                {% elif '.csv' in stream_detail.thumbnail_file.url %}
+                                    <td>CSV file</td>
+                                {% elif '.gif' in stream_detail.thumbnail_file.url %}
+                                    <td>GIF file</td>
+                                {% else %}
+                                    <td>Other file</td>
+                                {% endif %}
+                            {% else %}
+                            <td>No Thumbnail File</td>    
+                            {% endif %}
                             <td class="h6">
                                 Title : {{stream_detail.title|capfirst}} <br>
                                 <hr>
@@ -72,6 +108,23 @@
                             </td>
                             {% else %}
                             <td colspan="2" class="h6">No stream cover yet</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td class="h5 text-left" colspan="2">User Stream Booking List</td>
+                        </tr>
+                        <tr class="text-left">
+                            {% if user_list %}
+                            <td colspan="2" class="h6">
+                                User : 
+                                <ul>
+                                    {% for user in user_list %}
+                                    <li>{{user}}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            {% else %}
+                            <td colspan="2" class="h6">No Stream Booking yet</td>
                             {% endif %}
                         </tr>
                     </tbody>

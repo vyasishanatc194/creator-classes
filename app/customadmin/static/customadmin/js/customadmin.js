@@ -103,9 +103,9 @@ $(function () {
     $('.collapse-link').on('click', function (event) {
         var label = $(this).find('span').html();
         if (label === 'Expand') {
-            $(this).find('span').html('Collapse');
+            $(this).find("span").html('Collapse');
         } else {
-            $(this).find('span').html('Expand');
+            $(this).find("span").html('Expand');
         }
     });
 

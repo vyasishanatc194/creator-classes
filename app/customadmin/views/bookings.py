@@ -11,68 +11,88 @@ from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from customadmin.forms import MyCreatorReviewChangeForm, MyCreatorReviewCreationForm, MyClassReviewChangeForm, MyClassReviewCreationForm
+from customadmin.forms import SessionBookingChangeForm, SessionBookingCreationForm, StreamBookingChangeForm, StreamBookingCreationForm
 from django.shortcuts import reverse
 
-from user.models import CreatorReview, ClassReview
+from user.models import StreamBooking, SessionBooking, User, UserCard
+from creator.models import TimeSlot, OneToOneSession, Creator
+from django.http import JsonResponse
+
+def GetSlots(request):
+    creator_id = request.GET.get('creator_id')
+    creator_obj = Creator.objects.filter(pk=creator_id).first()
+    session_obj = OneToOneSession.objects.filter(creator=creator_obj).first()
+    if session_obj:
+        slots = TimeSlot.objects.filter(session=session_obj.pk).exclude(is_booked=True).values()
+    else:
+        slots =[]
+    return JsonResponse(list(slots), content_type="application/json", safe=False)
+
+def GetCards(request):
+    user_id = request.GET.get('user_id')
+    user_obj = User.objects.filter(pk=user_id).first()
+    card_obj = UserCard.objects.filter(user=user_obj).values()
+    return JsonResponse(list(card_obj), content_type="application/json", safe=False)
+
 # -----------------------------------------------------------------------------
-# CreatorReviews
+# Stream Booking
 # -----------------------------------------------------------------------------
 
-class CreatorReviewListView(MyListView):
-    """View for CreatorReviews listing"""
+class StreamBookingListView(MyListView):
+    """View for Stream Booking listing"""
 
     ordering = ["id"]
-    model = CreatorReview
+    model = StreamBooking
     queryset = model.objects.all()
-    template_name = "customadmin/reviews/creator_review_list.html"
-    permission_required = ("customadmin.view_creator_review",)
+    template_name = "customadmin/bookings/stream_booking_list.html"
+    permission_required = ("customadmin.view_stream_booking",)
 
     def get_queryset(self):
         return self.model.objects.all().exclude(active=False)
 
-class CreatorReviewCreateView(MyCreateView):
-    """View to create CreatorReviews"""
+class StreamBookingCreateView(MyCreateView):
+    """View to create Stream booking"""
 
-    model = CreatorReview
+    model = StreamBooking
     context = {}
-    form_class = MyCreatorReviewCreationForm
-    template_name = "customadmin/reviews/creator_review_form.html"
-    permission_required = ("customadmin.add_creator_review",)
+
+    form_class = StreamBookingCreationForm
+    template_name = "customadmin/bookings/stream_booking_form.html"
+    permission_required = ("customadmin.add_stream_booking",)
 
     def get_queryset(self):
         return self.model.objects.all().exclude(user.is_creator == true)
 
     def get_success_url(self):
-        return reverse("customadmin:creatorreview-list")
+        return reverse("customadmin:streambooking-list")
 
-class CreatorReviewUpdateView(MyUpdateView):
-    """View to update CreatorReviews"""
+class StreamBookingUpdateView(MyUpdateView):
+    """View to update Stream Booking"""
 
-    model = CreatorReview
-    form_class = MyCreatorReviewChangeForm
-    template_name = "customadmin/reviews/creator_review_form.html"
-    permission_required = ("customadmin.change_creator_review",)
+    model = StreamBooking
+    form_class = StreamBookingChangeForm
+    template_name = "customadmin/bookings/stream_booking_form.html"
+    permission_required = ("customadmin.change_stream_booking",)
 
     def get_success_url(self):
-        return reverse("customadmin:creatorreview-list")
+        return reverse("customadmin:streambooking-list")
 
-class CreatorReviewDeleteView(MyDeleteView):
-    """View to delete CreatorReviews"""
+class StreamBookingDeleteView(MyDeleteView):
+    """View to delete Stream Booking"""
 
-    model = CreatorReview
+    model = StreamBooking
     template_name = "customadmin/confirm_delete.html"
-    permission_required = ("customadmin.delete_creator_review",)
+    permission_required = ("customadmin.delete_stream_booking",)
 
     def get_success_url(self):
-        return reverse("customadmin:creatorreview-list")
+        return reverse("customadmin:streambooking-list")
 
-class CreatorReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class StreamBookingAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
     """Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view."""
 
-    model = CreatorReview
-    queryset = CreatorReview.objects.all().order_by("created_at")
+    model = StreamBooking
+    queryset = StreamBooking.objects.all().order_by("created_at")
 
     def _get_is_superuser(self, obj):
         """Get boolean column markup."""
@@ -116,65 +136,65 @@ class CreatorReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRe
             )
         return data
 
-
 # -----------------------------------------------------------------------------
-# ClassReviews
+# Session Booking
 # -----------------------------------------------------------------------------
 
-class ClassReviewListView(MyListView):
-    """View for ClassReviews listing"""
+class SessionBookingListView(MyListView):
+    """View for Session Booking listing"""
 
     ordering = ["id"]
-    model = ClassReview
+    model = SessionBooking
     queryset = model.objects.all()
-    template_name = "customadmin/reviews/class_review_list.html"
-    permission_required = ("customadmin.view_class_review",)
+    template_name = "customadmin/bookings/session_booking_list.html"
+    permission_required = ("customadmin.view_session_booking",)
 
     def get_queryset(self):
         return self.model.objects.all().exclude(active=False)
 
-class ClassReviewCreateView(MyCreateView):
-    """View to create ClassReviews"""
+class SessionBookingCreateView(MyCreateView):
+    """View to create Session Booking"""
 
-    model = ClassReview
+    model = SessionBooking
     context = {}
-    form_class = MyClassReviewCreationForm
-    template_name = "customadmin/reviews/class_review_form.html"
-    permission_required = ("customadmin.add_class_review",)
+
+    form_class = SessionBookingCreationForm
+    template_name = "customadmin/bookings/session_booking_form.html"
+    permission_required = ("customadmin.add_session_booking",)
 
     def get_queryset(self):
         return self.model.objects.all().exclude(user.is_creator == true)
 
     def get_success_url(self):
-        return reverse("customadmin:classreview-list")
+        return reverse("customadmin:sessionbooking-list")
 
-class ClassReviewUpdateView(MyUpdateView):
-    """View to update ClassReviews"""
+class SessionBookingUpdateView(MyUpdateView):
+    """View to update Session Booking"""
 
-    model = ClassReview
-    form_class = MyClassReviewChangeForm
-    template_name = "customadmin/reviews/class_review_form.html"
-    permission_required = ("customadmin.change_class_review",)
+    model = SessionBooking
+    form_class = SessionBookingChangeForm
+    template_name = "customadmin/bookings/session_booking_form.html"
+    permission_required = ("customadmin.change_session_booking",)
 
     def get_success_url(self):
-        return reverse("customadmin:classreview-list")
+        return reverse("customadmin:sessionbooking-list")
 
-class ClassReviewDeleteView(MyDeleteView):
-    """View to delete ClassReviews"""
+class SessionBookingDeleteView(MyDeleteView):
+    """View to delete Session Booking"""
 
-    model = ClassReview
+    model = SessionBooking
     template_name = "customadmin/confirm_delete.html"
-    permission_required = ("customadmin.delete_class_review",)
+    permission_required = ("customadmin.delete_session_booking",)
 
     def get_success_url(self):
-        return reverse("customadmin:classreview-list")
+        return reverse("customadmin:sessionbooking-list")
 
-class ClassReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class SessionBookingAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
     """Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view."""
 
-    model = ClassReview
-    queryset = ClassReview.objects.all().order_by("created_at")
+    model = SessionBooking
+    queryset = SessionBooking.objects.all().order_by("created_at")
 
     def _get_is_superuser(self, obj):
         """Get boolean column markup."""
@@ -217,3 +237,4 @@ class ClassReviewAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequ
                 }
             )
         return data
+

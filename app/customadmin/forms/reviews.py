@@ -36,6 +36,12 @@ class MyCreatorReviewCreationForm(forms.ModelForm):
         rating = cleaned_data.get("rating")
         review = cleaned_data.get("review")
 
+        instance = CreatorReview.objects.filter(creator=creator, user=user).first()
+        if instance:
+            raise forms.ValidationError(
+                "Category Review already exists with selected user."
+            )
+
         if not creator :
             raise forms.ValidationError(
                 "Please select creator."
@@ -86,6 +92,11 @@ class MyCreatorReviewChangeForm(forms.ModelForm):
         rating = cleaned_data.get("rating")
         review = cleaned_data.get("review")
 
+        if CreatorReview.objects.filter(creator=creator, user=user).exclude(pk=self.instance.id).count() > 0:
+            raise forms.ValidationError(
+                "Creator review already exists with selected user."
+            )
+
         if not creator :
             raise forms.ValidationError(
                 "Please select creator."
@@ -130,7 +141,6 @@ class MyClassReviewCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
-        print(*args)
         self.fields['creator_class'].required = False
         self.fields['user'].required = False
 
@@ -140,6 +150,12 @@ class MyClassReviewCreationForm(forms.ModelForm):
         user = cleaned_data.get("user")
         rating = cleaned_data.get("rating")
         review = cleaned_data.get("review")
+
+        instance = ClassReview.objects.filter(creator_class=creator_class, user=user).first()
+        if instance:
+            raise forms.ValidationError(
+                "Class Review already exists with selected user."
+            )
 
         if not creator_class :
             raise forms.ValidationError(
@@ -165,8 +181,6 @@ class MyClassReviewCreationForm(forms.ModelForm):
             instance.save()
         return instance
 
-
-
 class MyClassReviewChangeForm(forms.ModelForm):
     """Custom ClassReviewChangeForm."""
     class Meta:
@@ -181,16 +195,20 @@ class MyClassReviewChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
-        print(*args)
         self.fields['creator_class'].required = False
         self.fields['user'].required = False
-    
+
     def clean(self):
         cleaned_data = super(MyClassReviewChangeForm, self).clean()
         creator_class = cleaned_data.get("creator_class")
         user = cleaned_data.get("user")
         rating = cleaned_data.get("rating")
         review = cleaned_data.get("review")
+
+        if ClassReview.objects.filter(creator_class=creator_class, user=user).exclude(pk=self.instance.id).count() > 0:
+            raise forms.ValidationError(
+                "Class review already exists with selected user."
+            )
 
         if not creator_class :
             raise forms.ValidationError(
