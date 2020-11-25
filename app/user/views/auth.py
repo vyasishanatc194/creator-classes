@@ -40,7 +40,7 @@ class SignUpApiView(APIView):
                 return custom_response(True, status.HTTP_400_BAD_REQUEST, message)
 
             message = "Account created successfully!"
-            serializer = self.serializer_class(data=request.data)
+            serializer = self.serializer_class(data=request.data, context={'request': request})
             response_status, result, message = serialized_response(serializer, message)
             status_code = status.HTTP_201_CREATED if response_status else status.HTTP_400_BAD_REQUEST
             # TODO Email

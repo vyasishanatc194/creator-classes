@@ -3,7 +3,7 @@ from ..serializers import AddStreamSerializer
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsCreator
-from ..moels import Stream
+from ..models import Stream
 
 
 class AddStreamAPIView(APIView):
@@ -14,13 +14,12 @@ class AddStreamAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def post(self, request, *args, **kwargs):
-        request_copy = request.data
-        request_copy["creator"] = request.user.pk
+        request.data["creator"] = request.user.pk
         message = "Stream created successfully!"
-        serializer = self.serializer_class(data=request_copy, context={"request": request})
+        serializer = self.serializer_class(data=request.data, context={"request": request})
         response_status, result, message = serialized_response(serializer, message)
         status_code = status.HTTP_201_CREATED if response_status else status.HTTP_400_BAD_REQUEST
-        return custom_response(response_status, status_code, message, result)
+        return custom_response(response_status, status_code, message)
 
     def put(self, request, pk, format=None):
         request.data["creator"] = request.user.pk
@@ -35,8 +34,7 @@ class AddStreamAPIView(APIView):
         status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
         if response_status:
             return custom_response(response_status, status_code, message)
-        return custom_response(response_status, status_code, message, result)
-
+        return custom_response(response_status, status_code, message)
 
     def delete(self, request, pk, format=None):
         stream_exists = Stream.objects.filter(pk=pk, active=True)

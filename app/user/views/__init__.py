@@ -2,3 +2,4 @@ from .auth import SignUpApiView, LoginAPIView, LogoutAPIView, FacebookLogin, Twi
 from .review import CreatorReviewAPIView, ClassReviewAPIView
 from .favourites import FavouriteClassAPIView, FavouriteCreatorAPIView
 from .user_class import ClassFilterAPIView, ClassSearchAPIView
+from .user_stream import StreamDetailView, StreamSearchAPIView

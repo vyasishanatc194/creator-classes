@@ -3,6 +3,7 @@ from ..models import Creator, CreatorSkill
 from user.models import CreatorReview
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
+from user.models import User
 
 
 class CreatorSkillSerializer(serializers.ModelSerializer):
@@ -106,3 +107,47 @@ class CreatorListingSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, instance):
         return f"{instance.first_name} {instance.last_name}"
+
+
+class CreatorRegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Creator
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'password', 'confirm_password']
+
+    def create(self, validated_data):
+        """
+        custom 'create' so that password gets hashed!
+        """
+        if 'username' not in validated_data or not validated_data['username']:
+            validated_data['username']=validated_data['email'].split('@')[0]
+        username_check = User.objects.filter(username=validated_data['username']).distinct()
+        if username_check.exists(): 
+            return "Username already exists!"
+        validated_data['is_active'] = False
+        validated_data['is_creator'] = True
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+
+        return instance
+
+
+class CreatorLoginSerializer(serializers.ModelSerializer):
+    """
+    Creator Login serializer
+    """
+    email = serializers.EmailField(read_only=True)
+    token = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Creator
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token', 'profile_image', 'description', 'key_skill']
+
+    def get_token(self, obj):
+        return f"Token {Token.objects.get_or_create(user=obj)[0]}"

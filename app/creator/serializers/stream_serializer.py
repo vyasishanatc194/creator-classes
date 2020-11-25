@@ -6,7 +6,7 @@ from customadmin.models import AdminKeyword
 class AddStreamSerializer(serializers.ModelSerializer):
     """
     Add Class serializer
-    """
+    """ 
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.FileField(required=True)
@@ -36,9 +36,9 @@ class AddStreamSerializer(serializers.ModelSerializer):
             for content in stream_covers:
                 StreamCovers.objects.create(covers=content, stream=stream)
 
-        stream.stream_keywords = stream_keywords
-        stream.stream_covers = stream_covers
-        return stream
+        validated_data['stream_keywords'] = stream_keywords
+        validated_data['stream_covers'] = stream_covers
+        return validated_data
 
     def update(self, instance, validated_data):
         stream_keywords = validated_data.pop('stream_keywords', None)
@@ -61,7 +61,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
             for covers in stream_covers:
                 StreamCovers.objects.create(covers=covers, stream=instance)
 
-        instance.stream_keywords=stream_keywords
-        instance.stream_covers=stream_covers
-        return instance
+        validated_data['stream_keywords'] = stream_keywords
+        validated_data['stream_covers'] = stream_covers
+        return validated_data
 
