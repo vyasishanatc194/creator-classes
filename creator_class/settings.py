@@ -28,7 +28,7 @@ SECRET_KEY = 'e#krlbd^nxk$b8@6a(mosksb*)1lf@9^v^e&svv26^4c#lkab6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','3.139.122.63']
 
 
 # Application definition
@@ -106,8 +106,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'creator_class',
         'USER': 'postgres',
-        'HOST': 'localhost',
-        'PASSWORD': 'root',
+        'HOST': 'creatorclass.cemmg26jcbac.us-east-2.rds.amazonaws.com',
+        'PASSWORD': 'lOb4Rd6yq8TlYIQWAK2n',
         'PORT': '5432'
     }
 }
