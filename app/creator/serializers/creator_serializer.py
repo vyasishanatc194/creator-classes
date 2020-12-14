@@ -4,6 +4,7 @@ from user.models import CreatorReview
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 from user.models import User
+from user.serializers import CreatorReviewSerializer
 
 
 class CreatorSkillSerializer(serializers.ModelSerializer):
@@ -43,35 +44,49 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
 
 
+class CreatorReviewListSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    profile_image = serializers.SerializerMethodField('get_profile_image_url')
+    class Meta:
+        model = CreatorReview
+        fields = ['id', 'review', 'rating', 'username', 'first_name', 'last_name', 'profile_image']
+
+    def get_profile_image_url(self, review_class):
+        request = self.context.get('request')
+        if review_class.user.profile_image:
+            profile_image_url = review_class.user.profile_image.url
+            return request.build_absolute_uri(profile_image_url)
+
+
 class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
     """
     Creator Profile display serializer
     """
     email = serializers.EmailField(read_only=True)
     other_skills = serializers.SerializerMethodField()
-    avg_rating = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
+    creator_reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url',
-        'avg_rating', 'total_rating']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'total_rating', 'creator_reviews']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
         skills = [skill.skill for skill in other_skills]
         return skills
 
-    def get_avg_rating(self, instance):
-        ratings = CreatorReview.objects.filter(creator=instance)
-        sum_ratings = ratings.aggregate(Sum('rating'))
-        if sum_ratings['rating__sum'] and ratings.count():
-            return sum_ratings['rating__sum']/ratings.count()
-        return 0
-
     def get_total_rating(self, instance):
         ratings = CreatorReview.objects.filter(creator=instance).count()
         return ratings
+
+    def get_creator_reviews(self, instance):
+        reviews = CreatorReview.objects.filter(creator=instance)
+        print(reviews)
+        serializer = CreatorReviewListSerializer(reviews, many=True, context={"request": self.context.get('request')})
+        return serializer.data  
 
 
 class CreatorListingSerializer(serializers.ModelSerializer):
@@ -116,7 +131,7 @@ class CreatorRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'password', 'confirm_password']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'password', 'confirm_password', 'profile_image']
 
     def create(self, validated_data):
         """

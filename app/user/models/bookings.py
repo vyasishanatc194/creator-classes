@@ -7,7 +7,7 @@ class SessionBooking(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="booking_by")
     creator = models.ForeignKey("creator.Creator", on_delete=models.CASCADE, related_name="booking_with")
     time_slot = models.ForeignKey("creator.TimeSlot", on_delete=models.CASCADE, related_name="booking_slot")
-    user_card = models.ForeignKey("user.UserCard", on_delete=models.CASCADE, related_name="user_session_payment")
+    user_card = models.ForeignKey("user.Card", on_delete=models.CASCADE, related_name="user_session_payment")
 
     def __str__(self):
         return f"{self.user.email}"
@@ -21,7 +21,7 @@ class SessionBooking(ActivityTracking):
 class StreamBooking(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="stream_booking_by")
     stream = models.ForeignKey("creator.Stream", on_delete=models.CASCADE, related_name="booked_stream")
-    user_card = models.ForeignKey("user.UserCard", on_delete=models.CASCADE, related_name="user_stream_payment")
+    user_card = models.ForeignKey("user.Card", on_delete=models.CASCADE, related_name="user_stream_payment")
 
     def __str__(self):
         return f"{self.user.email}"

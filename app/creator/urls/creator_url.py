@@ -9,5 +9,7 @@ urlpatterns = [
 
     path("register/", views.CreatorRegisterView.as_view(), name="register"),
     path("login/", views.CreatorLoginAPIView.as_view(), name="creator-login"),
+    
+    path("creator-detail/<int:pk>/", views.CreatorDetailAPIView.as_view(), name="creator-detail"),
 
 ]

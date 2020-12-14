@@ -65,3 +65,28 @@ class AddStreamSerializer(serializers.ModelSerializer):
         validated_data['stream_covers'] = stream_covers
         return validated_data
 
+
+class MyStreamSerializer(serializers.ModelSerializer):
+    """
+    Add Class serializer
+    """ 
+    title = serializers.CharField(required=True)
+    thumbnail_file = serializers.FileField(required=True)
+    sneak_peak_file = serializers.FileField(required=True)
+    stream_datetime = serializers.DateTimeField(required=True)
+    stream_amount = serializers.FloatField(required=True)
+    total_seats = serializers.IntegerField(required=True)
+    stream_keywords = serializers.SerializerMethodField()
+    stream_covers = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Stream
+        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+
+    def get_stream_covers(self, instance):
+        stream_covers = StreamCovers.objects.filter(stream=instance)
+        return [stream_cover.covers for stream_cover in stream_covers]
+
+    def get_stream_keywords(self, instance):
+        stream_keywords = StreamKeyword.objects.filter(stream=instance)
+        return [stream_keyword.keyword.keyword for stream_keyword in stream_keywords]

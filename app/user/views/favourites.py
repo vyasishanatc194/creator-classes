@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from ..serializers import FavouriteCreatorSerializer, FavouriteClassSerializer, FavouriteClassListSerializer, FavouriteCreatorListSerializer
 from ..models import FavouriteCreator, FavouriteClass
 from creator_class.helpers import custom_response, serialized_response
-from rest_framework import status, parsers, renderers
+from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsUser
 
 

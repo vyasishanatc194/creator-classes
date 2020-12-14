@@ -3,6 +3,7 @@ from ..serializers import StreamDetailSerializer, StreamListingSerializer
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator.models import Stream, StreamKeyword
+from datetime import datetime
 
 STREAMS_FETCHED_MESSAGE = "Streams fetched Successfully!"
 
@@ -34,7 +35,7 @@ class StreamSearchAPIView(APIView):
         search = request.GET.get('search', None)
         stream_keyword = request.GET.get('stream_keyword', None)
 
-        streams = Stream.objects.filter(active=True)
+        streams = Stream.objects.filter(active=True, stream_datetime__gte=datetime.today())
         if search:
             streams = streams.filter(title__icontains=search)
 

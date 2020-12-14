@@ -36,6 +36,18 @@ class CreatorProfileAPI(APIView):
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 
 
+class CreatorDetailAPIView(APIView):
+    def get(self, request,pk):
+        creator_profile = get_object(Creator, pk)
+        if not creator_profile:
+            message = "Requested account details not found!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        serializer = CreatorProfileDisplaySerializer(creator_profile, context={"request": request})
+        message = "Creator Details fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+
 class CreatorListingAPIView(APIView):
     """
     Creator Profile view
@@ -64,7 +76,7 @@ class CreatorRegisterView(APIView):
         if username_check.exists():
             return custom_response(False, status.HTTP_400_BAD_REQUEST, "Username already exists!")
         message = "Account registered successfully!"
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, context={'request': request})
         response_status, result, message = serialized_response(serializer, message)
         status_code = status.HTTP_201_CREATED if response_status else status.HTTP_400_BAD_REQUEST
         # TODO Email

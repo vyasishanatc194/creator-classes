@@ -2,4 +2,4 @@ from .creator_serializer import CreatorProfileSerializer, CreatorProfileDisplayS
 from .class_serializer import AddClassSerializer, ClassListingSerializer, ClassDetailSerializer, ClassMaterialListSerializer, AdminKeywordSerializer, PopularClassListingSerializer
 from .material_serializer import MaterialCategorySerializer, MaterialSerializer
 from .sessions_serializer import OneToOneSessionSerializer, SessionListingSerializer
-from .stream_serializer import AddStreamSerializer
+from .stream_serializer import AddStreamSerializer, MyStreamSerializer

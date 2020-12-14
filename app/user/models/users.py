@@ -41,6 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=40, blank=True)
     profile_image = models.ImageField(upload_to="profile_image", default="sample.jpg", null=True,  blank=True, verbose_name=_("Profile Image"))
     description = models.CharField(max_length=255, blank=True)
+    customer_id = models.CharField(_("Customer Id"), blank=True, max_length=255)
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name=_("Unique Id"),)
 

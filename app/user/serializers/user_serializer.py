@@ -2,6 +2,7 @@ from rest_framework import fields, serializers
 from ..models import User
 from rest_framework.authtoken.models import Token
 from customadmin.models import Testimonial, Plan, PlanCover
+from creator_class.utils import MyStripe
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -31,6 +32,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
 
+        # Create Stripe customer ID
+        stripe = MyStripe()
+        customer = stripe.create_customer(instance)
+        instance.customer_id = customer.id
+        instance.save()
         return instance
 
 

@@ -101,6 +101,7 @@ WSGI_APPLICATION = 'creator_class.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# For server
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -112,6 +113,17 @@ DATABASES = {
     }
 }
 
+# For local
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'creator_class',
+#         'USER': 'postgres',
+#         'HOST': 'localhost',
+#         'PASSWORD': 'root',
+#         'PORT': '5432'
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -231,3 +243,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "webmaster.citrusbug@gmail.com"
 EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
 EMAIL_USE_TLS = True
+
+# Stripe token
+STRIPE_API_KEY = "sk_test_51GzimOEWRQWCJaWljECSqRalJjIzyeDSxOjZejSvwTT9VP03gaPzmuh1igtWHHTNdzZVje1E2H6W48wXMrjXQFB800Xr9juItC"
