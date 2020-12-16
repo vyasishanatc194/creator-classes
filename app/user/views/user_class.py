@@ -50,7 +50,7 @@ class ClassFilterAPIView(APIView):
             serializer = ClassListingSerializer(popular_classes, many=True, context={"request": request})
             return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, serializer.data)
         serializer = ClassListingSerializer(creator_classes, many=True, context={"request": request})
-        return custom_response(True, status.HTTP_200_OK, messaCLASSES_FETCHED_MESSAGEge, serializer.data)
+        return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, serializer.data)
 
 
 class ClassSearchAPIView(APIView):
