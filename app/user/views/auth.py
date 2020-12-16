@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
-from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer
+from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer
 from ..models import User
-from creator_class.helpers import custom_response, serialized_response
+from creator_class.helpers import custom_response, serialized_response, get_object
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
 from creator_class.permissions import IsAccountOwner
@@ -114,3 +114,31 @@ class TestimonialsListingAPIView(generics.ListCreateAPIView):
 class PlansListingAPIView(generics.ListCreateAPIView):
     queryset = Plan.objects.filter(active=True)
     serializer_class = PlanListingSerializer
+
+
+class UserProfileAPIView(APIView):
+    """
+    User Profile view
+    """
+    serializer_class = UserProfileUpdateSerializer
+    permission_classes = (IsAccountOwner,)
+
+    def put(self, request, *args, **kwargs):
+        user_profile = get_object(User, request.user.pk)
+        if not user_profile:
+            message = "User not found!"
+            return custom_response(True, status.HTTP_200_OK, message)
+        message = "Profile updated successfully!"
+        serializer = self.serializer_class(user_profile, data=request.data, partial=True, context={"request": request})
+        response_status, result, message = serialized_response(serializer, message)
+        status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
+        return custom_response(response_status, status_code, message, result)
+
+    def get(self, request):
+        user_profile = get_object(User, request.user.pk)
+        if not user_profile:
+            message = "Requested account details not found!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        serializer = self.serializer_class(user_profile, context={"request": request})
+        message = "User Details fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)

@@ -61,3 +61,10 @@ class PlanListingSerializer(serializers.ModelSerializer):
         return [plan_cover.covers for plan_cover in plan_covers]
 
 
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    """
+    User Profile update serializer
+    """
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'description', 'profile_image']
