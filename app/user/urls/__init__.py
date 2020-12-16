@@ -2,7 +2,7 @@
 from django.urls import include, path
 
 from .. import views
-from . import auth_url, review_url, favourite_url, user_class_url, user_stream_url, card_url
+from . import auth_url, review_url, favourite_url, user_class_url, user_stream_url, card_url, user_material_url
 
 app_name="user"
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path("", include(user_class_url)),
     path("", include(user_stream_url)),
     path("", include(card_url)),
+    path("", include(user_material_url)),
 ]

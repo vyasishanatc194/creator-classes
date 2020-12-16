@@ -4,3 +4,4 @@ from .favourite_serializer import FavouriteClassSerializer, FavouriteCreatorSeri
 from .user_stream_serializer import StreamDetailSerializer, StreamListingSerializer
 from .card_serializer import CardSerializer
 from .booking_serializer import SessionBookingSerializer
+from .user_material_serializer import UserMaterialListingSerializer
