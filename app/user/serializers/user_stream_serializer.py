@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from creator.models import StreamKeyword, StreamCovers, Stream
-from ..models import CreatorReview
+from ..models import CreatorReview, FavouriteCreator
 from customadmin.models import AdminKeyword
 from ..serializers import CreatorReviewSerializer
 from creator.serializers import CreatorListingSerializer
