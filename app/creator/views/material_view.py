@@ -83,3 +83,19 @@ class MyMaterialAPIView(APIView):
         serializer = self.serializer_class(materials, many=True, context={"request": request})
         message = "Materials fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class CreatorMaterialAPIView(APIView):
+    """
+    Creator Material view
+    """
+    serializer_class = MaterialSerializer
+
+    def get(self, request, format=None):
+        materials = Material.objects.filter(active=True)
+        if 'creator' in request.GET:
+            materials = materials.filter(creator=request.GET['creator'])
+
+        serializer = self.serializer_class(materials, many=True, context={"request": request})
+        message = "Materials fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)

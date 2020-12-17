@@ -61,3 +61,19 @@ class MyStreamListingAPIView(APIView):
         serializer = self.serializer_class(streams, many=True, context={"request": request})
         message = "Streams fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class CreatorStreamListingAPIView(APIView):
+    """
+    My stream listing view
+    """
+    serializer_class = MyStreamSerializer
+
+    def get(self, request):
+        streams = Stream.objects.filter(active=True, stream_datetime__gte=datetime.today())
+        if "creator" in request.GET:
+            streams = streams.filter(creator=request.GET['creator'])
+
+        serializer = self.serializer_class(streams, many=True, context={"request": request})
+        message = "Streams fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)

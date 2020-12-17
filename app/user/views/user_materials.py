@@ -11,18 +11,20 @@ class MaterialListingAPIView(APIView):
     Material Listing view
     """
     serializer_class = UserMaterialListingSerializer
+
     def get(self, request, format=None):
         materials = Material.objects.filter(active=True)
         if 'category' in request.GET:
             materials = materials.filter(material_category=request.GET['category'])
         serializer = self.serializer_class(materials, many=True, context={"request": request})
         message = "Materials fetched Successfully!"
-        result = serializer.data
-        
+        materials = serializer.data
+        result = {}
+        result['materials'] = materials
         if 'category' in request.GET:
             category = MaterialCategory.objects.filter(pk=request.GET['category'])
             if category:
                 category_serializer = MaterialCategorySerializer(category[0], context={"request": request})
-                result.append({'category_detail':category_serializer.data})
+                result['category_detail'] =category_serializer.data
 
         return custom_response(True, status.HTTP_200_OK, message, result)
