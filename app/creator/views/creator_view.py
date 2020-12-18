@@ -55,6 +55,11 @@ class CreatorListingAPIView(APIView):
     serializer_class = CreatorListingSerializer
     def get(self, request):
         creators = Creator.objects.filter(is_active=True)
+
+        key_skill = request.GET.get('key_skill', None)
+        if key_skill:
+            creators = creators.filter(key_skill=key_skill)
+
         serializer = self.serializer_class(creators, many=True, context={"request": request})
         message = "Creators fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)

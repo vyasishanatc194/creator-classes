@@ -6,6 +6,12 @@ from customadmin.models import AdminKeyword
 from . import CreatorListingSerializer
 
 
+class AdminKeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminKeyword
+        fields = ['id', 'keyword']
+
+
 class AddClassSerializer(serializers.ModelSerializer):
     """
     Add Class serializer
@@ -187,7 +193,8 @@ class ClassDetailSerializer(serializers.ModelSerializer):
 
     def get_class_keywords(self, instance):
         class_keywords = ClassKeyword.objects.filter(creator_class=instance)
-        return [class_keyword.keyword.keyword for class_keyword in class_keywords]
+        serializer = AdminKeywordSerializer(class_keywords, many=True)
+        return serializer.data
 
     def get_class_covers(self, instance):
         class_covers = ClassCovers.objects.filter(creator_class=instance)
@@ -210,12 +217,6 @@ class ClassDetailSerializer(serializers.ModelSerializer):
             is_favourite = FavouriteClass.objects.filter(creator_class=instance, user=user)
             return True if is_favourite else False
         return False
-
-
-class AdminKeywordSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AdminKeyword
-        fields = ['id', 'keyword']
 
 
 class PopularClassListingSerializer(serializers.ModelSerializer):
