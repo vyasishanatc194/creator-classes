@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib.auth.admin import UserAdmin
-from .models import User, CreatorReview, ClassReview, SessionBooking, StreamBooking
+from .models import User, CreatorReview, ClassReview, SessionBooking, StreamBooking, FavouriteCreator, FavouriteClass
 from .forms import AccountUpdateForm, AccountCreationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -77,8 +77,18 @@ class StreamBookingAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "user", "stream"]
 
+class FavouriteCreatorAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk"]
+
+class FavouriteClassAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk"]
+
 admin.site.register(User, UserAdmin)
 admin.site.register(CreatorReview, CreatorReviewAdmin)
 admin.site.register(ClassReview, ClassReviewAdmin)
 admin.site.register(SessionBooking, SessionBookingAdmin)
 admin.site.register(StreamBooking, StreamBookingAdmin)
+admin.site.register(FavouriteClass, FavouriteClassAdmin)
+admin.site.register(FavouriteCreator, FavouriteCreatorAdmin)

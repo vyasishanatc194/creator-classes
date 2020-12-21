@@ -1,8 +1,17 @@
 from rest_framework import fields, serializers
 from ..models import FavouriteCreator, FavouriteClass, ClassReview
-from creator.models import CreatorClass
+from creator.models import CreatorClass, Creator
 from django.db.models import Sum
 from creator.serializers import CreatorListingSerializer
+
+
+class FavouriteCreatorListingSerializer(serializers.ModelSerializer):
+    """
+    Creator Profile display serializer
+    """
+    class Meta:
+        model = Creator
+        fields = ['id', 'email', 'first_name', 'last_name', 'profile_image', 'key_skill']
 
 
 class FavouriteCreatorSerializer(serializers.ModelSerializer):
@@ -23,7 +32,7 @@ class ClassSerializer(serializers.ModelSerializer):
     """
     avg_rating = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
-    creator = serializers.SerializerMethodField()
+    creator = FavouriteCreatorListingSerializer()
 
     class Meta:
         model = CreatorClass
@@ -39,9 +48,6 @@ class ClassSerializer(serializers.ModelSerializer):
     def get_total_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance).count()
         return ratings
-
-    def get_creator(self, instance):
-        return f"{instance.creator.first_name} {instance.creator.last_name}"
 
 
 class FavouriteClassListSerializer(serializers.ModelSerializer):
