@@ -44,9 +44,9 @@ class MyStripe():
         """Using this method you can delete already registered customer"""
         return stripe.Customer.delete(customer_id)
 
-    def create_card(self, customer_id, card_id):
+    def create_card(self, customer_id, card):
         """Using this method you can create a new card of existing customer"""
-        return stripe.Customer.create_source(customer_id, source=card_id)
+        return stripe.Customer.create_source(customer_id, source=card['card_id'])
 
     def delete_card(self, customer_id, card_id):
         """Using this method you can delete a card of existing customer"""

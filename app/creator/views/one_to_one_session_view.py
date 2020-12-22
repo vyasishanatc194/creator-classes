@@ -70,7 +70,6 @@ class CreatorSessionListingAPIView(APIView):
     Creator session listing API
     """
     serializer_class = SessionListingSerializer
-    permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request, pk):
         sessions = TimeSlot.objects.filter(active=True, slot_datetime__gte=datetime.now(), session__creator__pk=pk)

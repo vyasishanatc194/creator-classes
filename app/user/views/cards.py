@@ -59,3 +59,30 @@ class CardAPIView(APIView):
         except Card.DoesNotExist:
             message = "Registered Card not found"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+    def put(self, request, pk, format=None):
+        try:
+            cards = Card.objects.get(id=pk)
+            stripe = MyStripe()
+            stripe.delete_card(cards.customer_id, cards.card_id)
+            cards.delete()
+            
+            newcard = stripe.create_card(request.user.customer_id, request.data)
+            data = create_card_object(newcard, request)
+            serializer = CardSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                message = "Successfully updated card"
+                return custom_response(True, status.HTTP_201_CREATED, message)
+            else:
+                message="Cannot update card"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message, serializer.errors)
+        except Exception as inst:
+            print(inst)
+            message = "Enter valid customer_id and card_id"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Card.DoesNotExist:
+            message = "Registered Card not found"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
