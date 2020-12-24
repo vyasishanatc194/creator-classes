@@ -5,7 +5,7 @@ from user.models import Card
 from ..serializers import CardSerializer
 from creator_class.helpers import custom_response
 from rest_framework import status
-from creator_class.utils import MyStripe, create_card_object
+from creator_class.utils import MyStripe, create_card_object, create_customer_id
 
 
 class CardAPIView(APIView):
@@ -31,7 +31,11 @@ class CardAPIView(APIView):
     def post(self, request, format=None):
         try:
             stripe = MyStripe()
-            newcard = stripe.create_card(request.user.customer_id, request.data)
+            customer_id = request.user.customer_id
+            if not customer_id:
+                newcustomer = create_customer_id(request.user)
+                customer_id = newcustomer.id
+            newcard = stripe.create_card(customer_id, request.data)
             data = create_card_object(newcard, request)
             serializer = CardSerializer(data=data)
             if serializer.is_valid():
