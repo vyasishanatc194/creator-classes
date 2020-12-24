@@ -3,6 +3,6 @@ from .review import CreatorReviewAPIView, ClassReviewAPIView
 from .favourites import FavouriteClassAPIView, FavouriteCreatorAPIView
 from .user_class import ClassFilterAPIView, ClassSearchAPIView
 from .user_stream import StreamDetailView, StreamSearchAPIView
-from .cards import CardAPIView
+from .cards import CardAPIView, CardDetailAPIView
 from .bookings import OneToOneSessionBookingAPIView
 from .user_materials import MaterialListingAPIView

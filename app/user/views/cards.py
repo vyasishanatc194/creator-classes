@@ -90,3 +90,23 @@ class CardAPIView(APIView):
         except Card.DoesNotExist:
             message = "Registered Card not found"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class CardDetailAPIView(APIView):
+    """API View for Card listing"""
+
+    permission_classes = (IsAccountOwner,)
+    serializer_class = CardSerializer
+    def get(self, request, pk, format=None):
+        try:
+            cards = Card.objects.filter(pk=pk)
+            if cards:
+                serializer = CardSerializer(cards[0], context={"request": request})
+                message= "Successfully fetched card"
+                return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+            message= "Card not found"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Card.DoesNotExist:
+            message= "Card not found"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
