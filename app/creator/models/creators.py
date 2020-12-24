@@ -16,6 +16,7 @@ class Creator(User):
     twitter_url = models.CharField(max_length=40, blank=True, null=True, default='')
     google_url = models.CharField(max_length=40, blank=True, null=True, default='')
     facebook_url = models.CharField(max_length=40, blank=True, null=True, default='')
+    creator_website_url = models.CharField(max_length=40, blank=True, null=True, default='')
 
     def __str__(self):
         return f"{self.email}"

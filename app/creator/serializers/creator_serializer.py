@@ -23,7 +23,7 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url']
 
 
     def update(self, instance, validated_data):
@@ -71,7 +71,7 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'total_rating', 'creator_reviews']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)

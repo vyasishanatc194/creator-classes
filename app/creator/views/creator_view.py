@@ -58,7 +58,7 @@ class CreatorListingAPIView(APIView):
 
         key_skill = request.GET.get('key_skill', None)
         if key_skill:
-            creators = creators.filter(key_skill=key_skill)
+            creators = creators.filter(key_skill__icontains=key_skill)
 
         serializer = self.serializer_class(creators, many=True, context={"request": request})
         message = "Creators fetched Successfully!"

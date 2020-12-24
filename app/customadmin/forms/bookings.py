@@ -16,8 +16,7 @@ class SessionBookingCreationForm(forms.ModelForm):
         fields = [
             "user",
             "creator",
-            "time_slot",     
-            "user_card",     
+            "time_slot",   
         ]
 
     def __init__(self, *args, **kwargs):
@@ -27,14 +26,12 @@ class SessionBookingCreationForm(forms.ModelForm):
         self.fields['user'].required = False
         self.fields['creator'].required = False
         self.fields['time_slot'].required = False
-        self.fields['user_card'].required = False
 
     def clean(self):
         cleaned_data = super(SessionBookingCreationForm, self).clean()
         user = cleaned_data.get("user")
         creator = cleaned_data.get("creator")
         time_slot = cleaned_data.get("time_slot")
-        user_card = cleaned_data.get("user_card")
         instance = SessionBooking.objects.filter(user=user, creator=creator,time_slot=time_slot).first()
         if instance:
             raise forms.ValidationError(
@@ -52,10 +49,6 @@ class SessionBookingCreationForm(forms.ModelForm):
         if not time_slot :
             raise forms.ValidationError(
                 "Please select time slot."
-            )
-        if not user_card :
-            raise forms.ValidationError(
-                "Please select card."
             )
 
     def save(self, commit=True):
@@ -77,8 +70,7 @@ class SessionBookingChangeForm(forms.ModelForm):
         fields = (
             "user",
             "creator",
-            "time_slot",  
-            "user_card",  
+            "time_slot", 
         )
 
     def __init__(self, *args, **kwargs):
@@ -88,14 +80,12 @@ class SessionBookingChangeForm(forms.ModelForm):
         self.fields['user'].required = False
         self.fields['creator'].required = False
         self.fields['time_slot'].required = False
-        self.fields['user_card'].required = False
 
     def clean(self):
         cleaned_data = super(SessionBookingChangeForm, self).clean()
         user = cleaned_data.get("user")
         creator = cleaned_data.get("creator")
         time_slot = cleaned_data.get("time_slot")
-        user_card = cleaned_data.get("user_card")
         if SessionBooking.objects.filter(user=user, creator=creator, time_slot=time_slot).exclude(pk=self.instance.id).count() > 0:
             raise forms.ValidationError(
                 "Session Booking already exists with selected user, creator and Time Slot."
@@ -112,10 +102,6 @@ class SessionBookingChangeForm(forms.ModelForm):
         if not time_slot :
             raise forms.ValidationError(
                 "Please select time slot."
-            )
-        if not user_card :
-            raise forms.ValidationError(
-                "Please select user card."
             )
 
     def save(self, commit=True):
@@ -139,8 +125,7 @@ class StreamBookingCreationForm(forms.ModelForm):
         model = StreamBooking
         fields = [
             "user",
-            "stream",    
-            "user_card",    
+            "stream",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -148,13 +133,11 @@ class StreamBookingCreationForm(forms.ModelForm):
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
         self.fields['user'].required = False
         self.fields['stream'].required = False
-        self.fields['user_card'].required = False
 
     def clean(self):
         cleaned_data = super(StreamBookingCreationForm, self).clean()
         user = cleaned_data.get("user")
         stream = cleaned_data.get("stream")
-        user_card = cleaned_data.get("user_card")
 
         stream_obj = Stream.objects.filter(creator=stream.creator).first()
         stream_count = StreamBooking.objects.filter(stream=stream).count()
@@ -196,7 +179,6 @@ class StreamBookingChangeForm(forms.ModelForm):
         fields = (
             "user",
             "stream",
-            "user_card",
         )
 
     def __init__(self, *args, **kwargs):
@@ -204,13 +186,11 @@ class StreamBookingChangeForm(forms.ModelForm):
         self.fields['user'].queryset = User.objects.filter(is_creator=False).exclude(username='admin')
         self.fields['user'].required = False
         self.fields['stream'].required = False
-        self.fields['user_card'].required = False
 
     def clean(self):
         cleaned_data = super(StreamBookingChangeForm, self).clean()
         user = cleaned_data.get("user")
         stream = cleaned_data.get("stream")
-        user_card = cleaned_data.get("user_card")
         if StreamBooking.objects.filter(user=user, stream=stream).exclude(pk=self.instance.id).count() > 0:
             raise forms.ValidationError(
                 "Stream Booking already exists with selected user and stream."

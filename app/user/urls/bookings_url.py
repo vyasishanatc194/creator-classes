@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path("session-booking/", views.OneToOneSessionBookingAPIView.as_view(), name="session-booking"),
+    path("book-session/", views.OneToOneSessionBookingAPIView.as_view(), name="book-session"),
 ]

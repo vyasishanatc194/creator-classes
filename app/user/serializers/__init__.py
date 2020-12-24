@@ -5,3 +5,4 @@ from .user_stream_serializer import StreamDetailSerializer, StreamListingSeriali
 from .card_serializer import CardSerializer
 from .booking_serializer import SessionBookingSerializer
 from .user_material_serializer import UserMaterialListingSerializer
+from .transaction_detail_serializer import TransactionDetailSerializer

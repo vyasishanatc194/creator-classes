@@ -246,3 +246,6 @@ EMAIL_USE_TLS = True
 
 # Stripe token
 STRIPE_API_KEY = "sk_test_51GzimOEWRQWCJaWljECSqRalJjIzyeDSxOjZejSvwTT9VP03gaPzmuh1igtWHHTNdzZVje1E2H6W48wXMrjXQFB800Xr9juItC"
+
+
+CURRENCY = "inr"

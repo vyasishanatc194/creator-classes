@@ -7,15 +7,32 @@ class SessionBooking(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="booking_by")
     creator = models.ForeignKey("creator.Creator", on_delete=models.CASCADE, related_name="booking_with")
     time_slot = models.ForeignKey("creator.TimeSlot", on_delete=models.CASCADE, related_name="booking_slot")
-    user_card = models.ForeignKey("user.Card", on_delete=models.CASCADE, related_name="user_session_payment")
+    card_id = models.CharField(null=True, blank=True, max_length=255)
+    transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
+    description = models.CharField(null=True, blank=True, max_length=255)
+
 
     def __str__(self):
-        return f"{self.user.email}"
+        return f"{self.pk}"
 
     class Meta:
         verbose_name = "Session booking"
         verbose_name_plural = "Session bookings"
         ordering = ["-created_at"]
+
+
+class BookedSessionKeywords(ActivityTracking):
+    session = models.ForeignKey(SessionBooking, on_delete=models.CASCADE, related_name="booking_slot")
+    keyword = models.ForeignKey("customadmin.AdminKeyword", on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.session.pk}"
+
+    class Meta:
+        verbose_name = "Session booking keyword"
+        verbose_name_plural = "Session booking keywords"
+        ordering = ["-created_at"]
+
 
 
 class StreamBooking(ActivityTracking):
