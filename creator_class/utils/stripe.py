@@ -4,6 +4,7 @@ Define Stripe payment gateway related stuff here.
 from django.conf import settings
 import stripe
 import json
+from user.models import User
 
 
 class MyStripe():
@@ -92,7 +93,7 @@ def create_card_object(newcard, request):
 def create_customer_id(user):
     """This method is used to create a customer if user is not a stripe customer"""
     stripe = MyStripe()
-    newcustomer = stripe.createCustomer(user)
+    newcustomer = stripe.create_customer(user)
     User.objects.filter(pk=user.id).update(customer_id=newcustomer.id)
     return newcustomer
 

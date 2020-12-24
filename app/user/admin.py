@@ -25,6 +25,7 @@ class UserAdmin(UserAdmin):
                     "username",
                     "profile_image",
                     "description",
+                    "customer_id",
                 )
             },
         ),
