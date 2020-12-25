@@ -3,7 +3,7 @@ from creator.models import StreamKeyword, StreamCovers, Stream
 from ..models import CreatorReview, FavouriteCreator
 from customadmin.models import AdminKeyword
 from ..serializers import CreatorReviewSerializer
-from creator.serializers import CreatorListingSerializer
+from creator.serializers import CreatorListingSerializer, AdminKeywordSerializer
 
 
 class StreamDetailSerializer(serializers.ModelSerializer):
@@ -22,7 +22,8 @@ class StreamDetailSerializer(serializers.ModelSerializer):
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
-        return [stream_keyword.keyword.keyword for stream_keyword in stream_keywords]
+        serializer = AdminKeywordSerializer(stream_keywords, many=True)
+        return serializer.data
 
     def get_stream_covers(self, instance):
         stream_covers = StreamCovers.objects.filter(stream=instance)
