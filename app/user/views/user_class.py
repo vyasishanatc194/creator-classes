@@ -17,10 +17,13 @@ class ClassFilterAPIView(APIView):
 
 
     def get(self, request):
+        search = request.GET.get('search', None)
         creator_classes = CreatorClass.objects.filter(active=True)
         creator_filter = request.GET.get('creator', None)
         filter_by = request.GET.get('filter_by', None)
         class_keyword = request.GET.get('class_keyword', None)
+        if search:
+            creator_classes = creator_classes.filter(title__icontains=search)
         if class_keyword:
             class_keyword = class_keyword.split(',')
             keyword_classes = []
