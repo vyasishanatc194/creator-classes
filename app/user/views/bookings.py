@@ -1,17 +1,18 @@
 from rest_framework.views import APIView
-from ..serializers import SessionBookingSerializer, TransactionDetailSerializer
-from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywords
-from creator.models import TimeSlot
+from ..serializers import SessionBookingSerializer, TransactionDetailSerializer, StreamSeatHolderSerializer, SessionSeatHolderSerializer
+from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywords, StreamBooking
+from creator.models import TimeSlot, Stream
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
-from creator_class.permissions import IsAccountOwner, IsUser
+from creator_class.permissions import IsAccountOwner, IsUser, IsCreator
 from creator_class.utils import MyStripe, create_card_object, create_customer_id, create_charge_object
 from customadmin.models import AdminKeyword
+from datetime import datetime
 
 
 class OneToOneSessionBookingAPIView(APIView):
     """
-    API View to purchase product
+    API View to book One to One Session
     """
     permission_classes = (IsAccountOwner, IsUser)
 
@@ -87,3 +88,95 @@ class OneToOneSessionBookingAPIView(APIView):
             print(inst)
             message = str(inst)
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class StreamBookingAPIView(APIView):
+    """
+    API View to book stream
+    """
+    permission_classes = (IsAccountOwner, IsUser)
+
+    def post(self, request, format=None):
+        """POST method to create the data"""
+        try:
+            if "stream" not in request.data:
+                message = "Stream is required!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            streams = Stream.objects.filter(pk=request.data['stream'], active=True, stream_datetime__gt=datetime.now())
+            if not streams:
+                message = "Stream not found!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            check_seats = StreamBooking.objects.filter(stream=request.data['stream'])
+            if check_seats.count() >= streams[0].total_seats:
+                message = "All seats are booked for this stream."
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            if "card_id" in request.data:
+                card_id = request.data["card_id"]
+                stripe = MyStripe()
+                customer_id = request.user.customer_id
+
+                if not customer_id:
+                    newcustomer = create_customer_id(request.user)
+                    customer_id = newcustomer.id
+                    print("<<<-----|| CUSTOMER CREATED ||----->>>")
+                newcard = stripe.create_card(customer_id, request.data)
+                card_id = newcard.id
+                print("<<<-----|| CARD CREATED ||----->>>")
+
+                newcharge = stripe.create_charge(streams[0].stream_amount, card_id, customer_id)
+                charge_object = create_charge_object(newcharge, request)
+
+                chargeserializer = TransactionDetailSerializer(data=charge_object)
+                if chargeserializer.is_valid():
+                    chargeserializer.save()
+                    print("<<<-----|| TransactionDetail CREATED ||----->>>")
+
+                    transaction = TransactionDetail.objects.filter(pk=chargeserializer.data['id'])
+
+                    stream_booking = StreamBooking()
+                    stream_booking.stream = streams[0]
+                    stream_booking.user = request.user
+                    stream_booking.card_id = request.data['card_id']
+                    stream_booking.transaction_detail = transaction[0]
+                    message = "Stream booked successfully!"
+                    stream_booking.save()
+                    return custom_response(True, status.HTTP_201_CREATED, message)
+            else:
+                message = "Card_id is required"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Exception as inst:
+            print(inst)
+            message = str(inst)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class StreamSeatHolderAPIView(APIView):
+    """
+    List of seat holders
+    """
+    serializer_class = StreamSeatHolderSerializer
+    permission_classes = (IsCreator,)
+
+    def get(self, request, pk):
+        seat_holders = StreamBooking.objects.filter(active=True, stream=pk)
+        serializer = StreamSeatHolderSerializer(seat_holders, many=True, context={"request": request})
+        message = "Seat holders fetched successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class BookedSessionSeatholdersAPIView(APIView):
+    """
+    List of seat holders
+    """
+    serializer_class = SessionSeatHolderSerializer
+    permission_classes = (IsCreator,)
+
+    def get(self, request):
+        seat_holders = SessionBooking.objects.filter(active=True, creator=request.user.pk, time_slot__slot_datetime__gte=datetime.now())
+        serializer = SessionSeatHolderSerializer(seat_holders, many=True, context={"request": request})
+        message = "Seat holders fetched successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)

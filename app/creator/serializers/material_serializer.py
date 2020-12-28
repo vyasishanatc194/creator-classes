@@ -33,3 +33,10 @@ class MaterialSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class MaterialDetailSerializer(serializers.ModelSerializer):
+    material_category = MaterialCategorySerializer()
+    class Meta:
+        model = Material
+        fields = ['id', 'creator', 'material_category', 'title', 'thumbnail_file', 'material_file']
+

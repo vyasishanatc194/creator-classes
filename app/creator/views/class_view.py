@@ -23,7 +23,6 @@ class AddClassAPIView(APIView):
         return custom_response(response_status, status_code, message, result)
 
     def put(self, request, pk, format=None):
-        request.data["creator"] = request.user.pk
         class_exists = CreatorClass.objects.filter(pk=pk, active=True)
         if not class_exists:
             message = "Class not found!"

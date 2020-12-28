@@ -4,5 +4,5 @@ from .favourites import FavouriteClassAPIView, FavouriteCreatorAPIView
 from .user_class import ClassFilterAPIView, ClassSearchAPIView
 from .user_stream import StreamDetailView, StreamSearchAPIView
 from .cards import CardAPIView, CardDetailAPIView
-from .bookings import OneToOneSessionBookingAPIView
+from .bookings import OneToOneSessionBookingAPIView, StreamBookingAPIView, StreamSeatHolderAPIView, BookedSessionSeatholdersAPIView
 from .user_materials import MaterialListingAPIView

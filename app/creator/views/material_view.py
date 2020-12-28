@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ..serializers import MaterialCategorySerializer, MaterialSerializer
+from ..serializers import MaterialCategorySerializer, MaterialSerializer, MaterialDetailSerializer
 from ..models import MaterialCategory, Material
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status, parsers
@@ -35,7 +35,6 @@ class AddMaterialAPIView(APIView):
         return custom_response(response_status, status_code, message, result)
 
     def put(self, request, pk, format=None):
-        request.data["creator"] = request.user
         material_exists = Material.objects.filter(pk=pk, active=True)
         if not material_exists:
             return custom_response(False, status.HTTP_400_BAD_REQUEST, NOT_FOUND_MESSAGE)
@@ -64,7 +63,7 @@ class AddMaterialAPIView(APIView):
         material_exists = Material.objects.filter(pk=pk, active=True)
         if not material_exists:
             return custom_response(False, status.HTTP_400_BAD_REQUEST, NOT_FOUND_MESSAGE)
-        serializer = self.serializer_class(material_exists[0], context={"request": request})
+        serializer = MaterialDetailSerializer(material_exists[0], context={"request": request})
         message = "Material fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 

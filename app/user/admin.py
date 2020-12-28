@@ -74,6 +74,7 @@ class ClassReviewAdmin(admin.ModelAdmin):
 class SessionBookingAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "user", "creator", "time_slot"]
+
 class StreamBookingAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "user", "stream"]
