@@ -33,7 +33,7 @@ class StreamSearchAPIView(APIView):
 
     def get(self, request):
         search = request.GET.get('search', None)
-        stream_keyword = request.GET.get('stream_keyword', None)
+        stream_keyword = request.GET.get('keyword', None)
 
         streams = Stream.objects.filter(active=True, stream_datetime__gte=datetime.today())
         if search:

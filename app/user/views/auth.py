@@ -112,8 +112,12 @@ class TestimonialsListingAPIView(generics.ListCreateAPIView):
 
 
 class PlansListingAPIView(generics.ListCreateAPIView):
-    queryset = Plan.objects.filter(active=True)
     serializer_class = PlanListingSerializer
+    def get(self, request):
+        plans = Plan.objects.filter(active=True)
+        serializer = self.serializer_class(plans, many=True, context={"request": request})
+        message = "Plans fetched successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 
 
 class UserProfileAPIView(APIView):
