@@ -16,7 +16,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image']
+        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image', 'is_creator']
     
         extra_kwargs = {"password":
                                 {"write_only": True}
