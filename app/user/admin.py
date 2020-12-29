@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib.auth.admin import UserAdmin
-from .models import User, CreatorReview, ClassReview, SessionBooking, StreamBooking, FavouriteCreator, FavouriteClass
+from .models import User, CreatorReview, ClassReview, SessionBooking, StreamBooking, FavouriteCreator, FavouriteClass, TransactionDetail
 from .forms import AccountUpdateForm, AccountCreationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -26,6 +26,10 @@ class UserAdmin(UserAdmin):
                     "profile_image",
                     "description",
                     "customer_id",
+                    "plan_id",
+                    "plan_purchased_at",
+                    "plan_purchase_detail",
+
                 )
             },
         ),
@@ -87,6 +91,11 @@ class FavouriteClassAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk"]
 
+
+class TransactionDetailAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk"]
+
 admin.site.register(User, UserAdmin)
 admin.site.register(CreatorReview, CreatorReviewAdmin)
 admin.site.register(ClassReview, ClassReviewAdmin)
@@ -94,3 +103,4 @@ admin.site.register(SessionBooking, SessionBookingAdmin)
 admin.site.register(StreamBooking, StreamBookingAdmin)
 admin.site.register(FavouriteClass, FavouriteClassAdmin)
 admin.site.register(FavouriteCreator, FavouriteCreatorAdmin)
+admin.site.register(TransactionDetail, TransactionDetailAdmin)

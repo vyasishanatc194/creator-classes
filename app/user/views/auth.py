@@ -1,10 +1,10 @@
 from rest_framework.views import APIView
-from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer
-from ..models import User
+from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer, TransactionDetailSerializer, UserPlanSerializer
+from ..models import User, TransactionDetail
 from creator_class.helpers import custom_response, serialized_response, get_object
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
-from creator_class.permissions import IsAccountOwner
+from creator_class.permissions import IsAccountOwner, IsUser
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
@@ -15,6 +15,9 @@ from rest_auth.social_serializers import TwitterLoginSerializer
 from google.views import GoogleOAuth2Adapter
 from rest_framework import generics
 from customadmin.models import Testimonial, Plan
+from creator_class.utils import MyStripe, create_card_object, create_customer_id, create_charge_object
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -145,4 +148,89 @@ class UserProfileAPIView(APIView):
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         serializer = self.serializer_class(user_profile, context={"request": request})
         message = "User Details fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class PlanPurchaseAPIView(APIView):
+    """
+    API View to purchase plan
+    """
+    permission_classes = (IsAccountOwner, IsUser)
+
+    def post(self, request, format=None):
+        """POST method to create the data"""
+        try:
+            if "plan_id" not in request.data:
+                message = "plan_id is required!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            plan_check = Plan.objects.filter(pk=request.data['plan_id'], active=True)
+            if not plan_check:
+                message = "Invalid plan selected."
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+            user = User.objects.get(pk=request.user.pk)
+            if user.plan_id:
+                if (user.plan_purchased_at + relativedelta(months=+user.plan_id.duration_in_months)) > datetime.now():
+                    message = f"You are already associated with {user.plan_id.name} plan."
+                    return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            if "card_id" in request.data:
+                card_id = request.data["card_id"]
+                stripe = MyStripe()
+                customer_id = request.user.customer_id
+
+                if not customer_id:
+                    newcustomer = create_customer_id(request.user)
+                    customer_id = newcustomer.id
+                    print("<<<-----|| CUSTOMER CREATED ||----->>>")
+                newcard = stripe.create_card(customer_id, request.data)
+                card_id = newcard.id
+                print("<<<-----|| CARD CREATED ||----->>>", plan_check[0])
+
+                newcharge = stripe.create_charge(plan_check[0].plan_amount, card_id, customer_id)
+                print("OKAY HERE")
+                charge_object = create_charge_object(newcharge, request)
+
+                chargeserializer = TransactionDetailSerializer(data=charge_object)
+                if chargeserializer.is_valid():
+                    chargeserializer.save()
+                    print("<<<-----|| TransactionDetail CREATED ||----->>>")
+
+                    transaction = TransactionDetail.objects.filter(pk=chargeserializer.data['id'])
+
+                    user.plan_id = plan_check[0]
+                    user.plan_purchased_at = datetime.now()
+                    user.plan_purchase_detail = transaction[0]
+                    message = "Plan purchased successfully!"
+                    user.save()
+                    return custom_response(True, status.HTTP_201_CREATED, message)
+            else:
+                message = "Card_id is required"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Exception as inst:
+            print(inst)
+            message = str(inst)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class UserPlanAPIView(APIView):
+    """
+    User Profile view
+    """
+    serializer_class = UserPlanSerializer
+    permission_classes = (IsAccountOwner, IsUser,)
+
+    def get(self, request):
+        user = get_object(User, request.user.pk)
+        if not user.plan_id:
+            message = "You dont have any active plan!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        if (user.plan_purchased_at + relativedelta(months=+user.plan_id.duration_in_months)) < datetime.now():
+            message = "You dont have any active plan!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        serializer = self.serializer_class(user, context={"request": request})
+        message = "plan Details fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)

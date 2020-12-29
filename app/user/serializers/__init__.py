@@ -1,4 +1,4 @@
-from .user_serializer import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer
+from .user_serializer import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer, UserPlanSerializer
 from . review_serializer import CreatorReviewSerializer, ClassReviewSerializer
 from .favourite_serializer import FavouriteClassSerializer, FavouriteCreatorSerializer, FavouriteClassListSerializer, FavouriteCreatorListSerializer
 from .user_stream_serializer import StreamDetailSerializer, StreamListingSerializer

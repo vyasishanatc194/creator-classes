@@ -13,8 +13,9 @@ urlpatterns = [
 
     path('testimonials/', views.TestimonialsListingAPIView.as_view(), name='testimonials'),
     path('plans/', views.PlansListingAPIView.as_view(), name='plans'),
-
-    path('profile/', views.UserProfileAPIView.as_view(), name='plans'),
+    path('profile/', views.UserProfileAPIView.as_view(), name='plans'),    
+    path('purchase-plan/', views.PlanPurchaseAPIView.as_view(), name='purchase-plan'),
+    path('user-plan/', views.UserPlanAPIView.as_view(), name='user-plan'),
 ]
 
 
