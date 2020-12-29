@@ -11,5 +11,6 @@ urlpatterns = [
     path("login/", views.CreatorLoginAPIView.as_view(), name="creator-login"),
     
     path("creator-detail/<int:pk>/", views.CreatorDetailAPIView.as_view(), name="creator-detail"),
+    path("earning-history/", views.CreatorEarningHistoryAPIView.as_view(), name="earning-history"),
 
 ]

@@ -126,7 +126,7 @@ def create_charge_object(newcharge, request):
         "customer_id": request.user.customer_id,
         "charge_id": newcharge.id,
         "charge_object": newcharge.object,
-        "amount": newcharge.amount,
+        "amount": float(newcharge.amount),
         "amount_refunded": newcharge.amount_refunded,
         "application": newcharge.application,
         "application_fee": newcharge.application_fee,

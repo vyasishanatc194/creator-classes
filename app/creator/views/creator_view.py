@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
 from ..serializers import CreatorProfileSerializer, CreatorProfileDisplaySerializer, CreatorListingSerializer, CreatorRegisterSerializer, CreatorLoginSerializer
 from ..models import Creator
-from user.models import User
+from user.models import User, StreamBooking, SessionBooking
 from creator_class.helpers import custom_response, serialized_response, get_object
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
-from creator_class.permissions import IsAccountOwner
+from creator_class.permissions import IsAccountOwner, IsCreator
+from django.db.models import Sum
+import datetime
+from dateutil.relativedelta import relativedelta
 
 
 class CreatorProfileAPI(APIView):
@@ -13,7 +16,7 @@ class CreatorProfileAPI(APIView):
     Creator Profile view
     """
     serializer_class = CreatorProfileSerializer
-    permission_classes = (IsAccountOwner,)
+    permission_classes = (IsAccountOwner, IsCreator)
 
     def put(self, request, *args, **kwargs):
         creator_profile = get_object(Creator, request.user.pk)
@@ -123,3 +126,37 @@ class CreatorLoginAPIView(APIView):
         login(request, creator_exist[0], backend='django.contrib.auth.backends.ModelBackend')
         serializer = CreatorLoginSerializer(creator_exist[0], context={'request':request})
         return custom_response(True, status.HTTP_200_OK, "Login Successful!", serializer.data)
+
+
+class CreatorEarningHistoryAPIView(APIView):
+    """
+    Creator Earning History view
+    """
+    permission_classes = (IsAccountOwner, IsCreator)
+    def get(self, request):
+        creator = Creator.objects.get(pk=request.user.pk)
+
+        result = {}
+        streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
+        stream_earnings=streams_booked.aggregate(Sum('stream__stream_amount'))['stream__stream_amount__sum']
+
+        session_booked = SessionBooking.objects.filter(creator=request.user.pk)
+        session_earnings=session_booked.aggregate(Sum('transaction_detail__amount'))['transaction_detail__amount__sum']
+
+        time_now = datetime.datetime.now()
+        time_now = time_now + relativedelta(months=1)
+        chart_data={}
+        for i in range(0,10):
+            time_now = time_now - relativedelta(months=1)
+            monthly_streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk, created_at__date__month=time_now.month, created_at__date__year=time_now.year)
+            monthly_stream_earnings=monthly_streams_booked.aggregate(Sum('stream__stream_amount'))['stream__stream_amount__sum']
+
+            monthly_session_booked = SessionBooking.objects.filter(creator=request.user.pk, created_at__date__month=time_now.month, created_at__date__year=time_now.year)
+            monthly_session_earnings=monthly_session_booked.aggregate(Sum('transaction_detail__amount'))['transaction_detail__amount__sum']
+
+            chart_data[time_now.month] = (monthly_stream_earnings if monthly_stream_earnings else 0) + (monthly_session_earnings if monthly_session_earnings else 0)
+
+        result['total_earnings'] = (stream_earnings if stream_earnings else 0) + (session_earnings if session_earnings else 0)
+        result['chart_data'] = chart_data
+        message = "Creators Earnings fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)

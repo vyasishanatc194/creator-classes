@@ -1,6 +1,6 @@
 """This is a model module to store Charge data in to the database"""
 
-from django.db.models import CharField
+from django.db.models import CharField, FloatField
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from creator_class.models import ActivityTracking
@@ -21,7 +21,7 @@ class TransactionDetail(ActivityTracking):
     customer_id = CharField(_("Customer Id"), max_length=255, blank=True)
     charge_id = CharField(_("Charge Id"), max_length=255, blank=True)
     charge_object = CharField(_("Object"), max_length=255, blank=True, null=True)
-    amount = CharField(_("Amount"), max_length=255, blank=True, null=True)
+    amount = FloatField(_("Amount"), max_length=255, blank=True, null=True)
     amount_refunded = CharField(_("Amount refunded"), max_length=255, blank=True, null=True)
     application = CharField(_("Application"), max_length=255, blank=True, null=True)
     application_fee = CharField(_("Application fee"), max_length=255, blank=True, null=True)
