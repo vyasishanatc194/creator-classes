@@ -193,7 +193,9 @@ class ClassDetailSerializer(serializers.ModelSerializer):
 
     def get_class_keywords(self, instance):
         class_keywords = ClassKeyword.objects.filter(creator_class=instance)
-        serializer = AdminKeywordSerializer(class_keywords, many=True)
+        keywords_list = [class_keyword.keyword for class_keyword in class_keywords]
+        admin_keywords = AdminKeyword.objects.filter(keyword__in=keywords_list)
+        serializer = AdminKeywordSerializer(admin_keywords, many=True)
         return serializer.data
 
     def get_class_covers(self, instance):

@@ -9,6 +9,7 @@ from creator_class.permissions import IsAccountOwner, IsCreator
 from django.db.models import Sum
 import datetime
 from dateutil.relativedelta import relativedelta
+import calendar
 
 
 class CreatorProfileAPI(APIView):
@@ -154,9 +155,10 @@ class CreatorEarningHistoryAPIView(APIView):
             monthly_session_booked = SessionBooking.objects.filter(creator=request.user.pk, created_at__date__month=time_now.month, created_at__date__year=time_now.year)
             monthly_session_earnings=monthly_session_booked.aggregate(Sum('transaction_detail__amount'))['transaction_detail__amount__sum']
 
-            chart_data[time_now.month] = (monthly_stream_earnings if monthly_stream_earnings else 0) + (monthly_session_earnings if monthly_session_earnings else 0)
+            chart_data[calendar.month_name[time_now.month]] = (monthly_stream_earnings if monthly_stream_earnings else 0) + (monthly_session_earnings if monthly_session_earnings else 0)
 
         result['total_earnings'] = (stream_earnings if stream_earnings else 0) + (session_earnings if session_earnings else 0)
-        result['chart_data'] = chart_data
+        result['labels'] = chart_data.keys()
+        result['data'] = chart_data.values()
         message = "Creators Earnings fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, result)

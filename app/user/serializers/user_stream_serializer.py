@@ -22,7 +22,9 @@ class StreamDetailSerializer(serializers.ModelSerializer):
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
-        serializer = AdminKeywordSerializer(stream_keywords, many=True)
+        keywords_list = [stream_keyword.keyword for stream_keyword in stream_keywords]
+        admin_keywords = AdminKeyword.objects.filter(keyword__in=keywords_list)
+        serializer = AdminKeywordSerializer(admin_keywords, many=True)
         return serializer.data
 
     def get_stream_covers(self, instance):
