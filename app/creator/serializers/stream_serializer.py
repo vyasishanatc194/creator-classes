@@ -90,3 +90,46 @@ class MyStreamSerializer(serializers.ModelSerializer):
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
         return [stream_keyword.keyword.keyword for stream_keyword in stream_keywords]
+
+
+class UpdateStreamSerializer(serializers.ModelSerializer):
+    """
+    Add Class serializer
+    """ 
+    title = serializers.CharField(required=False)
+    thumbnail_file = serializers.FileField(required=False)
+    sneak_peak_file = serializers.FileField(required=False)
+    stream_datetime = serializers.DateTimeField(required=False)
+    stream_amount = serializers.FloatField(required=False)
+    total_seats = serializers.IntegerField(required=False)
+    stream_keywords = serializers.CharField(required=False)
+    stream_covers = serializers.CharField(required=False)
+
+    class Meta:
+        model = Stream
+        fields = ['id', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+
+    def update(self, instance, validated_data):
+        stream_keywords = validated_data.pop('stream_keywords', None)
+        stream_covers = validated_data.pop('stream_covers', None)
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
+            instance.save()
+
+        if stream_keywords:
+            stream_keywords = stream_keywords.split(',')
+            StreamKeyword.objects.filter(stream=instance).delete()
+            for keyword in stream_keywords:
+                admin_keyword = AdminKeyword.objects.filter(pk=keyword)
+                if admin_keyword:
+                    StreamKeyword.objects.create(keyword=admin_keyword[0], stream=instance)
+
+        if stream_covers:
+            stream_covers = stream_covers.split(',')
+            StreamCovers.objects.filter(stream=instance).delete()
+            for covers in stream_covers:
+                StreamCovers.objects.create(covers=covers, stream=instance)
+
+        validated_data['stream_keywords'] = stream_keywords
+        validated_data['stream_covers'] = stream_covers
+        return validated_data

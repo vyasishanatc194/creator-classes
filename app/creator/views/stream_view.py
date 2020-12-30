@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ..serializers import AddStreamSerializer, MyStreamSerializer
+from ..serializers import AddStreamSerializer, MyStreamSerializer, UpdateStreamSerializer
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsCreator
@@ -29,7 +29,7 @@ class AddStreamAPIView(APIView):
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
         message = "Stream updated successfully!"
-        serializer = self.serializer_class(stream_exists[0], data=request.data, partial=True, context={"request": request})
+        serializer = UpdateStreamSerializer(stream_exists[0], data=request.data, partial=True, context={"request": request})
         response_status, result, message = serialized_response(serializer, message)
         status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
         if response_status:
