@@ -23,7 +23,6 @@ class AddStreamAPIView(APIView):
         return custom_response(response_status, status_code, message)
 
     def put(self, request, pk, format=None):
-        request.data["creator"] = request.user.pk
         stream_exists = Stream.objects.filter(pk=pk, active=True)
         if not stream_exists:
             message = "Stream not found!"
