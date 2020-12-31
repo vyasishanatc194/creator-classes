@@ -1,5 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import OneToOneSession, TimeSlot
+from ..serializers import CreatorListingSerializer
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
@@ -58,4 +59,21 @@ class SessionListingSerializer(serializers.ModelSerializer):
         fields = ['id', 'session', 'amount', 'slot_datetime', 'is_booked']
     
     def get_amount(self, instance):
-        return instance.session.amount        
+        return instance.session.amount
+
+
+class TimeSlotsListingSerializer(serializers.ModelSerializer):
+    # amount = serializers.SerializerMethodField()
+    class Meta:
+        model = TimeSlot
+        fields = ['id', 'session', 'slot_datetime', 'is_booked']
+    
+    # def get_amount(self, instance):
+    #     return instance.session.amount
+
+
+class OneToOneSessionListingSerializer(serializers.ModelSerializer):
+    creator = CreatorListingSerializer()
+    class Meta:
+        model = OneToOneSession
+        fields = ['id', 'creator', 'amount']

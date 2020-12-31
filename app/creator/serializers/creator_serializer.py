@@ -95,30 +95,16 @@ class CreatorListingSerializer(serializers.ModelSerializer):
     """
     email = serializers.EmailField(read_only=True)
     other_skills = serializers.SerializerMethodField()
-    avg_rating = serializers.SerializerMethodField()
-    total_rating = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'full_name', 'username', 'profile_image', 'key_skill', 'other_skills',
-        'avg_rating', 'total_rating']
+        fields = ['id', 'email', 'full_name', 'username', 'profile_image', 'key_skill', 'other_skills',]
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
         skills = [skill.skill for skill in other_skills]
         return skills
-
-    def get_avg_rating(self, instance):
-        ratings = CreatorReview.objects.filter(creator=instance)
-        sum_ratings = ratings.aggregate(Sum('rating'))
-        if sum_ratings['rating__sum'] and ratings.count():
-            return sum_ratings['rating__sum']/ratings.count()
-        return 0
-
-    def get_total_rating(self, instance):
-        ratings = CreatorReview.objects.filter(creator=instance).count()
-        return ratings
 
     def get_full_name(self, instance):
         return f"{instance.first_name} {instance.last_name}"

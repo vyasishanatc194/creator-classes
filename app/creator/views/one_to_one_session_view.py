@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ..serializers import OneToOneSessionSerializer, SessionListingSerializer
+from ..serializers import OneToOneSessionSerializer, SessionListingSerializer, OneToOneSessionListingSerializer
 from ..models import Creator, OneToOneSession, TimeSlot
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
@@ -72,8 +72,14 @@ class CreatorSessionListingAPIView(APIView):
     serializer_class = SessionListingSerializer
 
     def get(self, request, pk):
-        sessions = TimeSlot.objects.filter(active=True, slot_datetime__gte=datetime.now(), session__creator__pk=pk)
+        sessions = TimeSlot.objects.filter(active=True, slot_datetime__gte=datetime.now(), session__creator__pk=pk, is_booked=False)
         serializer = self.serializer_class(sessions, many=True, context={"request": request})
         message = "Creator Sessions fetched Successfully!"
-        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+        result = {}
+        result['time_slots'] = serializer.data
+        creator_sessions = OneToOneSession.objects.filter(creator=pk)
+        if creator_sessions:
+            session_serializer = OneToOneSessionListingSerializer(creator_sessions[0], context={"request": request})
+            result['session'] = session_serializer.data
+        return custom_response(True, status.HTTP_200_OK, message, result)
 
