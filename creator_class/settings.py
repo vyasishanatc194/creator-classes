@@ -245,7 +245,7 @@ EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
 EMAIL_USE_TLS = True
 
 # Stripe token
-STRIPE_API_KEY = "sk_test_M59oeSkIQEUMGT9MEXaFgTzX00Wy4c7Ptb"
+STRIPE_API_KEY = "sk_test_51I4l0BFwJZnPqrrsqMzlMuR72JD4GNsR4sf3Hd6q28xUoB2vs4hYWCf1fw1DZSYgCVsWx1w3XNhtMfZcydD0xBmv00umHC3nYO"
 
 
 CURRENCY = "inr"
