@@ -45,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     plan_id = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="selected_plan", null=True, blank=True)
     plan_purchased_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, related_name="plan_payment_detail", null=True, blank=True)
+    stripe_account_id = models.CharField(max_length=255, blank=True, null=True, default='')
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name=_("Unique Id"),)
 

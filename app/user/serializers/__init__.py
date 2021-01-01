@@ -6,3 +6,4 @@ from .card_serializer import CardSerializer
 from .booking_serializer import SessionBookingSerializer, StreamSeatHolderSerializer, SessionSeatHolderSerializer
 from .user_material_serializer import UserMaterialListingSerializer
 from .transaction_detail_serializer import TransactionDetailSerializer
+from .notification_serializer import NotificationSerializer

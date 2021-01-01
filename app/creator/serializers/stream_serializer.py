@@ -9,7 +9,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
     """ 
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
-    sneak_peak_file = serializers.FileField(required=True)
+    sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
     stream_amount = serializers.FloatField(required=True)
     total_seats = serializers.IntegerField(required=True)
@@ -72,7 +72,7 @@ class MyStreamSerializer(serializers.ModelSerializer):
     """ 
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
-    sneak_peak_file = serializers.FileField(required=True)
+    sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
     stream_amount = serializers.FloatField(required=True)
     total_seats = serializers.IntegerField(required=True)

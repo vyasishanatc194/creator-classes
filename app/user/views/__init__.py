@@ -6,3 +6,4 @@ from .user_stream import StreamDetailView, StreamSearchAPIView
 from .cards import CardAPIView, CardDetailAPIView
 from .bookings import OneToOneSessionBookingAPIView, StreamBookingAPIView, StreamSeatHolderAPIView, BookedSessionSeatholdersAPIView
 from .user_materials import MaterialListingAPIView
+from .notifications import NotificationListView, ReadAllNotificationView, RemoveAllNotificationView, ReadNotificationView

@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from ..serializers import SessionBookingSerializer, TransactionDetailSerializer, StreamSeatHolderSerializer, SessionSeatHolderSerializer
-from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywords, StreamBooking
+from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywords, StreamBooking, Notification
 from creator.models import TimeSlot, Stream
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
@@ -77,6 +77,19 @@ class OneToOneSessionBookingAPIView(APIView):
                                 session_keywords.session = session_booking
                                 session_keywords.keyword =keyword_exists[0]
                                 session_keywords.save()
+                    notification_creator = Notification()
+                    notification_creator.notification_type= "BOOKING"
+                    notification_creator.user = check_booking[0].session.creator
+                    notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
+                    notification_creator.title = "Booking"
+                    notification_creator.save()
+
+                    notification_user = Notification()
+                    notification_user.notification_type= "BOOKING"
+                    notification_user.user = request.user
+                    notification_creator.title = "Booking"
+                    notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is boked successfully"
+                    notification_user.save()
 
 
                     return custom_response(True, status.HTTP_201_CREATED, message)
@@ -143,6 +156,22 @@ class StreamBookingAPIView(APIView):
                     stream_booking.transaction_detail = transaction[0]
                     message = "Stream booked successfully!"
                     stream_booking.save()
+
+                    notification_creator = Notification()
+                    notification_creator.notification_type= "BOOKING"
+                    notification_creator.user = check_booking[0].session.creator
+                    notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
+                    notification_creator.title = "Booking"
+                    notification_creator.save()
+
+                    notification_user = Notification()
+                    notification_user.notification_type= "BOOKING"
+                    notification_user.user = request.user
+                    notification_user.description = f"Your seat is booked for {streams[0].title} stream."
+                    notification_creator.title = "Booking"
+                    notification_user.save()
+
+
                     return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = "Card_id is required"
