@@ -65,8 +65,9 @@ class StripeAccountDiscoonectAPI(APIView):
                     ob.stripe_account_id = ""
                     ob.save()    
                     message = "Successfully removed stripe accpunt"
-                    return custom_response(True, status.HTTP_200_OK, message, account_links)
-           
+                    return custom_response(True, status.HTTP_200_OK, message)
+                message = "Successfully removed stripe accpunt"
+                return custom_response(True, status.HTTP_200_OK, message)
             except Exception as e:
                 message = str(e)
                 return custom_response(True, status.HTTP_400_BAD_REQUEST, message)
