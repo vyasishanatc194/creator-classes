@@ -16,8 +16,11 @@ class NotificationListView(APIView):
     def get(self, request):
         notifications = Notification.objects.filter(user=request.user.pk).order_by('-id')
         serializer = self.serializer_class(notifications, many=True, context= {"request": request})
+        result={}
+        result['notifications'] = serializer.data
+        result['unread_count'] = Notification.objects.filter(user=request.user.pk, is_read=False).count()
         message = "Notifications fetched successfully!"
-        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+        return custom_response(True, status.HTTP_200_OK, message, result)
 
 
 class ReadAllNotificationView(APIView):

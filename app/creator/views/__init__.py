@@ -3,4 +3,4 @@ from .class_view import AddClassAPIView, MyClassListingAPIView, ClassDetailAPIVi
 from .material_view import MaterialcategoryListingAPIView, AddMaterialAPIView, MyMaterialAPIView, CreatorMaterialAPIView
 from .one_to_one_session_view import OneToOneSessionAPIView, CreatorSessionListingAPIView
 from .stream_view import AddStreamAPIView, MyStreamListingAPIView, CreatorStreamListingAPIView
-from .stripe_connect_view import StripeAccountConnectAPI, StripeAccountDiscoonectAPI
+from .stripe_connect_view import StripeAccountConnectAPI, StripeAccountDiscoonectAPI, CheckStripeConnectAPIView

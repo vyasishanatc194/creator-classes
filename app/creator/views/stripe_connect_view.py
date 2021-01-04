@@ -64,9 +64,9 @@ class StripeAccountDiscoonectAPI(APIView):
                     ob=Creator.objects.filter(id=request.user.id).first()
                     ob.stripe_account_id = ""
                     ob.save()    
-                    message = "Successfully removed stripe accpunt"
+                    message = "Successfully removed stripe account"
                     return custom_response(True, status.HTTP_200_OK, message)
-                message = "Successfully removed stripe accpunt"
+                message = "Successfully removed stripe account"
                 return custom_response(True, status.HTTP_200_OK, message)
             except Exception as e:
                 message = str(e)
@@ -74,3 +74,24 @@ class StripeAccountDiscoonectAPI(APIView):
         else:
             message = "Unauthorised User"
             return custom_response(True, status.HTTP_400_BAD_REQUEST, message)
+
+
+class CheckStripeConnectAPIView(APIView):
+
+    permission_classes = (IsAccountOwner, IsCreator,)
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            try:
+                if not request.user.stripe_account_id:
+                    message = "You are not connected with stripe account"
+                    return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+                else:
+                    message = "You are already connected with stripe"
+                    return custom_response(False, status.HTTP_200_OK, message)           
+            except Exception as e:
+                message = str(e)
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        else:
+            message = "Unauthorised User"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
