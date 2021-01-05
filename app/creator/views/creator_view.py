@@ -162,3 +162,23 @@ class CreatorEarningHistoryAPIView(APIView):
         result['data'] = chart_data.values()
         message = "Creators Earnings fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+class CreatorFundsAPIView(APIView):
+    """
+    Creator Earning History view
+    """
+    permission_classes = (IsAccountOwner, IsCreator)
+    def get(self, request):
+        result = {}
+        streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
+        stream_earnings=streams_booked.aggregate(Sum('stream__stream_amount'))['stream__stream_amount__sum']
+
+        session_booked = SessionBooking.objects.filter(creator=request.user.pk)
+        session_earnings=session_booked.aggregate(Sum('transaction_detail__amount'))['transaction_detail__amount__sum']
+
+        result['total_earnings'] = (stream_earnings if stream_earnings else 0) + (session_earnings if session_earnings else 0)
+        result['transfered_amount'] = 0
+        result['amount_to_transfer'] = result['total_earnings'] - result['transfered_amount']
+        message = "Creators Earnings fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)

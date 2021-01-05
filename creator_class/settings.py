@@ -49,14 +49,15 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'crispy_forms',
 
+
     "allauth",
     "allauth.account",
     'rest_auth.registration',
     "allauth.socialaccount",
     'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
     'rest_auth',
 
-    'google',
     'creator',
     'user',
     'customadmin',

@@ -1,4 +1,4 @@
-from .auth import SignUpApiView, LoginAPIView, LogoutAPIView, FacebookLogin, TwitterLogin, GoogleLogin, TestimonialsListingAPIView, PlansListingAPIView, UserProfileAPIView, PlanPurchaseAPIView, UserPlanAPIView
+from .auth import SignUpApiView, LoginAPIView, LogoutAPIView, FacebookLogin, GoogleLogin, TestimonialsListingAPIView, PlansListingAPIView, UserProfileAPIView, PlanPurchaseAPIView, UserPlanAPIView
 from .review import CreatorReviewAPIView, ClassReviewAPIView
 from .favourites import FavouriteClassAPIView, FavouriteCreatorAPIView
 from .user_class import ClassFilterAPIView, ClassSearchAPIView
