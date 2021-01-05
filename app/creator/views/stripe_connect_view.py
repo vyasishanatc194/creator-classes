@@ -88,7 +88,7 @@ class CheckStripeConnectAPIView(APIView):
                     return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
                 else:
                     message = "You are already connected with stripe"
-                    return custom_response(False, status.HTTP_200_OK, message)           
+                    return custom_response(True, status.HTTP_200_OK, message)           
             except Exception as e:
                 message = str(e)
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
