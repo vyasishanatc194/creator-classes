@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from creator_class.permissions import IsAccountOwner
-from user.models import Card
+from user.models import User
 from ..serializers import CardSerializer
 from creator_class.helpers import custom_response
 from rest_framework import status
@@ -13,18 +13,15 @@ class CardAPIView(APIView):
 
     permission_classes = (IsAccountOwner,)
     serializer_class = CardSerializer
-    queryset = Card.objects.all()
 
     def get(self, request, format=None):
         try:
-            cards = Card.objects.filter(user_id=request.user.pk)
-            if cards is not None:
-                serializer = CardSerializer(cards, many=True, context={"request": request})
-                message= "Successfully fetched cards"
-                return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+            serializer = CardSerializer(request.user, context={"request": request})
+            message= "Successfully fetched card"
+            return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 
         except Card.DoesNotExist:
-            message= "Cards not found"
+            message= "Card not found"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
 
@@ -32,6 +29,7 @@ class CardAPIView(APIView):
         try:
             stripe = MyStripe()
             customer_id = request.user.customer_id
+            user = User.objects.get(pk=request.user.pk)
             if not customer_id:
                 newcustomer = create_customer_id(request.user)
                 customer_id = newcustomer.id
@@ -41,72 +39,44 @@ class CardAPIView(APIView):
             if serializer.is_valid():
                 serializer.save()
                 message = "Successfully created card"
+
+                user.card_id= newcard.id
+                user.last4 = request.data['last4']
+                user.brand = request.data['brand']
+                user.exp_month = request.data['exp_month']
+                user.exp_year = request.data['exp_year']
+                user.card_name = request.data['card_name']
+                user.save()
+
+
                 return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message="Cannot create card"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message, serializer.errors)
         except Exception as inst:
             print(inst)
-            message = "Enter valid customer_id and card_id"
+            message = str(inst)
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
 
-    def delete(self, request, pk, format=None):
+    def delete(self, request, format=None):
         try:
-            cards = Card.objects.get(id=pk)
             stripe = MyStripe()
-            stripe.delete_card(request.user.pk, cards.card_id)
-            cards.delete()
+            if request.user.card_id and request.user.customer_id:
+                stripe.delete_card(request.user.customer_id, request.user.card_id)
+            user  = User.objects.get(pk=request.user.pk)
+            user.card_id = ""
+            user.last4 = ""
+            user.brand= ""
+            user.exp_month = ""
+            user.exp_year =""
+            user.card_name = ""
+            user.save()
             message="Successfully deleted registered card"
             return custom_response(True, status.HTTP_200_OK, message)
 
-        except Card.DoesNotExist:
-            message = "Registered Card not found"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
-
-    def put(self, request, pk, format=None):
-        try:
-            cards = Card.objects.get(id=pk)
-            stripe = MyStripe()
-            stripe.delete_card(cards.customer_id, cards.card_id)
-            cards.delete()
-            
-            newcard = stripe.create_card(request.user.customer_id, request.data)
-            data = create_card_object(newcard, request)
-            serializer = CardSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                message = "Successfully updated card"
-                return custom_response(True, status.HTTP_201_CREATED, message)
-            else:
-                message="Cannot update card"
-                return custom_response(False, status.HTTP_400_BAD_REQUEST, message, serializer.errors)
         except Exception as inst:
-            print(inst)
-            message = "Enter valid customer_id and card_id"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
-        except Card.DoesNotExist:
-            message = "Registered Card not found"
+            message = str(inst)
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
 
-class CardDetailAPIView(APIView):
-    """API View for Card listing"""
-
-    permission_classes = (IsAccountOwner,)
-    serializer_class = CardSerializer
-    def get(self, request, pk, format=None):
-        try:
-            cards = Card.objects.filter(pk=pk)
-            if cards:
-                serializer = CardSerializer(cards[0], context={"request": request})
-                message= "Successfully fetched card"
-                return custom_response(True, status.HTTP_200_OK, message, serializer.data)
-            message= "Card not found"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
-        except Card.DoesNotExist:
-            message= "Card not found"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
