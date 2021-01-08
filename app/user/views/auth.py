@@ -11,6 +11,7 @@ from rest_auth.registration.views import SocialLoginView
 
 from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
 from rest_auth.social_serializers import TwitterLoginSerializer
+from rest_auth.registration.serializers import SocialLoginSerializer
 
 from google.views import GoogleOAuth2Adapter
 from rest_framework import generics
@@ -18,6 +19,7 @@ from customadmin.models import Testimonial, Plan
 from creator_class.utils import MyStripe, create_card_object, create_customer_id, create_charge_object
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 
 
 
@@ -102,7 +104,10 @@ class FacebookLogin(SocialLoginView):
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
+    client_class = OAuth2Client
+    serializer_class = SocialLoginSerializer
 
+# google_login = GoogleLogin.as_view()
 
 class TestimonialsListingAPIView(generics.ListCreateAPIView):
     queryset = Testimonial.objects.filter(active=True)

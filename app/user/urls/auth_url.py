@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.conf.urls import url, include
 
 
 urlpatterns = [
@@ -15,6 +16,13 @@ urlpatterns = [
     path('profile/', views.UserProfileAPIView.as_view(), name='plans'),    
     path('purchase-plan/', views.PlanPurchaseAPIView.as_view(), name='purchase-plan'),
     path('user-plan/', views.UserPlanAPIView.as_view(), name='user-plan'),
+
+    url(r'^dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('accounts/', include('allauth.urls')),
+
+    url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+
 ]
 
 

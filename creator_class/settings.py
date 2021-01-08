@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_social_auth',
     'widget_tweaks',
     'crispy_forms',
+    'rest_auth',
 
 
     "allauth",
@@ -56,7 +57,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
-    'rest_auth',
+    # 'rest_auth',
+    # 'dj_rest_auth',
 
     'creator',
     'user',
@@ -164,7 +166,8 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     # social auth
-    'social_core.backends.facebook.FacebookOAuth2'
+    # 'social_core.backends.facebook.FacebookOAuth2'
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 AUTH_USER_MODEL = 'user.User'
@@ -226,7 +229,7 @@ LOGIN_URL = "auth:auth_login"
 
 LOGOUT_REDIRECT_URL = "auth:auth_login"
 
-SITE_ID = 1
+SITE_ID = 2
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -252,3 +255,4 @@ STRIPE_API_KEY = "sk_test_51I4l0BFwJZnPqrrsqMzlMuR72JD4GNsR4sf3Hd6q28xUoB2vs4hYW
 CURRENCY = "inr"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
+
