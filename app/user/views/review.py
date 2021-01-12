@@ -24,10 +24,6 @@ class CreatorReviewAPIView(APIView):
                 message = "Enter valid rating!"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
-        already_reviewed = CreatorReview.objects.filter(user=request.user.pk, creator=request.data['creator'])
-        if already_reviewed:
-            already_reviewed[0].delete()
-
         serializer = self.serializer_class(data=request_copy)
         message = "Review added successfully!"
         response_status, result, message = serialized_response(serializer, message)
@@ -80,10 +76,6 @@ class ClassReviewAPIView(APIView):
             if int(request_copy['rating']) > 5 or int(request_copy['rating']) < 1:
                 message = "Enter valid rating!"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
-        already_reviewed = ClassReview.objects.filter(user=request.user.pk, creator_class=request.data['creator_class'])
-        if already_reviewed:
-            already_reviewed[0].delete()
 
         serializer = self.serializer_class(data=request_copy)
         message = "Review added successfully!"
