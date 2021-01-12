@@ -15,13 +15,18 @@ class OneToOneSessionAPIView(APIView):
     permission_classes = (IsCreator,)
 
     def post(self, request, *args, **kwargs):
-
         session_exists = OneToOneSession.objects.filter(creator=request.user.pk, active=True)
-        if session_exists:
-            message = "One to One session already exists!"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         request_copy = request.data.copy()
         request_copy["creator"] = request.user.pk
+        if session_exists:
+            message = "Session updated successfully!"
+            serializer = self.serializer_class(session_exists[0], data=request_copy, partial=True, context={"request": request})
+            response_status, result, message = serialized_response(serializer, message)
+            status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
+            if response_status:
+                return custom_response(response_status, status_code, message)
+            return custom_response(response_status, status_code, message, result)
+        
         message = "One To One Session created successfully!"
         serializer = self.serializer_class(data=request_copy, context={"request": request})
         response_status, result, message = serialized_response(serializer, message)

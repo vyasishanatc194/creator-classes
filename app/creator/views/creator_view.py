@@ -61,6 +61,11 @@ class CreatorListingAPIView(APIView):
         creators = Creator.objects.filter(is_active=True)
 
         key_skill = request.GET.get('key_skill', None)
+        exclude_creator = request.GET.get('exclude_creator', None)
+        
+        if exclude_creator:
+            creators = creators.exclude(pk=exclude_creator)
+
         if key_skill:
             creators = creators.filter(key_skill__icontains=key_skill)
 

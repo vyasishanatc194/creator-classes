@@ -66,8 +66,12 @@ class ClassSearchAPIView(APIView):
     def get(self, request):
         search = request.GET.get('search', None)
         class_keyword = request.GET.get('class_keyword', None)
+        exclude_class = request.GET.get('exclude_class', None)
 
         creator_classes = CreatorClass.objects.filter(active=True)
+        if exclude_class:
+            creator_classes = creator_classes.exclude(pk=exclude_creator)
+
         if search:
             creator_classes = creator_classes.filter(title__icontains=search)
 
