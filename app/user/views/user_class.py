@@ -70,7 +70,7 @@ class ClassSearchAPIView(APIView):
 
         creator_classes = CreatorClass.objects.filter(active=True)
         if exclude_class:
-            creator_classes = creator_classes.exclude(pk=exclude_creator)
+            creator_classes = creator_classes.exclude(pk=exclude_class)
 
         if search:
             creator_classes = creator_classes.filter(title__icontains=search)
