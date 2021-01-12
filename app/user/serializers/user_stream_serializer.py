@@ -2,7 +2,7 @@ from rest_framework import fields, serializers
 from creator.models import StreamKeyword, StreamCovers, Stream
 from ..models import CreatorReview, FavouriteCreator
 from customadmin.models import AdminKeyword
-from ..serializers import CreatorReviewSerializer
+from ..serializers import CreatorReviewSerializer, CreatorReviewListSerializer
 from creator.serializers import CreatorListingSerializer, AdminKeywordSerializer
 
 
@@ -33,7 +33,7 @@ class StreamDetailSerializer(serializers.ModelSerializer):
 
     def get_creator_reviews(self, instance):
         reviews  = CreatorReview.objects.filter(creator=instance.creator)
-        serializer = CreatorReviewSerializer(reviews, many=True, context={"request": self.context.get('request')})
+        serializer = CreatorReviewListSerializer(reviews, many=True, context={"request": self.context.get('request')})
         return serializer.data
 
     def get_is_favourite(self, instance):
