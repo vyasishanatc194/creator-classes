@@ -1,4 +1,13 @@
-from .creator_view import CreatorProfileAPI, CreatorListingAPIView, CreatorRegisterView, CreatorLoginAPIView, CreatorDetailAPIView, CreatorEarningHistoryAPIView, CreatorFundsAPIView
+from .creator_view import(
+    CreatorProfileAPI,
+    CreatorListingAPIView,
+    CreatorRegisterView,
+    CreatorLoginAPIView,
+    CreatorDetailAPIView,
+    CreatorEarningHistoryAPIView,
+    CreatorFundsAPIView,
+    AffiliatedUsersListingAPIView,
+)
 from .class_view import AddClassAPIView, MyClassListingAPIView, ClassDetailAPIView, ClassDetailSerializer, KeywordsAPIView
 from .material_view import MaterialcategoryListingAPIView, AddMaterialAPIView, MyMaterialAPIView, CreatorMaterialAPIView
 from .one_to_one_session_view import OneToOneSessionAPIView, CreatorSessionListingAPIView

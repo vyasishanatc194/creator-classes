@@ -52,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     exp_month = models.CharField(_("Exp. month"), max_length=255, blank=True)
     exp_year = models.CharField(_("Exp. year"), max_length=255, blank=True)
     card_name = models.CharField(_("Card holder name"), max_length=255, blank=True, null=True)
+    affiliated_with = models.ForeignKey("creator.Creator", on_delete=models.CASCADE, null=True, blank=True)
 
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name=_("Unique Id"),)
@@ -69,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["username"]
 
     def __unicode__(self):
-        return self.email
+        return self.pk
 
     def get_full_name(self):
         return " ".join([self.first_name, self.last_name])

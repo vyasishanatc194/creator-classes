@@ -30,6 +30,7 @@ class UserAdmin(UserAdmin):
                     "plan_purchased_at",
                     "plan_purchase_detail",
                     "is_creator",
+                    "affiliated_with",
 
                 )
             },

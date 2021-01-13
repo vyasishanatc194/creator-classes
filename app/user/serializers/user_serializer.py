@@ -3,6 +3,7 @@ from ..models import User
 from rest_framework.authtoken.models import Token
 from customadmin.models import Testimonial, Plan, PlanCover
 from creator_class.utils import MyStripe
+from creator.models import Creator
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -13,10 +14,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField(read_only=True)
     password = serializers.CharField(write_only=True, required=False)
     confirm_password = serializers.CharField(read_only=True, required=False)
+    affiliation_code = serializers.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image', 'is_creator']
+        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image', 'is_creator', 'affiliation_code']
     
         extra_kwargs = {"password":
                                 {"write_only": True}
@@ -27,10 +29,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
         custom 'create' so that password gets hashed!
         """
         password = validated_data.pop('password', None)
+        affiliation_code = validated_data.pop('affiliation_code', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
         instance.save()
+
+        if affiliation_code:
+            creators = Creator.objects.filter(is_active=True, affiliation_link__contains=affiliation_code)
+            if creators:
+                instance.affiliated_with = creators[0]
+                instance.save()
+
 
         # Create Stripe customer ID
         stripe = MyStripe()

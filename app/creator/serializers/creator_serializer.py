@@ -5,6 +5,8 @@ from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 from user.models import User
 from user.serializers import CreatorReviewSerializer
+import uuid
+from django.conf import settings
 
 
 class CreatorSkillSerializer(serializers.ModelSerializer):
@@ -71,7 +73,7 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews', 'affiliation_link']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
@@ -134,6 +136,7 @@ class CreatorRegisterSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
+        instance.affiliation_link = f"{settings.USER_SIGNUP_LINK}{uuid.uuid4()}"
         instance.save()
 
         return instance
@@ -152,3 +155,12 @@ class CreatorLoginSerializer(serializers.ModelSerializer):
 
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
+
+
+class AffiliatedUserProfileSerializer(serializers.ModelSerializer):
+    """
+    User Profile update serializer
+    """
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'description', 'profile_image', 'created_at']

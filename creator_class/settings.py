@@ -256,3 +256,4 @@ CURRENCY = "inr"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
 
+USER_SIGNUP_LINK = "http://localhost:3002/user/signup/"

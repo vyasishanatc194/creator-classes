@@ -1,15 +1,16 @@
 from rest_framework.views import APIView
-from ..serializers import CreatorProfileSerializer, CreatorProfileDisplaySerializer, CreatorListingSerializer, CreatorRegisterSerializer, CreatorLoginSerializer
+from ..serializers import CreatorProfileSerializer, CreatorProfileDisplaySerializer, CreatorListingSerializer, CreatorRegisterSerializer, CreatorLoginSerializer, AffiliatedUserProfileSerializer
 from ..models import Creator
 from user.models import User, StreamBooking, SessionBooking
 from creator_class.helpers import custom_response, serialized_response, get_object
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
-from creator_class.permissions import IsAccountOwner, IsCreator
+from creator_class.permissions import IsAccountOwner, IsCreator, get_pagination_response
 from django.db.models import Sum
 import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
+from user.models import User
 
 
 class CreatorProfileAPI(APIView):
@@ -186,4 +187,18 @@ class CreatorFundsAPIView(APIView):
         result['transfered_amount'] = 0
         result['amount_to_transfer'] = result['total_earnings'] - result['transfered_amount']
         message = "Creators Earnings fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+
+class AffiliatedUsersListingAPIView(APIView):
+    """
+    Creator Earning History view
+    """
+    permission_classes = (IsAccountOwner, IsCreator)
+    serializer_class = AffiliatedUserProfileSerializer
+    def get(self, request):
+        users = User.objects.filter(is_creator=False, is_active=True, affiliated_with=request.user.pk)
+        result = get_pagination_response(users, request, self.serializer_class, context = {"request": request})
+        message = "Affiliated users fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, result)

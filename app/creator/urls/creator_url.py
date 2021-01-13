@@ -13,5 +13,6 @@ urlpatterns = [
     path("creator-detail/<int:pk>/", views.CreatorDetailAPIView.as_view(), name="creator-detail"),
     path("earning-history/", views.CreatorEarningHistoryAPIView.as_view(), name="earning-history"),
     path("funds-history/", views.CreatorFundsAPIView.as_view(), name="funds-history"),
+    path("affiliated-users/", views.AffiliatedUsersListingAPIView.as_view(), name="affiliated-users"),
 
 ]
