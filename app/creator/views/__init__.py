@@ -7,6 +7,7 @@ from .creator_view import(
     CreatorEarningHistoryAPIView,
     CreatorFundsAPIView,
     AffiliatedUsersListingAPIView,
+    AffiliationRecordAPIView,
 )
 from .class_view import AddClassAPIView, MyClassListingAPIView, ClassDetailAPIView, ClassDetailSerializer, KeywordsAPIView
 from .material_view import MaterialcategoryListingAPIView, AddMaterialAPIView, MyMaterialAPIView, CreatorMaterialAPIView

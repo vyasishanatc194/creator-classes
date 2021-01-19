@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer, TransactionDetailSerializer, UserPlanSerializer
 from ..models import User, TransactionDetail
+from creator.models import CreatorAffiliation
 from creator_class.helpers import custom_response, serialized_response, get_object
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
@@ -190,7 +191,6 @@ class PlanPurchaseAPIView(APIView):
                 print("<<<-----|| CARD CREATED ||----->>>", plan_check[0])
 
                 newcharge = stripe.create_charge(plan_check[0].plan_amount, card_id, customer_id)
-                print("OKAY HERE")
                 charge_object = create_charge_object(newcharge, request)
 
                 chargeserializer = TransactionDetailSerializer(data=charge_object)
@@ -205,6 +205,14 @@ class PlanPurchaseAPIView(APIView):
                     user.plan_purchase_detail = transaction[0]
                     message = "Plan purchased successfully!"
                     user.save()
+
+                    if user.affiliated_with:
+                        affiliation_record = CreatorAffiliation()
+                        affiliation_record.user = user
+                        affiliation_record.plan_id = plan_check[0]
+                        affiliation_record.amount = plan_check[0].plan_amount
+                        affiliation_record.save()
+
                     return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = "Card_id is required"

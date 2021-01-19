@@ -77,11 +77,11 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'description', 'profile_image']
+        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image']
 
 
 class UserPlanSerializer(serializers.ModelSerializer):
     plan_id = PlanListingSerializer()
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'description', 'profile_image', 'plan_id', 'plan_purchased_at']
+        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image', 'plan_id', 'plan_purchased_at']

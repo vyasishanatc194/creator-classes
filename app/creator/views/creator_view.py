@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
-from ..serializers import CreatorProfileSerializer, CreatorProfileDisplaySerializer, CreatorListingSerializer, CreatorRegisterSerializer, CreatorLoginSerializer, AffiliatedUserProfileSerializer
-from ..models import Creator
+from ..serializers import CreatorProfileSerializer, CreatorProfileDisplaySerializer, CreatorListingSerializer, CreatorRegisterSerializer, CreatorLoginSerializer, AffiliatedUserProfileSerializer, AffiliationRecordSerializer, CreatorTransferredMoneySerializer
+from ..models import Creator, CreatorAffiliation, CreatorTransferredMoney
 from user.models import User, StreamBooking, SessionBooking
 from creator_class.helpers import custom_response, serialized_response, get_object
 from rest_framework import status, parsers, renderers
@@ -10,7 +10,7 @@ from django.db.models import Sum
 import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
-from user.models import User
+from customadmin.models import CreatorClassCommission
 
 
 class CreatorProfileAPI(APIView):
@@ -175,17 +175,61 @@ class CreatorFundsAPIView(APIView):
     Creator Earning History view
     """
     permission_classes = (IsAccountOwner, IsCreator)
+    serializer_class = CreatorTransferredMoneySerializer
+
     def get(self, request):
         result = {}
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
         stream_earnings=streams_booked.aggregate(Sum('stream__stream_amount'))['stream__stream_amount__sum']
 
         session_booked = SessionBooking.objects.filter(creator=request.user.pk)
         session_earnings=session_booked.aggregate(Sum('transaction_detail__amount'))['transaction_detail__amount__sum']
 
-        result['total_earnings'] = (stream_earnings if stream_earnings else 0) + (session_earnings if session_earnings else 0)
-        result['transfered_amount'] = 0
-        result['amount_to_transfer'] = result['total_earnings'] - result['transfered_amount']
+        creator_earnings = (stream_earnings if stream_earnings else 0) + (session_earnings if session_earnings else 0)
+
+        affiliations = CreatorAffiliation.objects.filter(user__affiliated_with=request.user.pk)
+        affiliation_commission_total = affiliations.aggregate(Sum('amount'))['amount__sum']
+
+        transfer_amount = 0
+        if creator_earnings or affiliation_commission_total:
+            final_earning_amount=0
+            if creator_earnings:
+                creator_class_deduction = float(float(creator_earnings) * creator_class_commission.creator_class_deduction)/100
+                final_earning_amount = creator_earnings - creator_class_deduction
+
+            # Affiliation amount
+            final_commission_amount=0
+            if affiliation_commission_total:
+                affiliation_deduction = float(float(affiliation_commission_total) * creator_class_commission.affiliation_deduction)/100
+                final_commission_amount = affiliation_commission_total - affiliation_deduction
+
+            transfer_amount = final_earning_amount + final_commission_amount
+        result['total_earnings'] = round(transfer_amount,2)
+
+
+        # Creator transferred amount
+        transfered_amount=CreatorTransferredMoney.objects.filter(creator=request.user.pk)
+        result['transfered_amount'] = transfered_amount.aggregate(Sum('transferred_amount'))['transferred_amount__sum']
+        if not result['transfered_amount']:
+            result['transfered_amount']=0
+        
+        result['amount_to_transfer'] = float(result['total_earnings'])
+        if result['transfered_amount']:
+            result['amount_to_transfer'] = float(result['total_earnings']) - float(result['transfered_amount'])
+
+        result['affiliation_admin_deduction_percent']=creator_class_commission.affiliation_deduction
+        result['creator_class_deduction_percent']=creator_class_commission.creator_class_deduction
+
+        # CreatorTransferredMoney table
+        transferred_data = CreatorTransferredMoney.objects.filter(creator=request.user.pk)
+        result['transferred_data'] = get_pagination_response(transferred_data, request, self.serializer_class, context = {"request": request})
+
         message = "Creators Earnings fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, result)
 
@@ -193,7 +237,7 @@ class CreatorFundsAPIView(APIView):
 
 class AffiliatedUsersListingAPIView(APIView):
     """
-    Creator Earning History view
+    Affiliated users listing API View
     """
     permission_classes = (IsAccountOwner, IsCreator)
     serializer_class = AffiliatedUserProfileSerializer
@@ -202,3 +246,28 @@ class AffiliatedUsersListingAPIView(APIView):
         result = get_pagination_response(users, request, self.serializer_class, context = {"request": request})
         message = "Affiliated users fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+class AffiliationRecordAPIView(APIView):
+    """
+    Affiliation record API View
+    """
+    permission_classes = (IsAccountOwner, IsCreator)
+    serializer_class = AffiliationRecordSerializer
+    def get(self, request):
+        records = CreatorAffiliation.objects.filter(user__affiliated_with=request.user.pk)
+        result= get_pagination_response(records, request, self.serializer_class, context = {"request": request})
+        
+
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+        
+        result.update({'admin_deduction_in_percentage':creator_class_commission.affiliation_deduction})
+        
+        message = "Affiliation records fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)
+

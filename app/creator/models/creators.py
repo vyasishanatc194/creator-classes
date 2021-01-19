@@ -40,3 +40,19 @@ class CreatorSkill(ActivityTracking):
         verbose_name = "Creator skill"
         verbose_name_plural = "Creator skills"
         ordering = ["-created_at"]
+
+
+class CreatorAffiliation(ActivityTracking):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="affiliated_user")
+    plan_id = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="user")
+    amount = models.FloatField(blank=True, null=True)
+    transfer_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
+    admin_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.email}"
+
+    class Meta:
+        verbose_name = "Creator Affiliation"
+        verbose_name_plural = "Creator Affiliation"
+        ordering = ["-created_at"]

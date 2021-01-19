@@ -1,12 +1,14 @@
 from rest_framework import fields, serializers
-from ..models import Creator, CreatorSkill
+from ..models import Creator, CreatorSkill, CreatorAffiliation, CreatorTransferredMoney
 from user.models import CreatorReview
+from user.serializers import PlanListingSerializer
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 from user.models import User
 from user.serializers import CreatorReviewSerializer
 import uuid
 from django.conf import settings
+from customadmin.models import CreatorClassCommission
 
 
 class CreatorSkillSerializer(serializers.ModelSerializer):
@@ -159,8 +161,48 @@ class CreatorLoginSerializer(serializers.ModelSerializer):
 
 class AffiliatedUserProfileSerializer(serializers.ModelSerializer):
     """
-    User Profile update serializer
+    Affiliated User Profile serializer
     """
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'description', 'profile_image', 'created_at']
+        fields = ['id', 'first_name', 'last_name','username', 'email', 'description', 'profile_image', 'created_at']
+
+
+class AffiliationRecordSerializer(serializers.ModelSerializer):
+    """
+    Affiliation record serializer
+    """
+    user = AffiliatedUserProfileSerializer()
+    plan_id = PlanListingSerializer()
+    transfer_amount = serializers.SerializerMethodField()
+    admin_amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CreatorAffiliation
+        fields = ['id', 'user', 'plan_id', 'amount', 'transfer_amount', 'admin_amount', 'created_at']
+
+    
+    def get_admin_amount(self, instance):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+        return float(float(instance.amount) * creator_class_commission.affiliation_deduction)/100
+
+    def get_transfer_amount(self, instance):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+        affiliation_deduction=float(float(instance.amount) * creator_class_commission.affiliation_deduction)/100
+        return instance.amount - affiliation_deduction
+
+
+class CreatorTransferredMoneySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreatorTransferredMoney
+        fields = '__all__'
