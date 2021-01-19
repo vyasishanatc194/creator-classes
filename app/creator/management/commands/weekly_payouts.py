@@ -5,8 +5,8 @@ import stripe
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from core.utils import send_sendgrid_email
-from .models import CreatorTransferredMoney, Creator, CreatorAffiliation
+# from core.utils import send_sendgrid_email
+from creator.models import CreatorTransferredMoney, Creator, CreatorAffiliation
 from customadmin.models import CreatorClassCommission
 from user.models import SessionBooking, StreamBooking
 
@@ -74,7 +74,7 @@ class Command(BaseCommand):
 
                             
                             if creator_earnings or affiliation_commission_total:
-                               final_earning_amount=0
+                                final_earning_amount=0
                                 if creator_earnings:
                                     creator_class_deduction = float(float(creator_earnings) * creator_class_commission.creator_class_deduction)/100
                                     final_earning_amount = creator_earnings - creator_class_deduction
