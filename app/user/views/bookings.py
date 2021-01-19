@@ -159,7 +159,7 @@ class StreamBookingAPIView(APIView):
 
                     notification_creator = Notification()
                     notification_creator.notification_type= "BOOKING"
-                    notification_creator.user = check_seats[0].creator
+                    notification_creator.user = check_seats[0].stream.creator
                     notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
                     notification_creator.title = "Booking"
                     notification_creator.save()
