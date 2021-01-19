@@ -117,3 +117,11 @@ from .bookings import (
 )
 
 from .user import export_user_csv
+
+from .commissions import (
+    CreatorClassCommissionAjaxPagination,
+    CreatorClassCommissionCreateView,
+    CreatorClassCommissionListView,
+    CreatorClassCommissionUpdateView,
+    CreatorClassCommissionDeleteView,
+)

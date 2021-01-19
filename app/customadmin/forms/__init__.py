@@ -9,3 +9,4 @@ from .keywords import AdminKeywordCreationForm, AdminKeywordChangeForm
 from .plans import PlanCreationForm, PlanChangeForm, PlanCoverCreationForm, PlanCoverChangeForm
 from .streams import StreamCreationForm, StreamChangeForm, StreamKeywordCreationForm, StreamKeywordChangeForm, StreamCoversCreationForm, StreamCoversChangeForm
 from .bookings import StreamBookingCreationForm, StreamBookingChangeForm,SessionBookingCreationForm, SessionBookingChangeForm
+from .commission_deduction import CommissionChangeForm, CommissionCreationForm

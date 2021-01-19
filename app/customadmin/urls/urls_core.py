@@ -160,4 +160,15 @@ urlpatterns +=[
     path("ajax-plans", views.PlanAjaxPagination.as_view(), name="plan-list-ajax"),
 #------------------------------------------------------------------------------------------------------
 
+#------------------------------------------------------------------------------------------------------
+    #Keyword
+    path("commission/", views.CreatorClassCommissionListView.as_view(), name="creatorclasscommission-detail"),
+    path("commission/", views.CreatorClassCommissionListView.as_view(), name="creatorclasscommission-list"),
+    path("commission/create/", views.CreatorClassCreateView.as_view(), name="creatorclasscommission-create"),
+    path("commission/<int:pk>/update/", views.CreatorClassCommissionUpdateView.as_view(), name="creatorclasscommission-update"),
+    path("commission/<int:pk>/delete/", views.CreatorClassCommissionDeleteView.as_view(), name="creatorclasscommission-delete"),
+    path("ajax-commission", views.CreatorClassCommissionAjaxPagination.as_view(), name="creatorclasscommission-list-ajax"),
+
+
+
 ]
