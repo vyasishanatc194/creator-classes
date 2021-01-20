@@ -38,6 +38,7 @@ class Notification(ActivityTracking):
         help_text=_("Notification Title"),
         verbose_name=_("Title"),
     )
+    profile_image = models.ImageField(upload_to="profile_image", default="sample.jpg", null=True,  blank=True, verbose_name=_("Profile Image"))
 
     def __str__(self):
         return self.title

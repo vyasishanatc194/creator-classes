@@ -82,12 +82,14 @@ class OneToOneSessionBookingAPIView(APIView):
                     notification_creator.user = check_booking[0].session.creator
                     notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
                     notification_creator.title = "Booking"
+                    notification_creator.profile_image = request.user.profile_image
                     notification_creator.save()
 
                     notification_user = Notification()
                     notification_user.notification_type= "BOOKING"
                     notification_user.user = request.user
-                    notification_creator.title = "Booking"
+                    notification_user.title = "Booking"
+                    notification_user.profile_image = check_booking[0].session.creator.profile_image
                     notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is boked successfully"
                     notification_user.save()
 
@@ -162,13 +164,15 @@ class StreamBookingAPIView(APIView):
                     notification_creator.user = check_seats[0].stream.creator
                     notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
                     notification_creator.title = "Booking"
+                    notification_creator.profile_image = request.user.profile_image
                     notification_creator.save()
 
                     notification_user = Notification()
                     notification_user.notification_type= "BOOKING"
                     notification_user.user = request.user
                     notification_user.description = f"Your seat is booked for {streams[0].title} stream."
-                    notification_creator.title = "Booking"
+                    notification_user.title = "Booking"
+                    notification_user.profile_image = streams[0].creator.profile_image
                     notification_user.save()
 
 
