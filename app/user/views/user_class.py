@@ -27,10 +27,11 @@ class ClassFilterAPIView(APIView):
         if class_keyword:
             class_keyword = class_keyword.split(',')
             keyword_classes = []
-            classes_keywords= ClassKeyword.objects.filter(keyword__in=class_keyword)
+            classes_keywords= ClassKeyword.objects.filter(keyword__in=class_keyword, creator_class__active=True)
 
             for classes in classes_keywords:
-                keyword_classes.append(classes.creator_class)
+                if classes.creator_class not in keyword_classes:
+                    keyword_classes.append(classes.creator_class)
             serializer = ClassListingSerializer(keyword_classes, many=True, context={"request": request})
             return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, serializer.data)
 
