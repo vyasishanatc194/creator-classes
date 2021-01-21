@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_URLS_REGEX = r"^/creator/.*$"
+CORS_URLS_REGEX = r"^/user/.*$"
 
 CORS_ALLOWED_ORIGINS = [
     "http://3.139.122.63:8000",
