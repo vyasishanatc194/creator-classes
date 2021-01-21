@@ -77,36 +77,36 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_URLS_REGEX = r"^/api/.*$"
+# CORS_URLS_REGEX = r"^/api/.*$"
 
-CORS_ALLOWED_ORIGINS = [
-    "http://3.139.122.63:8000",
-    "http://localhost:3005",
-    "http://127.0.0.1:3005",
-    "http://localhost:3002",
-    "http://localhost:3000",
-    "http://creatorclasscb.s3-website.ap-south-1.amazonaws.com",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://3.139.122.63:8000",
+#     "http://localhost:3005",
+#     "http://127.0.0.1:3005",
+#     "http://localhost:3002",
+#     "http://localhost:3000",
+#     "http://creatorclasscb.s3-website.ap-south-1.amazonaws.com",
+# ]
 
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
+# CORS_ALLOW_METHODS = [
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+# ]
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
