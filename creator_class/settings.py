@@ -111,6 +111,9 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 ROOT_URLCONF = 'creator_class.urls'
 
 TEMPLATES = [
