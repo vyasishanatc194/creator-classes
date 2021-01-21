@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material, MaterialCategory, OneToOneSession, TimeSlot, Stream, StreamCovers, StreamKeyword
+from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material, MaterialCategory, OneToOneSession, TimeSlot, Stream, StreamCovers, StreamKeyword, CreatorTransferredMoney
 
 # Register your models here.
 
@@ -58,6 +58,12 @@ class TimeSlotAdmin(admin.ModelAdmin):
     list_display = ["pk", "session", "slot_datetime", "is_booked",]
 
 
+class CreatorTransferredMoneyAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk", "creator", "created_at", "status"]
+
+
+
 admin.site.register(Creator, CreatorAdmin)
 admin.site.register(CreatorSkill, CreatorSkillAdmin)
 admin.site.register(CreatorClass, CreatorClassAdmin)
@@ -71,3 +77,4 @@ admin.site.register(TimeSlot, TimeSlotAdmin)
 admin.site.register(Stream, StreamAdmin)
 admin.site.register(StreamKeyword, StreamKeywordAdmin)
 admin.site.register(StreamCovers, StreamCoversAdmin)
+admin.site.register(CreatorTransferredMoney, CreatorTransferredMoneyAdmin)
