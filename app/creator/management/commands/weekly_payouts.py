@@ -28,7 +28,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         try:
-
+            PayoutErrorLog.objects.create(
+                error_text = "Script is running"
+            )
             creator_class_commission = CreatorClassCommission.objects.all().first()
             if not creator_class_commission:
                 creator_class_commission = CreatorClassCommission()
