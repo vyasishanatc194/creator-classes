@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['127.0.0.1','3.139.122.63']
 # Application definition
 
 INSTALLED_APPS = [
-    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,6 +63,7 @@ INSTALLED_APPS = [
     'creator',
     'user',
     'customadmin',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
