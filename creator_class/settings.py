@@ -95,7 +95,7 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
-Access_Control_Allow-Methods
+
 ROOT_URLCONF = 'creator_class.urls'
 
 TEMPLATES = [
