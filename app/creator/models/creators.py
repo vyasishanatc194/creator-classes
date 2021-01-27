@@ -56,3 +56,14 @@ class CreatorAffiliation(ActivityTracking):
         verbose_name = "Creator Affiliation"
         verbose_name_plural = "Creator Affiliation"
         ordering = ["-created_at"]
+
+
+class PayoutErrorLog(ActivityTracking):
+    error_text = models.TextField(blank=True, null=True, default='')
+    def __str__(self):
+        return f"{self.pk}"
+
+    class Meta:
+        verbose_name = "Payout Error Log"
+        verbose_name_plural = "Payout Error Logs"
+        ordering = ["-created_at"]

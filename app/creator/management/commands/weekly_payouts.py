@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 # from core.utils import send_sendgrid_email
-from creator.models import CreatorTransferredMoney, Creator, CreatorAffiliation
+from creator.models import CreatorTransferredMoney, Creator, CreatorAffiliation, PayoutErrorLog
 from customadmin.models import CreatorClassCommission
 from user.models import SessionBooking, StreamBooking
 
@@ -115,6 +115,9 @@ class Command(BaseCommand):
             print(".........................................success")
             self.stdout.write(self.style.SUCCESS("Successfully transfer amount"))
 
-        except:
+        except Exception as inst:
+            PayoutErrorLog.objects.create(
+                error_text = str(inst)
+            )
             print(".........................................Error")
             self.stdout.write(self.style.ERROR("Error in transfer amount"))

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material, MaterialCategory, OneToOneSession, TimeSlot, Stream, StreamCovers, StreamKeyword, CreatorTransferredMoney
+from .models import Creator, CreatorSkill, CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material, MaterialCategory, OneToOneSession, TimeSlot, Stream, StreamCovers, StreamKeyword, CreatorTransferredMoney, PayoutErrorLog
 
 # Register your models here.
 
@@ -62,7 +62,9 @@ class CreatorTransferredMoneyAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk", "creator", "created_at", "status"]
 
-
+class PayoutErrorLogAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ["pk"]
 
 admin.site.register(Creator, CreatorAdmin)
 admin.site.register(CreatorSkill, CreatorSkillAdmin)
@@ -78,3 +80,4 @@ admin.site.register(Stream, StreamAdmin)
 admin.site.register(StreamKeyword, StreamKeywordAdmin)
 admin.site.register(StreamCovers, StreamCoversAdmin)
 admin.site.register(CreatorTransferredMoney, CreatorTransferredMoneyAdmin)
+admin.site.register(PayoutErrorLog, PayoutErrorLogAdmin)

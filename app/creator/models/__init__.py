@@ -1,4 +1,4 @@
-from .creators import Creator, CreatorSkill, CreatorAffiliation
+from .creators import Creator, CreatorSkill, CreatorAffiliation, PayoutErrorLog
 from .classes import ClassKeyword, ClassCovers, CreatorClass, ClassMaterial
 from .materials import MaterialCategory, Material
 from .onetoonesession import OneToOneSession, TimeSlot
