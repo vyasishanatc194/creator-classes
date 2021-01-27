@@ -48,9 +48,9 @@ class Command(BaseCommand):
 
                     """ Check creator stripe card  details"""
 
-                    PayoutErrorLog.objects.create(
-                       error_text = str(connected_stripe_status.details_submitted)
-                    )
+                    # PayoutErrorLog.objects.create(
+                    #    error_text = str(connected_stripe_status.details_submitted)
+                    # )
 
                     if connected_stripe_status.details_submitted:
 
