@@ -41,21 +41,17 @@ class Command(BaseCommand):
 
                 """ Check Creator stripe """
 
-                PayoutErrorLog.objects.create(
-                    error_text = "Creators found"
-                )
                 if creator.stripe_account_id:
                     connected_stripe_status = stripe.Account.retrieve(
                         str(creator.stripe_account_id)
                     )
-                    PayoutErrorLog.objects.create(
-                        error_text = "Creators found stripe id found"
-                    )
+
                     """ Check creator stripe card  details"""
 
-                    connected_stripe_status = stripe.Account.retrieve(
-                        str(connected_stripe_status.details_submitted)
+                    PayoutErrorLog.objects.create(
+                       error_text = str(connected_stripe_status.details_submitted)
                     )
+
                     if connected_stripe_status.details_submitted:
 
                         """ Check creator account to any transaction this week"""
@@ -64,9 +60,7 @@ class Command(BaseCommand):
                             creator__id=creator.id,
                             created_at__range=[start_date_week, end_date],
                         )
-                        connected_stripe_status = stripe.Account.retrieve(
-                            str(transfer)
-                        )
+
                         if not transfer:
                             streams_booked = StreamBooking.objects.filter(stream__creator=creator.pk, created_at__range=[start_date_week, end_date])
                             stream_earnings=streams_booked.aggregate(Sum('stream__stream_amount'))['stream__stream_amount__sum']
