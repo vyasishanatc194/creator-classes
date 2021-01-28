@@ -80,9 +80,9 @@ MIDDLEWARE = [
 CORS_URLS_REGEX = r"^/api/.*$"
 
 CORS_ALLOWED_ORIGINS = [
-    "http://3.139.122.63"
+    "http://3.139.122.63",
     "http://localhost:8080",
-    "http://127.0.0.1:9000".
+    "http://127.0.0.1:9000",
     "http://localhost:3002",
 ]
 
@@ -280,4 +280,4 @@ CURRENCY = "usd"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
 
-USER_SIGNUP_LINK = "http://3.139.122.63:8000/user/signup/"
+USER_SIGNUP_LINK = "http://3.139.122.63/user/signup/"
