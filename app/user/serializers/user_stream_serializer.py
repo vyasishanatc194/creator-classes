@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from creator.models import StreamKeyword, StreamCovers, Stream
-from ..models import CreatorReview, FavouriteCreator
+from ..models import CreatorReview, FavouriteCreator, StreamBooking
 from customadmin.models import AdminKeyword
 from ..serializers import CreatorReviewSerializer, CreatorReviewListSerializer
 from creator.serializers import CreatorListingSerializer, AdminKeywordSerializer
@@ -15,10 +15,12 @@ class StreamDetailSerializer(serializers.ModelSerializer):
     creator = CreatorListingSerializer()
     creator_reviews = serializers.SerializerMethodField()
     is_favourite = serializers.SerializerMethodField()
+    is_booked = serializers.SerializerMethodField()
+    available_seats = serializers.SerializerMethodField()
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers', 'creator_reviews', 'is_favourite']
+        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers', 'creator_reviews', 'is_favourite', 'is_booked', 'available_seats']
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
@@ -42,6 +44,18 @@ class StreamDetailSerializer(serializers.ModelSerializer):
             is_favourite = FavouriteCreator.objects.filter(creator=instance.creator, user=user)
             return True if is_favourite else False
         return False
+
+    def get_is_booked(self, instance):
+        user = self.context['request'].user
+        if not user.is_anonymous:
+            is_booked = StreamBooking.objects.filter(stream=instance.pk, user=user)
+            return True if is_booked else False
+        return False
+
+    def get_available_seats(self, instance):
+        booked_seats = StreamBooking.objects.filter(stream=instance.pk)
+        return instance.total_seats - booked_seats.count()
+
 
 
 class StreamListingSerializer(serializers.ModelSerializer):

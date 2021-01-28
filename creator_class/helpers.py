@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.core.mail import EmailMultiAlternatives
 import os
+from user.models import User
 
 # Pagination
 PAGINATOR = PageNumberPagination()
@@ -35,18 +36,12 @@ def dict_obj_list_to_str(data):
     return data
 
 
-def send_email(user, subject):
-    user_obj= Account.objects.get(email=user.email)
-
-    user_obj.link_expired_at = datetime.datetime.now() + datetime.timedelta(days=1)
-   
+def send_email(user, subject, text_content):
     from_email= settings.EMAIL_HOST_USER
     to= user.email
-    user_obj.save()
-    text_content = f""
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.send()
-    return "Mail with OTP has been sent successfully"
+    return "Mail with link has been sent successfully"
 
 
 def get_pagination_response(model_class, request, serializer_class, context):

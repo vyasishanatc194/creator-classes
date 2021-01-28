@@ -21,7 +21,10 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 
     url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+
+    path("forgot-password/", views.ForgotPasswordAPIView.as_view(), name="forgot-password"),
+    path("set-password/", views.SetPasswordAPIView.as_view(), name="set-password"),
 
 ]
 

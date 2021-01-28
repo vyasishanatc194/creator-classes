@@ -9,6 +9,7 @@ class CreatorClass(ActivityTracking):
     title = models.CharField(max_length=200, blank=True, null=True, default='')
     thumbnail_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("class thumbnail"))
     class_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class video"))
+    promo_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class promo"))
 
     def __str__(self):
         return f"{self.creator.username} | {self.title}"

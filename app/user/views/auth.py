@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from ..serializers import UserProfileSerializer, TestimonialListingSerializer, PlanListingSerializer, UserProfileUpdateSerializer, TransactionDetailSerializer, UserPlanSerializer
 from ..models import User, TransactionDetail
 from creator.models import CreatorAffiliation
-from creator_class.helpers import custom_response, serialized_response, get_object
+from creator_class.helpers import custom_response, serialized_response, get_object, send_email
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
 from creator_class.permissions import IsAccountOwner, IsUser
@@ -21,6 +21,12 @@ from creator_class.utils import MyStripe, create_card_object, create_customer_id
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from django.conf import settings
+import datetime as datetime_obj
+import pytz
+import uuid
+utc = pytz.UTC
+
 
 
 
@@ -242,3 +248,46 @@ class UserPlanAPIView(APIView):
         serializer = self.serializer_class(user, context={"request": request})
         message = "plan Details fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class ForgotPasswordAPIView(APIView):
+    """
+    Send password reset link to email
+    """
+    def post(self, request, format=None):
+        if "email" not in request.data.keys():
+            message = "Email field is missing!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        try:
+            user = User.objects.get(email=request.data['email'])
+        except User.DoesNotExist:
+            message = "User not found!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        user.password_reset_link = uuid.uuid4()
+        user.save()
+        subject= "[CreatorClasses] Request to change Password"
+        text_content = f"Hello, \nYou recently requested to reset your password for your Creator Class account. Please click the below link to change your password. \n {settings.RESET_PASSWORD_LINK}{user.password_reset_link}"
+        email_response = send_email(user, subject, text_content)              
+        return custom_response(True, status.HTTP_200_OK, email_response)
+
+
+class SetPasswordAPIView(APIView):
+    """
+    Set password view
+    """
+    def post(self, request, format=None):
+        if "password" not in request.data:
+            message = "Password field is missing!"
+        if "token" not in request.data:
+            message = "Token field is missing!"
+        else:
+            user = User.objects.filter(password_reset_link=request.data["token"]).first()
+            if user:
+                user.set_password(request.data["password"])
+                user.password_reset_link = None
+                user.save()
+                message = "Password Changed Successfully!"
+                return custom_response(True, status.HTTP_200_OK, message)
+        message = "Invalid Token or link expired!"
+        return custom_response(False, status.HTTP_400_BAD_REQUEST, message)

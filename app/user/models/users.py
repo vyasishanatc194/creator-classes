@@ -53,7 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     exp_year = models.CharField(_("Exp. year"), max_length=255, blank=True)
     card_name = models.CharField(_("Card holder name"), max_length=255, blank=True, null=True)
     affiliated_with = models.ForeignKey("creator.Creator", on_delete=models.CASCADE, null=True, blank=True)
-
+    link_expired_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    password_reset_link = models.UUIDField(unique=True, null=True, blank=True)
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name=_("Unique Id"),)
 
