@@ -38,9 +38,9 @@ class ClassFilterAPIView(APIView):
         if creator_filter:
             creator_classes = creator_classes.filter(creator=creator_filter)
         if filter_by=='new_first':
-            creator_classes = creator_classes.order_by('-created_at')
-        if filter_by=='old_first':
             creator_classes = creator_classes.order_by('created_at')
+        if filter_by=='old_first':
+            creator_classes = creator_classes.order_by('-created_at')
         if filter_by=='popularity':
             popular_classes = []
             class_reviews = ClassReview.objects.filter(creator_class__active=True).order_by('-rating')
