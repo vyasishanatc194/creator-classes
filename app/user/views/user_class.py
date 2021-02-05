@@ -32,15 +32,22 @@ class ClassFilterAPIView(APIView):
             for classes in classes_keywords:
                 if classes.creator_class not in keyword_classes:
                     keyword_classes.append(classes.creator_class)
+
             serializer = ClassListingSerializer(keyword_classes, many=True, context={"request": request})
+            if filter_by=='new_first':
+                keyword_classes = sorted(serializer.data, key=lambda k: k['created_at'], reverse=True)
+                return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, keyword_classes)
+            if filter_by=='old_first':
+                old_first_classes = sorted(serializer.data, key=lambda k: k['created_at'])
+                return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, old_first_classes)
             return custom_response(True, status.HTTP_200_OK, CLASSES_FETCHED_MESSAGE, serializer.data)
 
         if creator_filter:
             creator_classes = creator_classes.filter(creator=creator_filter)
         if filter_by=='new_first':
-            creator_classes = creator_classes.order_by('created_at')
-        if filter_by=='old_first':
             creator_classes = creator_classes.order_by('-created_at')
+        if filter_by=='old_first':
+            creator_classes = creator_classes.order_by('created_at')
         if filter_by=='popularity':
             popular_classes = []
             class_reviews = ClassReview.objects.filter(creator_class__active=True).order_by('-rating')
