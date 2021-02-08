@@ -84,6 +84,9 @@ class LoginAPIView(APIView):
                 account = authenticate(email=user[0].email, password=password)
         
         if account is not None:
+            if account.is_creator:
+                message = "Invalid user credentials!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             login(request, account)
             serializer = UserProfileSerializer(account, context={'request':request})
             return custom_response(True, status.HTTP_200_OK, "Login Successful!", serializer.data)

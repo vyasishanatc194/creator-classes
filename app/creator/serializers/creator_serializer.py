@@ -153,7 +153,7 @@ class CreatorLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token', 'profile_image', 'description', 'key_skill']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token', 'profile_image', 'is_creator', 'description', 'key_skill']
 
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
