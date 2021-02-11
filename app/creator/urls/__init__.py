@@ -2,7 +2,7 @@
 from django.urls import include, path
 
 from .. import views
-from . import creator_url, class_url, material_url, session_url, stream_url, stripe_connect_url
+from . import creator_url, class_url, material_url, session_url, stream_url, stripe_connect_url, earning_url
 
 app_name = "creator"
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path("", include(session_url)),
     path("", include(stream_url)),
     path("", include(stripe_connect_url)),
+    path("", include(earning_url)),
 ]

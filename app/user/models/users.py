@@ -104,3 +104,14 @@ class UserCard(ActivityTracking):
         verbose_name_plural = "User Card Details"
         ordering = ["-created_at"]
 
+
+class UserSelectedKeyword(ActivityTracking):
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="users")
+    keyword = models.ForeignKey("customadmin.AdminKeyword", on_delete=models.CASCADE, related_name="user_selected_keyword")
+    def __str__(self):
+        return self.user.pk
+
+    class Meta:
+        verbose_name = "User Selected Keyword"
+        verbose_name_plural = "User Selected Keywords"
+        ordering = ["-created_at"]

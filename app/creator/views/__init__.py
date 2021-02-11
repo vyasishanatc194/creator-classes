@@ -14,3 +14,9 @@ from .material_view import MaterialcategoryListingAPIView, AddMaterialAPIView, M
 from .one_to_one_session_view import OneToOneSessionAPIView, CreatorSessionListingAPIView
 from .stream_view import AddStreamAPIView, MyStreamListingAPIView, CreatorStreamListingAPIView
 from .stripe_connect_view import StripeAccountConnectAPI, StripeAccountDiscoonectAPI, CheckStripeConnectAPIView
+from .earnings import(
+    CreatorTotalEarningHistoryAPIView,
+    AffiliationEarningChartAPIView,
+    StreamEarningChartAPIView,
+    CreatorSessionEarningChartAPIView,
+)

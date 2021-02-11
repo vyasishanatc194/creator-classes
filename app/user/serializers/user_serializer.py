@@ -1,9 +1,29 @@
 from rest_framework import fields, serializers
-from ..models import User
+from ..models import User, UserSelectedKeyword
 from rest_framework.authtoken.models import Token
 from customadmin.models import Testimonial, Plan, PlanCover
 from creator_class.utils import MyStripe
 from creator.models import Creator
+# from creator.serializers import AdminKeywordSerializer
+
+
+# class UserSelectedKeywordSerializer(serializers.ModelSerializer):
+#     keyword = AdminKeywordSerializer()
+#     class Meta:
+#         model = UserSelectedKeyword
+#         fields = ['user', 'keyword']
+
+#     def create(self, validated_data):
+#         instance = validated_data
+#         user = validated_data.pop('user', None)
+#         keywords = validated_data.pop('keywords', None)
+#         for keyword in keywords:
+#             admin_keyword = AdminKeyword.objects.filter(pk=keyword)
+#             if admin_keyword:
+#                 keyword_exists = UserSelectedKeyword.obj.filter(user=user, keyword=keyword)
+#                 if not keyword_exists:   
+#                     UserSelectedKeyword.objects.create(keyword=keyword, user=user)
+#         return instance
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -15,6 +35,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
     confirm_password = serializers.CharField(read_only=True, required=False)
     affiliation_code = serializers.CharField(required=False)
+    # selected_keywords = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -53,6 +74,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
 
+    # def get_selected_keywords(self, instance):
+    #     selected_keywords = UserSelectedKeyword.objects.filter(user=instance.pk)
+    #     serializer = UserSelectedKeywordSerializer(selected_keywords, many=True)
+    #     return serializer.data
+
 
 class TestimonialListingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,3 +111,4 @@ class UserPlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image', 'plan_id', 'plan_purchased_at']
+

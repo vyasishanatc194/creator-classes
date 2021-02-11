@@ -1,11 +1,10 @@
 from rest_framework import fields, serializers
 from ..models import Creator, CreatorSkill, CreatorAffiliation, CreatorTransferredMoney
-from user.models import CreatorReview
-from user.serializers import PlanListingSerializer
+from user.models import CreatorReview 
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 from user.models import User
-from user.serializers import CreatorReviewSerializer
+from user.serializers import PlanListingSerializer
 import uuid
 from django.conf import settings
 from customadmin.models import CreatorClassCommission
