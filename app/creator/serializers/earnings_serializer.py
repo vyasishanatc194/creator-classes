@@ -48,7 +48,7 @@ class SessionUserListingSerializer(serializers.ModelSerializer):
     creator_session_amount = serializers.SerializerMethodField()
     class Meta:
         model = SessionBooking
-        fields = ['user', 'session', 'created_at', 'payment_method', 'session_amount', 'creator_session_amount']
+        fields = ['user', 'created_at', 'payment_method', 'session_amount', 'creator_session_amount']
 
     def get_payment_method(self, instance):
         return instance.transaction_detail.brand
