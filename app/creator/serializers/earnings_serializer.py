@@ -72,13 +72,13 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
         fields = ['user', 'plan', 'created_at', 'payment_method', 'plan_amount', 'commission_amount']
 
     def get_payment_method(self, instance):
-        return instance.transaction_detail.brand
+        return instance.plan_purchase_detail.brand
 
     def get_plan_amount(self, instance):
-        return instance.transaction_detail.amount
+        return instance.plan_purchase_detail.amount
 
     def get_commission_amount(self, instance):
-        plan_amount = instance.transaction_detail.amount
+        plan_amount = instance.plan_purchase_detail.amount
         return (amount * (creator_class_commission.affiliation_deduction/100))
 
 
