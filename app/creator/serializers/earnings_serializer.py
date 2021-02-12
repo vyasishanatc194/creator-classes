@@ -79,7 +79,7 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
 
     def get_commission_amount(self, instance):
         plan_amount = instance.plan_purchase_detail.amount
-        return (amount * (creator_class_commission.affiliation_deduction/100))
+        return (plan_amount * (creator_class_commission.affiliation_deduction/100))
 
 
 class CreatorTransferredMoneyListingSerializer(serializers.ModelSerializer):
