@@ -70,6 +70,9 @@ class Command(BaseCommand):
 
                             creator_earnings = (stream_earnings if stream_earnings else 0) + (session_earnings if session_earnings else 0)
 
+                            stream_amount_received = stream_earnings - (float(float(stream_earnings) * creator_class_commission.creator_class_deduction)/100)
+                            session_amount_received = session_earnings - (float(float(session_earnings) * creator_class_commission.creator_class_deduction)/100)
+
 
                             affiliations = CreatorAffiliation.objects.filter(user__affiliated_with=creator)
                             affiliation_commission_total = affiliations.aggregate(Sum('amount'))['amount__sum']
@@ -86,8 +89,8 @@ class Command(BaseCommand):
                                 # Affiliation amount
                                 final_commission_amount=0
                                 if affiliation_commission_total:
-                                    affiliation_deduction = float(float(affiliation_commission_total) * creator_class_commission.affiliation_deduction)/100
-                                    final_commission_amount = affiliation_commission_total - affiliation_deduction
+                                    final_commission_amount = float(float(affiliation_commission_total) * creator_class_commission.affiliation_deduction)/100
+
 
                                 transfer_amount = final_earning_amount + final_commission_amount
                                 final_amount = round(transfer_amount,2)
@@ -107,7 +110,11 @@ class Command(BaseCommand):
                                                                         affiliation_deduction=affiliation_deduction,
                                                                         final_earning_amount=final_earning_amount,
                                                                         final_commission_amount=final_commission_amount,
-                                                                        transferred_amount=final_amount
+                                                                        transferred_amount=final_amount,
+                                                                        stream_amount_total= stream_earnings,
+                                                                        session_amount_total= session_earnings,
+                                                                        session_amount_received = session_amount_received,
+                                                                        stream_amount_received = stream_amount_total
                                                                     )
                                     
                                     print(".........................................success")

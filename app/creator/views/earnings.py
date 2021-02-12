@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ..models import Creator, CreatorAffiliation
+from ..models import Creator, CreatorAffiliation, CreatorTransferredMoney
 from user.models import User, StreamBooking, SessionBooking, UserPlanPurchaseHistory
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
@@ -9,7 +9,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
 from customadmin.models import CreatorClassCommission
-from ..serializers import StreamUserListingSerializer, SessionUserListingSerializer, UserPlanPurchaseHistorySerializer
+from ..serializers import StreamUserListingSerializer, SessionUserListingSerializer, UserPlanPurchaseHistorySerializer, CreatorTransferredMoneyListingSerializer
 from creator_class.helpers import get_pagination_response
 
 
@@ -484,16 +484,42 @@ class AffiliationUsersDetailAPIView(APIView):
                     if plan not in plan_purchase_list:
                         plan_purchase_list.append(plan)
 
-
             result = get_pagination_response(plan_purchase_list, request, self.serializer_class, context = {"request": request})
             message = "Booking detail fetched Successfully!"
             return custom_response(True, status.HTTP_200_OK, message, result)
 
-
-        
-        
         result = get_pagination_response(
-            users, request, self.serializer_class, context={"request": request}
+            plans_purchased, request, self.serializer_class, context={"request": request}
         )
         message = "Affiliated users fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+class PayoutsDetailAPIView(APIView):
+    """
+    Affiliated users detail listing API View
+    """
+
+    permission_classes = (IsAccountOwner, IsCreator)
+    serializer_class = CreatorTransferredMoneyListingSerializer
+
+    def get(self, request):
+        transactions = CreatorTransferredMoney.objects.filter(creator=request.user.pk)
+        start_date  = request.GET.get('start_date', None)
+        end_date  = request.GET.get('end_date', None)
+        search  = request.GET.get('search', None)
+
+        if start_date:
+            transactions = transactions.filter(created_at__gte=start_date)
+        
+        if end_date:
+            transactions = transactions.filter(created_at__lte=end_date)
+
+        if search:
+            transactions = transactions.filter(Q(transaction_id__icontains=search) | Q(transferred_amount__icontains=search) | Q(created_at__date__icontains=search))
+
+        result = get_pagination_response(
+            transactions, request, self.serializer_class, context={"request": request}
+        )
+        message = "Payouts fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, result)

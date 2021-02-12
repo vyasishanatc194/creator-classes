@@ -1,7 +1,7 @@
 from rest_framework import fields, serializers
 from user.models import StreamBooking, SessionBooking, UserPlanPurchaseHistory
 from user.serializers import UserProfileUpdateSerializer
-from ..models import Stream, OneToOneSession
+from ..models import Stream, OneToOneSession, CreatorTransferredMoney
 from customadmin.models import CreatorClassCommission
 
 
@@ -80,3 +80,10 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
     def get_commission_amount(self, instance):
         plan_amount = instance.transaction_detail.amount
         return (amount * (creator_class_commission.affiliation_deduction/100))
+
+
+class CreatorTransferredMoneyListingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CreatorTransferredMoney
+        fields = ['transaction_id', 'created_at', 'transferred_amount', 'affiliation_commission_total', 'stream_amount_received', 'session_amount_received']

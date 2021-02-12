@@ -11,5 +11,7 @@ urlpatterns = [
     path("stream-user-listing/", views.StreamUserListingAPIView.as_view(), name="stream-user-listing"),
     path("session-user-listing/", views.SessionUserListingAPIView.as_view(), name="session-user-listing"),
     path("affiliate-user-listing/", views.AffiliationUsersDetailAPIView.as_view(), name="affiliate-user-listing"),
+    path("payouts-listing/", views.PayoutsDetailAPIView.as_view(), name="payouts-listing"),
+    
 ]
 

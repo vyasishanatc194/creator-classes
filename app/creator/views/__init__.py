@@ -22,4 +22,5 @@ from .earnings import(
     StreamUserListingAPIView,
     SessionUserListingAPIView,
     AffiliationUsersDetailAPIView,
+    PayoutsDetailAPIView,
 )

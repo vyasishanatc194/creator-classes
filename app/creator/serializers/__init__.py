@@ -35,4 +35,5 @@ from .earnings_serializer import (
     StreamUserListingSerializer,
     SessionUserListingSerializer,
     UserPlanPurchaseHistorySerializer,
+    CreatorTransferredMoneyListingSerializer,
 )

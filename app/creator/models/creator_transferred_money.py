@@ -24,6 +24,12 @@ class CreatorTransferredMoney(models.Model):
     final_earning_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
     final_commission_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
     transferred_amount= models.PositiveIntegerField(default=0, blank=True, null=True)
+    stream_amount_total = models.FloatField(default=0, blank=True, null=True)
+    stream_amount_received = models.FloatField(default=0, blank=True, null=True)
+    session_amount_total = models.FloatField(default=0, blank=True, null=True)
+    session_amount_received = models.FloatField(default=0, blank=True, null=True)
+
+
     status = models.CharField(
         max_length=222, blank=True, null=True, choices=STATUS_CHOICES, default="fail"
     )
