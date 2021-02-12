@@ -66,7 +66,7 @@ class PayoutErrorLogAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk"]
 
-class CreatorAffiliation(admin.ModelAdmin):
+class CreatorAffiliationAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ["pk"]
 
