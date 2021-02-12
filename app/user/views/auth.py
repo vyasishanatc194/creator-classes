@@ -29,7 +29,7 @@ from rest_auth.registration.serializers import SocialLoginSerializer
 
 from google.views import GoogleOAuth2Adapter
 from rest_framework import generics
-from customadmin.models import Testimonial, Plan
+from customadmin.models import Testimonial, Plan, CreatorClassCommission
 from creator_class.utils import (
     MyStripe,
     create_card_object,
@@ -45,6 +45,13 @@ import pytz
 import uuid
 
 utc = pytz.UTC
+
+creator_class_commission = CreatorClassCommission.objects.all().first()
+if not creator_class_commission:
+    creator_class_commission = CreatorClassCommission()
+    creator_class_commission.affiliation_deduction = 10
+    creator_class_commission.creator_class_deduction = 10
+    creator_class_commission.save()
 
 
 class SignUpApiView(APIView):
@@ -270,12 +277,13 @@ class PlanPurchaseAPIView(APIView):
                         plan = plan_check[0],
                         plan_purchase_detail = transaction[0]
                     )
-
+                    commision_amount = plan_check[0].plan_amount * creator_class_commission.affiliation_deduction/100
                     if user.affiliated_with:
                         affiliation_record = CreatorAffiliation()
                         affiliation_record.user = user
                         affiliation_record.plan_id = plan_check[0]
                         affiliation_record.amount = plan_check[0].plan_amount
+                        affiliation_record.commission_amount = commision_amount
                         affiliation_record.save()
 
                     return custom_response(True, status.HTTP_201_CREATED, message)
