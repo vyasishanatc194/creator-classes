@@ -1,15 +1,16 @@
 from rest_framework.views import APIView
 from ..models import Creator, CreatorAffiliation
-from user.models import User, StreamBooking, SessionBooking
+from user.models import User, StreamBooking, SessionBooking, UserPlanPurchaseHistory
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsCreator, get_pagination_response
-from django.db.models import Sum
+from django.db.models import Sum, Q
 import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
 from customadmin.models import CreatorClassCommission
-# from ..serializers import StreamUserListingSerializer
+from ..serializers import StreamUserListingSerializer, SessionUserListingSerializer, UserPlanPurchaseHistorySerializer
+from creator_class.helpers import get_pagination_response
 
 
 creator_class_commission = CreatorClassCommission.objects.all().first()
@@ -366,15 +367,133 @@ class CreatorSessionEarningChartAPIView(APIView):
         return custom_response(True, status.HTTP_200_OK, message, result)
 
 
-# class MyClassListingAPIView(APIView):
-#     """
-#     My class listing view
-#     """
-#     serializer_class = StreamUserListingSerializer
-#     permission_classes = (IsAccountOwner, IsCreator)
+class StreamUserListingAPIView(APIView):
+    """
+    My class listing view
+    """
+    serializer_class = StreamUserListingSerializer
+    permission_classes = (IsAccountOwner, IsCreator)
 
-#     def get(self, request):
-#         stream_bookings = StreamBooking.objects.filter(stream__creator=request.user.pk)
-#         serializer = self.serializer_class(stream_bookings, many=True, context={"request": request})
-#         message = "Classes fetched Successfully!"
-#         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+    def get(self, request):
+        stream_bookings = StreamBooking.objects.filter(stream__creator=request.user.pk)
+
+        start_date  = request.GET.get('start_date', None)
+        end_date  = request.GET.get('end_date', None)
+        search  = request.GET.get('search', None)
+
+        if start_date:
+            stream_bookings = stream_bookings.filter(created_at__gte=start_date)
+        
+        if end_date:
+            stream_bookings = stream_bookings.filter(created_at__lte=end_date)
+
+        if search:
+            search_bookings = stream_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
+            booking_list = []
+            for booking in search_bookings:
+                booking_list.append(booking)
+            for stream_booking in stream_bookings:
+                creator_amount = stream_booking.stream.stream_amount - (stream_booking.stream.stream_amount * (creator_class_commission.creator_class_deduction)/100)
+                if search in str(creator_amount):
+                    if stream_booking not in booking_list:
+                        booking_list.append(stream_booking)
+
+            result = get_pagination_response(booking_list, request, self.serializer_class, context = {"request": request})
+            message = "Booking detail fetched Successfully!"
+            return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+        result = get_pagination_response(stream_bookings, request, self.serializer_class, context = {"request": request})
+        message = "Booking detail fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+class SessionUserListingAPIView(APIView):
+    """
+    My Session user listing view
+    """
+    serializer_class = SessionUserListingSerializer
+    permission_classes = (IsAccountOwner, IsCreator)
+
+    def get(self, request):
+        session_bookings = SessionBooking.objects.filter(creator=request.user.pk)
+
+        start_date  = request.GET.get('start_date', None)
+        end_date  = request.GET.get('end_date', None)
+        search  = request.GET.get('search', None)
+
+        if start_date:
+            session_bookings = session_bookings.filter(created_at__gte=start_date)
+        
+        if end_date:
+            session_bookings = session_bookings.filter(created_at__lte=end_date)
+
+        if search:
+            search_bookings = session_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
+            booking_list = []
+            for booking in search_bookings:
+                booking_list.append(booking)
+
+            for session_booking in session_bookings:
+                creator_amount = session_booking.transaction_detail.amount - (session_booking.transaction_detail.amount * (creator_class_commission.creator_class_deduction)/100)
+                if search in str(creator_amount):
+                    if session_booking not in booking_list:
+                        booking_list.append(session_booking)
+
+            result = get_pagination_response(booking_list, request, self.serializer_class, context = {"request": request})
+            message = "Booking detail fetched Successfully!"
+            return custom_response(True, status.HTTP_200_OK, message, result)
+
+        result = get_pagination_response(session_bookings, request, self.serializer_class, context = {"request": request})
+        message = "Booking detail fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+class AffiliationUsersDetailAPIView(APIView):
+    """
+    Affiliated users detail listing API View
+    """
+
+    permission_classes = (IsAccountOwner, IsCreator)
+    serializer_class = UserPlanPurchaseHistorySerializer
+
+    def get(self, request):
+        plans_purchased = UserPlanPurchaseHistory.objects.filter(user__is_creator=False, user__affiliated_with=request.user.pk)
+        start_date  = request.GET.get('start_date', None)
+        end_date  = request.GET.get('end_date', None)
+        search  = request.GET.get('search', None)
+
+        if start_date:
+            plans_purchased = plans_purchased.filter(created_at__gte=start_date)
+        
+        if end_date:
+            plans_purchased = plans_purchased.filter(created_at__lte=end_date)
+
+        if search:
+            search_plans = plans_purchased.filter(Q(plan_purchase_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
+            plan_purchase_list = []
+            for booking in search_plans:
+                plan_purchase_list.append(booking)
+
+            for plan in plans_purchased:
+                if search in str(plan.plan_purchase_detail.amount):
+                    if plan not in plan_purchase_list:
+                        plan_purchase_list.append(plan)
+                creator_amount = plan.plan_purchase_detail.amount * (creator_class_commission.affiliation_deduction)/100
+                if search in str(creator_amount):
+                    if plan not in plan_purchase_list:
+                        plan_purchase_list.append(plan)
+
+
+            result = get_pagination_response(plan_purchase_list, request, self.serializer_class, context = {"request": request})
+            message = "Booking detail fetched Successfully!"
+            return custom_response(True, status.HTTP_200_OK, message, result)
+
+
+        
+        
+        result = get_pagination_response(
+            users, request, self.serializer_class, context={"request": request}
+        )
+        message = "Affiliated users fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, result)

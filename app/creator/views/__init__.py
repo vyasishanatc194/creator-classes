@@ -19,4 +19,7 @@ from .earnings import(
     AffiliationEarningChartAPIView,
     StreamEarningChartAPIView,
     CreatorSessionEarningChartAPIView,
+    StreamUserListingAPIView,
+    SessionUserListingAPIView,
+    AffiliationUsersDetailAPIView,
 )

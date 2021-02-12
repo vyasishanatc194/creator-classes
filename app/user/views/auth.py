@@ -8,7 +8,7 @@ from ..serializers import (
     UserPlanSerializer,
     # UserSelectedKeywordSerializer,
 )
-from ..models import User, TransactionDetail
+from ..models import User, TransactionDetail, UserPlanPurchaseHistory
 from creator.models import CreatorAffiliation
 from creator_class.helpers import (
     custom_response,
@@ -264,6 +264,12 @@ class PlanPurchaseAPIView(APIView):
                     user.plan_purchase_detail = transaction[0]
                     message = "Plan purchased successfully!"
                     user.save()
+
+                    UserPlanPurchaseHistory.objects.create(
+                        user = user,
+                        plan = plan_check[0],
+                        plan_purchase_detail = transaction[0]
+                    )
 
                     if user.affiliated_with:
                         affiliation_record = CreatorAffiliation()

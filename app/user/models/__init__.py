@@ -1,4 +1,4 @@
-from .users import User, UserCard, UserSelectedKeyword
+from .users import User, UserCard, UserSelectedKeyword, UserPlanPurchaseHistory
 from .reviews import CreatorReview, ClassReview
 from .favourites import FavouriteClass, FavouriteCreator
 from .bookings import SessionBooking, StreamBooking, BookedSessionKeywords

@@ -115,3 +115,16 @@ class UserSelectedKeyword(ActivityTracking):
         verbose_name = "User Selected Keyword"
         verbose_name_plural = "User Selected Keywords"
         ordering = ["-created_at"]
+
+
+class UserPlanPurchaseHistory(ActivityTracking):
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="plan_user")
+    plan = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="user_plan", null=True, blank=True)
+    plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, related_name="transaction_detail", null=True, blank=True)
+    def __str__(self):
+        return self.user.pk
+
+    class Meta:
+        verbose_name = "Plan Purchase History"
+        verbose_name_plural = "Plan Purchase History"
+        ordering = ["-created_at"]
