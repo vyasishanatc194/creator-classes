@@ -106,7 +106,9 @@ class MyStreamSerializer(serializers.ModelSerializer):
         return [stream_keyword.keyword.keyword for stream_keyword in stream_keywords]
 
     def get_tz_value(self, instance):
-        return instance.tz.tz
+        if instance.tz:
+            return instance.tz.tz
+        return None
 
 
 class UpdateStreamSerializer(serializers.ModelSerializer):

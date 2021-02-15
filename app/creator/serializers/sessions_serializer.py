@@ -40,15 +40,18 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         time_slots = validated_data.pop('time_slots', None)
+        tz = validated_data.pop('tz', None)
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
             instance.save()
 
+        tz_value = AvailableTimezone.objects.filter(pk=tz)
+            
         if time_slots:
             time_slots = time_slots.split(',')
             TimeSlot.objects.filter(session=instance).delete()
             for slot in time_slots:
-                serializer = TimeSlotSerializer(data={'session': instance.pk, 'slot_datetime': slot})
+                serializer = TimeSlotSerializer(data={'session': instance.pk, 'slot_datetime': slot, 'tz': tz_value.first()})
                 if serializer.is_valid():
                     serializer.save()
                 else:
