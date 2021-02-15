@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import StreamKeyword, StreamCovers, Stream
-from customadmin.models import AdminKeyword
+from customadmin.models import AdminKeyword, AvailableTimezone
 
 
 class AddStreamSerializer(serializers.ModelSerializer):
