@@ -4,9 +4,14 @@ from ..serializers import CreatorListingSerializer
 from customadmin.models import AvailableTimezone
 
 
+class AvailableTimezoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvailableTimezone
+        fields = ['id', 'tz']
+
+
 class TimeSlotSerializer(serializers.ModelSerializer):
     slot_datetime = serializers.DateTimeField(required=True)
-    tz = serializers.DateTimeField(required=True)
     class Meta:
         model = TimeSlot
         fields = ['id', 'session', 'slot_datetime', 'tz']
@@ -20,18 +25,17 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
     tz = serializers.CharField(required=True)
     class Meta:
         model = OneToOneSession
-        fields = ['id', 'creator', 'amount', 'time_slots', 'tz']
+        fields = ['id', 'amount', 'time_slots', 'creator', 'tz']
 
     def create(self, validated_data):
         time_slots = validated_data.pop('time_slots', None)
         tz = validated_data.pop('tz', None)
+        validated_data['creator'] = self.context['request'].user
         session = OneToOneSession.objects.create(**validated_data)
-        if tz:
-            tz_value = AvailableTimezone.objects.filter(pk=tz)
         if time_slots:
             time_slots = time_slots.split(',')
             for slot in time_slots:
-                serializer = TimeSlotSerializer(data={'session': session.pk, 'slot_datetime': slot, 'tz': tz_value.first()})
+                serializer = TimeSlotSerializer(data={'session': session.pk, 'slot_datetime': slot, 'tz': tz})
                 if serializer.is_valid():
                     serializer.save()
                 else:
@@ -45,19 +49,17 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
             instance.save()
-
-        tz_value = AvailableTimezone.objects.filter(pk=tz)
-            
         if time_slots:
             time_slots = time_slots.split(',')
             TimeSlot.objects.filter(session=instance).delete()
             for slot in time_slots:
-                serializer = TimeSlotSerializer(data={'session': instance.pk, 'slot_datetime': slot, 'tz': tz_value.first()})
+                serializer = TimeSlotSerializer(data={'session': instance.pk, 'slot_datetime': slot, 'tz': tz})
                 if serializer.is_valid():
                     serializer.save()
                 else:
                     return serializer.errors
         instance.time_slots=time_slots
+        instance.tz = tz
         return instance
 
 
