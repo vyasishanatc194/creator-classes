@@ -16,17 +16,21 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
     Add Sessions serializer
     """
     time_slots = serializers.CharField(required=True)
+    tz = serializers.CharField(required=True)
     class Meta:
         model = OneToOneSession
-        fields = ['id', 'creator', 'amount', 'time_slots']
+        fields = ['id', 'creator', 'amount', 'time_slots', 'tz']
 
     def create(self, validated_data):
         time_slots = validated_data.pop('time_slots', None)
+        tz = validated_data.pop('tz', None)
         session = OneToOneSession.objects.create(**validated_data)
+        if tz:
+            tz_value = AvailableTimezone.objects.filter(pk=tz)
         if time_slots:
             time_slots = time_slots.split(',')
             for slot in time_slots:
-                serializer = TimeSlotSerializer(data={'session': session.pk, 'slot_datetime': slot})
+                serializer = TimeSlotSerializer(data={'session': session.pk, 'slot_datetime': slot, 'tz': tz_value.first()})
                 if serializer.is_valid():
                     serializer.save()
                 else:
