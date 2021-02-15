@@ -8,6 +8,7 @@ from ..serializers import (
     AffiliatedUserProfileSerializer,
     AffiliationRecordSerializer,
     CreatorTransferredMoneySerializer,
+    TimezoneListingSerializer,
 )
 from ..models import Creator, CreatorAffiliation, CreatorTransferredMoney
 from user.models import User, StreamBooking, SessionBooking
@@ -19,7 +20,24 @@ from django.db.models import Sum
 import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
-from customadmin.models import CreatorClassCommission
+from customadmin.models import CreatorClassCommission, AvailableTimezone
+
+
+class TimezonesListingAPIView(APIView):
+    """
+    Timezones listing view
+    """
+
+    serializer_class = TimezoneListingSerializer
+
+    def get(self, request):
+        timezones = AvailableTimezone.objects.filter(active=True)
+
+        serializer = self.serializer_class(
+            timezones, many=True, context={"request": request}
+        )
+        message = "Timezones fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
 
 
 class CreatorProfileAPI(APIView):

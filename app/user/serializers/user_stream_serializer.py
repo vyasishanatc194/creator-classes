@@ -17,10 +17,11 @@ class StreamDetailSerializer(serializers.ModelSerializer):
     is_favourite = serializers.SerializerMethodField()
     is_booked = serializers.SerializerMethodField()
     available_seats = serializers.SerializerMethodField()
+    tz_value = serializers.SerializerMethodField()
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers', 'creator_reviews', 'is_favourite', 'is_booked', 'available_seats']
+        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers', 'creator_reviews', 'is_favourite', 'is_booked', 'available_seats']
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
@@ -56,6 +57,10 @@ class StreamDetailSerializer(serializers.ModelSerializer):
         booked_seats = StreamBooking.objects.filter(stream=instance.pk)
         return instance.total_seats - booked_seats.count()
 
+    def get_tz_value(self, instance):
+        return instance.tz.tz
+
+
 
 
 class StreamListingSerializer(serializers.ModelSerializer):
@@ -65,10 +70,11 @@ class StreamListingSerializer(serializers.ModelSerializer):
     stream_keywords = serializers.SerializerMethodField()
     stream_covers = serializers.SerializerMethodField()
     creator = CreatorListingSerializer()
+    tz_value = serializers.SerializerMethodField()
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
@@ -77,3 +83,6 @@ class StreamListingSerializer(serializers.ModelSerializer):
     def get_stream_covers(self, instance):
         stream_covers = StreamCovers.objects.filter(stream=instance)
         return [stream_covers.covers for stream_covers in stream_covers]
+
+    def get_tz_value(self, instance):
+        return instance.tz.tz

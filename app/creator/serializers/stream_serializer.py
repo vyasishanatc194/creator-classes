@@ -11,6 +11,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
+    tz = serializers.DateTimeField(required=True)
     stream_amount = serializers.FloatField(required=True)
     total_seats = serializers.IntegerField(required=True)
     stream_keywords = serializers.CharField(required=True)
@@ -18,12 +19,18 @@ class AddStreamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
 
     def create(self, validated_data):
+        tz = validated_data.pop('tz', None)
         stream_keywords = validated_data.pop('stream_keywords', None)
         stream_covers = validated_data.pop('stream_covers', None)
+        if tz:
+            selected_tz = AvailableTimezone.objects.filter(pk=selected_tz)
+            validated_data['tz'] = selected_tz.first()
         stream =Stream.objects.create(**validated_data)
+
+
         if stream_keywords:
             stream_keywords = stream_keywords.split(',')
             for keyword in stream_keywords:
@@ -43,6 +50,11 @@ class AddStreamSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         stream_keywords = validated_data.pop('stream_keywords', None)
         stream_covers = validated_data.pop('stream_covers', None)
+        tz = validated_data.pop('tz', None)
+        if tz:
+            selected_tz = AvailableTimezone.objects.filter(pk=selected_tz)
+            validated_data['tz'] = selected_tz.first()
+
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
             instance.save()
@@ -74,6 +86,8 @@ class MyStreamSerializer(serializers.ModelSerializer):
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
+    tz = serializers.DateTimeField(required=True)
+    tz_value = serializers.SerializerMethodField()
     stream_amount = serializers.FloatField(required=True)
     total_seats = serializers.IntegerField(required=True)
     stream_keywords = serializers.SerializerMethodField()
@@ -81,7 +95,7 @@ class MyStreamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
 
     def get_stream_covers(self, instance):
         stream_covers = StreamCovers.objects.filter(stream=instance)
@@ -90,6 +104,9 @@ class MyStreamSerializer(serializers.ModelSerializer):
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
         return [stream_keyword.keyword.keyword for stream_keyword in stream_keywords]
+
+    def get_tz_value(self, instance):
+        return instance.tz.tz
 
 
 class UpdateStreamSerializer(serializers.ModelSerializer):
@@ -100,6 +117,7 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
     thumbnail_file = serializers.FileField(required=False)
     sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=False)
+    tz = serializers.DateTimeField(required=False)
     stream_amount = serializers.FloatField(required=False)
     total_seats = serializers.IntegerField(required=False)
     stream_keywords = serializers.CharField(required=False)
@@ -107,11 +125,15 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = ['id', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
 
     def update(self, instance, validated_data):
         stream_keywords = validated_data.pop('stream_keywords', None)
         stream_covers = validated_data.pop('stream_covers', None)
+        tz = validated_data.pop('tz', None)
+        if tz:
+            selected_tz = AvailableTimezone.objects.filter(pk=selected_tz)
+            validated_data['tz'] = selected_tz.first()
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
             instance.save()

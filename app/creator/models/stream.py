@@ -11,6 +11,7 @@ class Stream(ActivityTracking):
     stream_datetime = models.DateTimeField(null=True, blank=True, help_text=_("Stream Datetime"), verbose_name=_("Stream Datetime"))
     stream_amount = models.FloatField(blank=True, null=True, default=10)
     total_seats = models.IntegerField(blank=True, null=True, default=10)
+    tz = models.ForeignKey("customadmin.AvailableTimezone", on_delete=models.CASCADE, related_name="available_timezones", blank=True, null=True)
 
     def __str__(self):
         return f"{self.creator.username} | {self.title} "

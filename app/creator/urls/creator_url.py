@@ -15,5 +15,7 @@ urlpatterns = [
     path("funds-history/", views.CreatorFundsAPIView.as_view(), name="funds-history"),
     path("affiliated-users/", views.AffiliatedUsersListingAPIView.as_view(), name="affiliated-users"),
     path("affiliation-record/", views.AffiliationRecordAPIView.as_view(), name="affiliation-record"),
+    
+    path("timezones/", views.TimezonesListingAPIView.as_view(), name="timezones"),
 
 ]

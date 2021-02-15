@@ -7,7 +7,13 @@ from user.models import User
 from user.serializers import PlanListingSerializer
 import uuid
 from django.conf import settings
-from customadmin.models import CreatorClassCommission
+from customadmin.models import CreatorClassCommission, AvailableTimezone
+
+
+class TimezoneListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvailableTimezone
+        fields = ['pk', 'tz']
 
 
 class CreatorSkillSerializer(serializers.ModelSerializer):

@@ -16,6 +16,7 @@ class OneToOneSession(ActivityTracking):
 class TimeSlot(ActivityTracking):
     session = models.ForeignKey("OneToOneSession", on_delete=models.CASCADE, related_name="sessiontimeslot")
     slot_datetime = models.DateTimeField(auto_now_add=False)
+    tz = models.ForeignKey("customadmin.AvailableTimezone", on_delete=models.CASCADE, related_name="selected_timezones", blank=True, null=True)
     is_booked = models.BooleanField(default=False)
 
     def __str__(self):
