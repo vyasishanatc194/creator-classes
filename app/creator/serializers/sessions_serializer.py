@@ -5,9 +5,10 @@ from ..serializers import CreatorListingSerializer
 
 class TimeSlotSerializer(serializers.ModelSerializer):
     slot_datetime = serializers.DateTimeField(required=True)
+    tz = serializers.DateTimeField(required=True)
     class Meta:
         model = TimeSlot
-        fields = ['id', 'session', 'slot_datetime']
+        fields = ['id', 'session', 'slot_datetime', 'tz']
 
 
 class OneToOneSessionSerializer(serializers.ModelSerializer):
@@ -54,22 +55,29 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
 
 class SessionListingSerializer(serializers.ModelSerializer):
     amount = serializers.SerializerMethodField()
+    tz_value = serializers.SerializerMethodField()
     class Meta:
         model = TimeSlot
-        fields = ['id', 'session', 'amount', 'slot_datetime', 'is_booked']
+        fields = ['id', 'session', 'amount', 'slot_datetime', 'tz', 'tz_value', 'is_booked']
     
     def get_amount(self, instance):
         return instance.session.amount
 
+    def get_amount(self, instance):
+        return instance.tz.tz
+
 
 class TimeSlotsListingSerializer(serializers.ModelSerializer):
     # amount = serializers.SerializerMethodField()
+    tz_value = serializers.SerializerMethodField()
     class Meta:
         model = TimeSlot
-        fields = ['id', 'session', 'slot_datetime', 'is_booked']
+        fields = ['id', 'session', 'slot_datetime', 'is_booked' , 'tz', 'tz_value']
     
     # def get_amount(self, instance):
     #     return instance.session.amount
+    def get_amount(self, instance):
+        return instance.tz.tz
 
 
 class OneToOneSessionListingSerializer(serializers.ModelSerializer):
