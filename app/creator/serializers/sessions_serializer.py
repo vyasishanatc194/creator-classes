@@ -63,7 +63,7 @@ class SessionListingSerializer(serializers.ModelSerializer):
     def get_amount(self, instance):
         return instance.session.amount
 
-    def get_amount(self, instance):
+    def get_tz_value(self, instance):
         if instance.tz:
             return instance.tz.tz
         return None
