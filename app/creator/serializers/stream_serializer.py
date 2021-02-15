@@ -11,7 +11,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
-    tz = serializers.DateTimeField(required=True)
+    tz = serializers.CharField(required=True)
     stream_amount = serializers.FloatField(required=True)
     total_seats = serializers.IntegerField(required=True)
     stream_keywords = serializers.CharField(required=True)
@@ -26,7 +26,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
         stream_keywords = validated_data.pop('stream_keywords', None)
         stream_covers = validated_data.pop('stream_covers', None)
         if tz:
-            selected_tz = AvailableTimezone.objects.filter(pk=selected_tz)
+            selected_tz = AvailableTimezone.objects.filter(pk=tz)
             validated_data['tz'] = selected_tz.first()
         stream =Stream.objects.create(**validated_data)
 
