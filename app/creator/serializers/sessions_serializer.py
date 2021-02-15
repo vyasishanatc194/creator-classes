@@ -1,6 +1,7 @@
 from rest_framework import fields, serializers
 from ..models import OneToOneSession, TimeSlot
 from ..serializers import CreatorListingSerializer
+from customadmin.models import AvailableTimezone
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
