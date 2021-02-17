@@ -118,7 +118,7 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
     thumbnail_file = serializers.FileField(required=False)
     sneak_peak_file = serializers.FileField(required=False)
     stream_datetime = serializers.DateTimeField(required=False)
-    tz = serializers.DateTimeField(required=False)
+    tz = serializers.CharField(required=False)
     stream_amount = serializers.FloatField(required=False)
     total_seats = serializers.IntegerField(required=False)
     stream_keywords = serializers.CharField(required=False)
