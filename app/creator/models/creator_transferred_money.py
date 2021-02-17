@@ -49,4 +49,4 @@ class CreatorTransferredMoney(models.Model):
         verbose_name_plural = "Creator Transferred Money"
 
     def __str__(self):
-        return "{0}".format(self.transfer_amount)
+        return "{0}".format(self.transferred_amount)
