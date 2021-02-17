@@ -27,10 +27,11 @@ class StreamSeatHolderSerializer(serializers.ModelSerializer):
 class SessionSeatHolderSerializer(serializers.ModelSerializer):
     user = UserProfileUpdateSerializer()
     booked_time_slot = serializers.SerializerMethodField()
+    tz_value = serializers.SerializerMethodField()
     booked_session_keywords = serializers.SerializerMethodField()
     class Meta:
         model = SessionBooking
-        fields = ("id", "user", "created_at", 'booked_time_slot', 'description', 'booked_session_keywords')
+        fields = ("id", "user", "created_at", 'booked_time_slot', 'tz_value', 'description', 'booked_session_keywords')
 
     def get_booked_time_slot(self, instance):
         return instance.time_slot.slot_datetime
@@ -39,3 +40,8 @@ class SessionSeatHolderSerializer(serializers.ModelSerializer):
         booked_keywords = BookedSessionKeywords.objects.filter(session=instance)
         serializer = AdminKeywordSerializer(booked_keywords, many=True)
         return serializer.data
+
+    def get_tz_value(self, instance):
+        if instance.time_slot:
+            return instance.time_slot.tz
+        return None
