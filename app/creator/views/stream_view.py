@@ -32,9 +32,7 @@ class AddStreamAPIView(APIView):
         serializer = UpdateStreamSerializer(stream_exists[0], data=request.data, partial=True, context={"request": request})
         response_status, result, message = serialized_response(serializer, message)
         status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
-        if response_status:
-            return custom_response(response_status, status_code, message)
-        return custom_response(response_status, status_code, message)
+        return custom_response(response_status, status_code, message, result)
 
     def delete(self, request, pk, format=None):
         stream_exists = Stream.objects.filter(pk=pk, active=True)
