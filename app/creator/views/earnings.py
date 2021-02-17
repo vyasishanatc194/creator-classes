@@ -286,8 +286,18 @@ class StreamEarningChartAPIView(APIView):
                 Sum("stream__stream_amount")
             )["stream__stream_amount__sum"]
 
+            month_stream_earnings = (
+                monthly_stream_earnings
+                - (
+                    monthly_stream_earnings
+                    * creator_class_commission.creator_class_deduction
+                    / 100
+                )
+                if monthly_stream_earnings
+                else 0
+            )
             stream_chart[calendar.month_name[time_now.month]] = (
-                monthly_stream_earnings if monthly_stream_earnings else 0
+                month_stream_earnings if month_stream_earnings else 0
             )
         # Total earnings
         result["total_earnings"] = stream_earnings if stream_earnings else 0         
@@ -356,8 +366,18 @@ class CreatorSessionEarningChartAPIView(APIView):
                 Sum("transaction_detail__amount")
             )["transaction_detail__amount__sum"]
 
+            month_session_earnings = (
+                monthly_session_earnings
+                - (
+                    monthly_session_earnings
+                    * creator_class_commission.creator_class_deduction
+                    / 100
+                )
+                if monthly_session_earnings
+                else 0
+            )
             session_chart[calendar.month_name[time_now.month]] = (
-                monthly_session_earnings if monthly_session_earnings else 0
+                month_session_earnings if month_session_earnings else 0
             )
 
         # This month total earnings
@@ -486,10 +506,10 @@ class AffiliationUsersDetailAPIView(APIView):
         search  = request.GET.get('search', None)
 
         if start_date:
-            plans_purchased = plans_purchased.filter(created_at__gte=start_date)
+            plans_purchased = plans_purchased.filter(created_at__date__gte=start_date)
         
         if end_date:
-            plans_purchased = plans_purchased.filter(created_at__lte=end_date)
+            plans_purchased = plans_purchased.filter(created_at__date__lte=end_date)
 
         if search:
             search_plans = plans_purchased.filter(Q(plan_purchase_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
@@ -532,10 +552,10 @@ class PayoutsDetailAPIView(APIView):
         search  = request.GET.get('search', None)
 
         if start_date:
-            transactions = transactions.filter(created_at__gte=start_date)
+            transactions = transactions.filter(created_at__date__gte=start_date)
         
         if end_date:
-            transactions = transactions.filter(created_at__lte=end_date)
+            transactions = transactions.filter(created_at__date__lte=end_date)
 
         if search:
             transactions = transactions.filter(Q(transaction_id__icontains=search) | Q(transferred_amount__icontains=search) | Q(created_at__date__icontains=search))
