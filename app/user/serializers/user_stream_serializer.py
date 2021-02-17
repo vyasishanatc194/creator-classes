@@ -58,7 +58,9 @@ class StreamDetailSerializer(serializers.ModelSerializer):
         return instance.total_seats - booked_seats.count()
 
     def get_tz_value(self, instance):
-        return instance.tz.tz
+        if instance.tz:
+            return instance.tz.tz
+        return None
 
 
 
@@ -85,4 +87,6 @@ class StreamListingSerializer(serializers.ModelSerializer):
         return [stream_covers.covers for stream_covers in stream_covers]
 
     def get_tz_value(self, instance):
-        return instance.tz.tz
+        if instance.tz:
+            return instance.tz.tz
+        return None
