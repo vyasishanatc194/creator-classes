@@ -133,7 +133,7 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
         stream_covers = validated_data.pop('stream_covers', None)
         tz = validated_data.pop('tz', None)
         if tz:
-            selected_tz = AvailableTimezone.objects.filter(pk=selected_tz)
+            selected_tz = AvailableTimezone.objects.filter(pk=tz)
             validated_data['tz'] = selected_tz.first()
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
