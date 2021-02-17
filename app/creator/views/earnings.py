@@ -70,6 +70,17 @@ class CreatorTotalEarningHistoryAPIView(APIView):
                 Sum("stream__stream_amount")
             )["stream__stream_amount__sum"]
 
+            month_stream_earnings = (
+                monthly_stream_earnings
+                - (
+                    monthly_stream_earnings
+                    * creator_class_commission.creator_class_deduction
+                    / 100
+                )
+                if monthly_stream_earnings
+                else 0
+            )
+
             monthly_session_booked = session_booked.filter(
                 created_at__date__month=time_now.month,
                 created_at__date__year=time_now.year,
@@ -78,12 +89,23 @@ class CreatorTotalEarningHistoryAPIView(APIView):
                 Sum("transaction_detail__amount")
             )["transaction_detail__amount__sum"]
 
+            month_session_earnings = (
+                monthly_session_earnings
+                - (
+                    monthly_session_earnings
+                    * creator_class_commission.creator_class_deduction
+                    / 100
+                )
+                if monthly_session_earnings
+                else 0
+            )
+
             stream_chart[calendar.month_name[time_now.month]] = (
-                monthly_stream_earnings if monthly_stream_earnings else 0
+                month_stream_earnings if month_stream_earnings else 0
             )
 
             session_chart[calendar.month_name[time_now.month]] = (
-                monthly_session_earnings if monthly_session_earnings else 0
+                month_session_earnings if month_session_earnings else 0
             )
             monthly_affiliation = CreatorAffiliation.objects.filter(
                 user__affiliated_with=request.user.pk,
