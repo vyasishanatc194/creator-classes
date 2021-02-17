@@ -445,10 +445,10 @@ class SessionUserListingAPIView(APIView):
         search  = request.GET.get('search', None)
 
         if start_date:
-            session_bookings = session_bookings.filter(created_at__gte=start_date)
+            session_bookings = session_bookings.filter(created_at__date__gte=start_date)
         
         if end_date:
-            session_bookings = session_bookings.filter(created_at__lte=end_date)
+            session_bookings = session_bookings.filter(created_at__date__lte=end_date)
 
         if search:
             search_bookings = session_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
