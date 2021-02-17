@@ -56,7 +56,7 @@ class MyStreamListingAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
-        streams = Stream.objects.filter(active=True, creator=request.user.pk, stream_datetime__gte=datetime.today())
+        streams = Stream.objects.filter(active=True, creator=request.user.pk, stream_datetime__gte=datetime.now())
         serializer = self.serializer_class(streams, many=True, context={"request": request})
         message = "Streams fetched Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
