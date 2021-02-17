@@ -85,7 +85,6 @@ class MyStreamSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.FileField(required=False)
-    stream_datetime = serializers.DateTimeField(required=True)
     tz = serializers.DateTimeField(required=True)
     tz_value = serializers.SerializerMethodField()
     stream_amount = serializers.FloatField(required=True)
