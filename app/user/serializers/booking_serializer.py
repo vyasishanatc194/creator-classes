@@ -43,5 +43,5 @@ class SessionSeatHolderSerializer(serializers.ModelSerializer):
 
     def get_tz_value(self, instance):
         if instance.time_slot:
-            return instance.time_slot.tz
+            return instance.time_slot.tz.tz
         return None
