@@ -424,10 +424,10 @@ class StreamUserListingAPIView(APIView):
         search  = request.GET.get('search', None)
 
         if start_date:
-            stream_bookings = stream_bookings.filter(created_at__gte=start_date)
+            stream_bookings = stream_bookings.filter(created_at__date__gte=start_date)
         
         if end_date:
-            stream_bookings = stream_bookings.filter(created_at__lte=end_date)
+            stream_bookings = stream_bookings.filter(created_at__date__lte=end_date)
 
         if search:
             search_bookings = stream_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
