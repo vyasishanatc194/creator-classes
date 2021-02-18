@@ -39,8 +39,9 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
                     serializer.save()
                 else:
                     return serializer.errors
-        session.time_slots = serializer.data
-        return session
+        validated_data['time_slots'] =  time_slots
+        validated_data['tz'] =  tz
+        return validated_data
 
     def update(self, instance, validated_data):
         time_slots = validated_data.pop('time_slots', None)
