@@ -30,7 +30,6 @@ class OneToOneSessionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         time_slots = validated_data.pop('time_slots', None)
         tz = validated_data.pop('tz', None)
-        validated_data['creator'] = self.context['request'].user
         session = OneToOneSession.objects.create(**validated_data)
         if time_slots:
             time_slots = time_slots.split(',')
