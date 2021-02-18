@@ -10,7 +10,7 @@ from customadmin.views.generic import (
 )
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.views.generic import TemplateView, DetailView
@@ -19,10 +19,18 @@ from django_datatables_too.mixins import DataTableMixin
 from ..forms import MyUserChangeForm, MyUserCreationForm, UserCardChangeForm, UserCardCreationForm
 from django.shortcuts import reverse, render
 
-from user.models import User, UserCard, SessionBooking, StreamBooking
-from creator.models import Creator
+from user.models import User, UserCard, SessionBooking, StreamBooking, UserPlanPurchaseHistory
+from creator.models import Creator, CreatorAffiliation
+from customadmin.models import CreatorClassCommission
 
 import csv
+
+creator_class_commission = CreatorClassCommission.objects.all().first()
+if not creator_class_commission:
+    creator_class_commission = CreatorClassCommission()
+    creator_class_commission.affiliation_deduction = 10
+    creator_class_commission.creator_class_deduction = 10
+    creator_class_commission.save()
 
 # Export CSV FILE
 
@@ -73,9 +81,21 @@ class IndexView(LoginRequiredMixin, TemplateView):
     context = {}
 
     def get(self, request):
+        stream_bookings = StreamBooking.objects.all().aggregate(Sum("stream__stream_amount"))["stream__stream_amount__sum"]
+        stream_earnings = (stream_bookings * creator_class_commission.creator_class_deduction / 100) if stream_bookings else 0
+
+        session_bookings = SessionBooking.objects.all().aggregate(Sum("transaction_detail__amount"))["transaction_detail__amount__sum"]
+        session_earnings = (session_bookings * creator_class_commission.creator_class_deduction / 100) if session_bookings else 0
+
+        plan_purchase = UserPlanPurchaseHistory.objects.all().aggregate(Sum("plan_purchase_detail__amount"))["plan_purchase_detail__amount__sum"]
+        commission_amount = CreatorAffiliation.objects.all().aggregate(Sum("commission_amount"))["commission_amount__sum"]
+        plan_earnings = (plan_purchase if plan_purchase else 0) - (commission_amount if commission_amount else 0)
+
+        creator_classes_earnings = stream_earnings + session_earnings + plan_earnings
+
         self.context['user_count']=User.objects.all().exclude(is_creator=True).exclude(username='admin').count()
         self.context['creator_count']=Creator.objects.all().filter(status='ACCEPT').count()
-        self.context['rejected_creator_count']=Creator.objects.filter(status='REJECT').count()
+        self.context['creator_classes_earnings']=creator_classes_earnings
         self.context['pending_creator_count']=Creator.objects.filter(status='PENDING').count()
         return render(request, self.template_name, self.context)
 
