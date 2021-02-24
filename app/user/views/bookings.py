@@ -277,3 +277,85 @@ class PayPalStreamBookingAPIView(APIView):
             print(inst)
             message = str(inst)
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+
+class PayPalSessionBookingAPIView(APIView):
+    """
+    API View to book One to One Session through Paypal
+    """
+    permission_classes = (IsAccountOwner, IsUser)
+
+    def post(self, request, format=None):
+        """POST method to create the data"""
+        try:
+            if "creator" not in request.data:
+                message = "creator is required!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            if "time_slot" not in request.data :
+                message = "time_slot is required!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            check_booking = TimeSlot.objects.filter(pk=request.data['time_slot'], session__creator__pk=request.data['creator'])
+            if check_booking and check_booking[0].is_booked:
+                message = "This time slot is already booked. Please select another."
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+            
+            request_copy = request.data.copy()
+            request_copy["user"] = request.user.pk
+
+            chargeserializer = TransactionDetailSerializer(data=request_copy)
+            if chargeserializer.is_valid():
+                chargeserializer.save()
+                print("<<<-----|| TransactionDetail CREATED ||----->>>")
+
+                transaction = TransactionDetail.objects.filter(pk=chargeserializer.data['id'])
+
+                session_booking = SessionBooking()
+                session_booking.user = request.user
+                session_booking.creator = check_booking[0].session.creator
+                session_booking.time_slot = check_booking[0]
+                session_booking.card_id = request.data['brand']
+                session_booking.transaction_detail = transaction[0]
+                if "description" in request.data:
+                    session_booking.description=request.data['description']
+                session_booking.save()
+                message = "Session booked successfully!"
+
+                check_booking[0].is_booked=True
+                check_booking[0].save()
+                if 'keywords' in request.data:
+                    keywords = request.data['keywords'].split(',')
+                    for keyword in keywords:
+                        keyword_exists = AdminKeyword.objects.filter(pk=keyword)
+                        if keyword_exists:
+                            session_keywords =BookedSessionKeywords()
+                            session_keywords.session = session_booking
+                            session_keywords.keyword =keyword_exists[0]
+                            session_keywords.save()
+                notification_creator = Notification()
+                notification_creator.notification_type= "BOOKING"
+                notification_creator.user = check_booking[0].session.creator
+                notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
+                notification_creator.title = "Booking"
+                notification_creator.profile_image = request.user.profile_image
+                notification_creator.save()
+
+                notification_user = Notification()
+                notification_user.notification_type= "BOOKING"
+                notification_user.user = request.user
+                notification_user.title = "Booking"
+                notification_user.profile_image = check_booking[0].session.creator.profile_image
+                notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is boked successfully"
+                notification_user.save()
+
+                return custom_response(True, status.HTTP_201_CREATED, message)
+            else:
+                message = chargeserializer.errors
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Exception as inst:
+            print(inst)
+            message = str(inst)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)

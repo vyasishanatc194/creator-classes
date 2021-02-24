@@ -9,4 +9,5 @@ urlpatterns = [
     path("session-seat-holders/", views.BookedSessionSeatholdersAPIView.as_view(), name="session-seat-holders"),
     
     path("paypal-book-stream/", views.PayPalStreamBookingAPIView.as_view(), name="paypal-book-stream"),
+    path("paypal-book-session/", views.PayPalSessionBookingAPIView.as_view(), name="paypal-book-session"),
 ]

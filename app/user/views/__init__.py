@@ -24,6 +24,7 @@ from .bookings import (
     StreamSeatHolderAPIView,
     BookedSessionSeatholdersAPIView,
     PayPalStreamBookingAPIView,
+    PayPalSessionBookingAPIView,
 )
 from .user_materials import MaterialListingAPIView
 from .notifications import (
