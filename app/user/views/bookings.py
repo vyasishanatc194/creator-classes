@@ -213,3 +213,67 @@ class BookedSessionSeatholdersAPIView(APIView):
         serializer = SessionSeatHolderSerializer(seat_holders, many=True, context={"request": request})
         message = "Seat holders fetched successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+
+class PayPalStreamBookingAPIView(APIView):
+    """
+    API View to book stream with PayPal
+    """
+    permission_classes = (IsAccountOwner, IsUser)
+
+    def post(self, request, format=None):
+        """POST method to create the data"""
+        try:
+            if "stream" not in request.data:
+                message = "Stream is required!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            streams = Stream.objects.filter(pk=request.data['stream'], active=True, stream_datetime__gt=datetime.now())
+            if not streams:
+                message = "Stream not found!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            request_copy = request.data.copy()
+            request_copy["user"] = request.user.pk
+            chargeserializer = TransactionDetailSerializer(data=request_copy)
+            if chargeserializer.is_valid():
+                chargeserializer.save()
+                print("<<<-----|| TransactionDetail CREATED ||----->>>")
+
+                transaction = TransactionDetail.objects.filter(pk=chargeserializer.data['id'])
+
+                stream_booking = StreamBooking()
+                stream_booking.stream = streams[0]
+                stream_booking.user = request.user
+                stream_booking.card_id = request.data['brand']
+                stream_booking.transaction_detail = transaction[0]
+                message = "Stream booked successfully!"
+                stream_booking.save()
+
+                notification_creator = Notification()
+                notification_creator.notification_type= "BOOKING"
+                notification_creator.user = streams[0].creator
+                notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
+                notification_creator.title = "Booking"
+                notification_creator.profile_image = request.user.profile_image
+                notification_creator.save()
+
+                notification_user = Notification()
+                notification_user.notification_type= "BOOKING"
+                notification_user.user = request.user
+                notification_user.description = f"Your seat is booked for {streams[0].title} stream."
+                notification_user.title = "Booking"
+                notification_user.profile_image = streams[0].creator.profile_image
+                notification_user.save()
+
+                return custom_response(True, status.HTTP_201_CREATED, message)
+            else:
+                message = chargeserializer.errors
+                print("here")
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Exception as inst:
+            print(inst)
+            message = str(inst)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
