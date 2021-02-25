@@ -279,12 +279,14 @@ class PlanPurchaseAPIView(APIView):
                     )
                     commision_amount = plan_check[0].plan_amount * creator_class_commission.affiliation_deduction/100
                     if user.affiliated_with:
-                        affiliation_record = CreatorAffiliation()
-                        affiliation_record.user = user
-                        affiliation_record.plan_id = plan_check[0]
-                        affiliation_record.amount = plan_check[0].plan_amount
-                        affiliation_record.commission_amount = commision_amount
-                        affiliation_record.save()
+                        already_affiliated = CreatorAffiliation.objects.filter(user=request.user.pk)
+                        if not already_affiliated:
+                            affiliation_record = CreatorAffiliation()
+                            affiliation_record.user = user
+                            affiliation_record.plan_id = plan_check[0]
+                            affiliation_record.amount = plan_check[0].plan_amount
+                            affiliation_record.commission_amount = commision_amount
+                            affiliation_record.save()
 
                     return custom_response(True, status.HTTP_201_CREATED, message)
             else:
