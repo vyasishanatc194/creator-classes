@@ -74,6 +74,27 @@ class MyStripe():
         """Using this method you can create a new token of credit/debit card"""
         return stripe.Token.create(card=data)
 
+    def subscribe_plan(self, customer_id, plan_id,payment_method):
+        return stripe.Subscription.create(customer=customer_id, default_payment_method=payment_method, items=[{'price':plan_id}])
+
+    def create_payment_method(self, token):
+        return stripe.PaymentMethod.create(type="card", card={"token": token})
+
+    def payment_method_attach(self, payment_method_id, customer_id):
+        return stripe.PaymentMethod.attach(payment_method_id, customer=customer_id)
+
+    def CreatePaymentMethod(self, token):
+        return stripe.PaymentMethod.create(type="card", card={"token": token},)
+
+    def PaymentMethodAttach(self, payment_method_id, customer_id):
+        return stripe.PaymentMethod.attach(payment_method_id, customer=customer_id)
+
+    def subscribePlan(self, customerId, plan_id,payment_method):
+        return stripe.Subscription.create(customer=customerId, default_payment_method=payment_method, items=[{'price':plan_id}], )
+
+    def CancelSubscriptionPlan(self, subscription_id):
+        return stripe.Subscription.delete(subscription_id)
+
 
 def create_card_object(newcard, request):
     """This method is used to create a response object of a card"""

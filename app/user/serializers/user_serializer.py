@@ -90,7 +90,7 @@ class PlanListingSerializer(serializers.ModelSerializer):
     plan_covers = serializers.SerializerMethodField()
     class Meta:
         model = Plan
-        fields = ['id', 'name', 'plan_amount', 'duration_in_months', 'plan_covers']
+        fields = ['id', 'name', 'plan_amount', 'duration_in_months', 'plan_covers', 'stripe_plan_id', 'paypal_plan_id']
 
     def get_plan_covers(self, instance):
         plan_covers = PlanCover.objects.filter(plan=instance)
@@ -110,5 +110,5 @@ class UserPlanSerializer(serializers.ModelSerializer):
     plan_id = PlanListingSerializer()
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image', 'plan_id', 'plan_purchased_at']
+        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image', 'plan_id', 'plan_purchased_at', 'stripe_subscription_id', 'paypal_subscription_id']
 

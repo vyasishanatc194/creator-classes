@@ -25,6 +25,9 @@ urlpatterns = [
 
     path("forgot-password/", views.ForgotPasswordAPIView.as_view(), name="forgot-password"),
     path("set-password/", views.SetPasswordAPIView.as_view(), name="set-password"),
+    
+    path("calcel-subscription/", views.CancelSubscriptionAPIView.as_view(), name="calcel-subscription"),
+    path("paypal-subscription/", views.PayPalPlanPurchaseAPIView.as_view(), name="paypal-subscription"),
 
     # path("select-keywords/", views.UserSelectedKeywordsAPIView.as_view(), name="select-keywords"),
 

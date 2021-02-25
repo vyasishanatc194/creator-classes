@@ -270,7 +270,6 @@ class PayPalStreamBookingAPIView(APIView):
                 return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = chargeserializer.errors
-                print("here")
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
         except Exception as inst:

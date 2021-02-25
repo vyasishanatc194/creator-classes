@@ -15,6 +15,8 @@ class PlanCreationForm(forms.ModelForm):
             "name",
             "plan_amount",
             "duration_in_months",
+            "stripe_plan_id",
+            "paypal_plan_id",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -62,6 +64,8 @@ class PlanChangeForm(forms.ModelForm):
             "name",
             "plan_amount",
             "duration_in_months",
+            "stripe_plan_id",
+            "paypal_plan_id",
         )
 
     def __init__(self, *args, **kwargs):

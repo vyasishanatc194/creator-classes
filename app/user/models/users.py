@@ -46,6 +46,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     plan_purchased_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, related_name="plan_payment_detail", null=True, blank=True)
     stripe_account_id = models.CharField(max_length=255, blank=True, null=True, default='')
+    stripe_subscription_id = models.CharField(_("Stripe subscription id"), max_length=255, blank=True, null=True)
+    paypal_subscription_id = models.CharField(_("Paypal subscription id"), max_length=255, blank=True, null=True)
+
     card_id = models.CharField(_("Card Id"), max_length=255, blank=True)
     last4 = models.CharField(_("Last 4 digits"), max_length=255, blank=True)
     brand = models.CharField(_("Brand of card"), max_length=255, blank=True)

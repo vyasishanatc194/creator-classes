@@ -29,7 +29,15 @@
                     <div class="col-sm-6">
                         {{ form.duration_in_months|as_crispy_field }}
                     </div>
-                </div>             
+                </div>     
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form.stripe_plan_id|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.paypal_plan_id|as_crispy_field }}
+                    </div>
+                </div>           
             </div>
             <!-- /ibox-content -->
 
