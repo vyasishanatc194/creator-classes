@@ -126,8 +126,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Successfully transfer amount"))
 
         except Exception as inst:
-            PayoutErrorLog.objects.create(
-                error_text = str(inst)
-            )
+            # PayoutErrorLog.objects.create(
+            #     error_text = str(inst)
+            # )
             print(".........................................Error")
             self.stdout.write(self.style.ERROR("Error in transfer amount"))
