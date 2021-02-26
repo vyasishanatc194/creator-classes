@@ -456,7 +456,6 @@ class PayPalPlanPurchaseAPIView(APIView):
             if not plan_check:
                 message = "Invalid plan selected."
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
             user = User.objects.get(pk=request.user.pk)
             if user.plan_id:
                 if (
@@ -467,11 +466,11 @@ class PayPalPlanPurchaseAPIView(APIView):
                         f"You are already associated with {user.plan_id.name} plan."
                     )
                     return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
             request_copy = request.data.copy()
             request_copy["user"] = request.user.pk
             chargeserializer = TransactionDetailSerializer(data=request_copy)
             if chargeserializer.is_valid():
+                chargeserializer.save()
                 transaction = TransactionDetail.objects.filter(
                         pk=chargeserializer.data["id"]
                     )
@@ -479,8 +478,8 @@ class PayPalPlanPurchaseAPIView(APIView):
                 user.plan_purchased_at = datetime.now()
                 user.plan_purchase_detail = transaction[0]
                 user.paypal_subscription_id = request.data['paypal_subscription_id']
-                message = "Plan purchased successfully!"
                 user.save()
+                message = "Plan purchased successfully!"
                 UserPlanPurchaseHistory.objects.create(
                     user = user,
                     plan = plan_check[0],
@@ -500,6 +499,95 @@ class PayPalPlanPurchaseAPIView(APIView):
                 return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = chargeserializer.errors
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+        except Exception as inst:
+            print(inst)
+            message = str(inst)
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+
+class ChangePlanAPIView(APIView):
+    """
+    API View to purchase plan
+    """
+
+    permission_classes = (IsAccountOwner, IsUser)
+
+    def post(self, request, format=None):
+        """POST method to create the data"""
+        try:
+            if "plan_id" not in request.data:
+                message = "plan_id is required!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            plan_check = Plan.objects.filter(pk=request.data["plan_id"], active=True)
+            if not plan_check:
+                message = "Invalid plan selected."
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            user = User.objects.get(pk=request.user.pk)
+            if "card_id" in request.data:
+                card_id = request.data["card_id"]
+                stripe = MyStripe()
+                customer_id = request.user.customer_id
+
+                if not customer_id:
+                    newcustomer = create_customer_id(request.user)
+                    customer_id = newcustomer.id
+                    print("<<<-----|| CUSTOMER CREATED ||----->>>")
+                newcard = stripe.create_card(customer_id, request.data)
+                card_id = newcard.id
+                print("<<<-----|| CARD CREATED ||----->>>")
+
+                payment_method = stripe.CreatePaymentMethod(request.data["card_id"])
+                stripe.PaymentMethodAttach(payment_method.id, customer_id)
+                
+                subscribe_new_plan = stripe.subscribePlan(customer_id, plan_check[0].stripe_plan_id, payment_method.id)
+                if subscribe_new_plan['status']=='active':    
+                    subscription_stripe = stripe.CancelSubscriptionPlan(user.stripe_subscription_id)
+
+                subscribe_new_plan.user = user.pk
+                subscribe_new_plan.metadata = None
+
+                chargeserializer = TransactionDetailSerializer(data=subscribe_new_plan)
+                if chargeserializer.is_valid():
+                    chargeserializer.save()
+                    print("<<<-----|| TransactionDetail CREATED ||----->>>")
+
+                    transaction = TransactionDetail.objects.filter(
+                        pk=chargeserializer.data["id"]
+                    )
+
+                    user.plan_id = plan_check[0]
+                    user.plan_purchased_at = datetime.now()
+                    user.plan_purchase_detail = transaction[0]
+                    user.stripe_subscription_id = subscribe_new_plan['id']
+                    message = "Plan updated successfully!"
+                    user.save()
+                    print(subscribe_new_plan['id'])
+                    UserPlanPurchaseHistory.objects.create(
+                        user = user,
+                        plan = plan_check[0],
+                        plan_purchase_detail = transaction[0]
+                    )
+                    commision_amount = plan_check[0].plan_amount * creator_class_commission.affiliation_deduction/100
+                    if user.affiliated_with:
+                        already_affiliated = CreatorAffiliation.objects.filter(user=request.user.pk)
+                        if not already_affiliated:
+                            affiliation_record = CreatorAffiliation()
+                            affiliation_record.user = user
+                            affiliation_record.plan_id = plan_check[0]
+                            affiliation_record.amount = plan_check[0].plan_amount
+                            affiliation_record.commission_amount = commision_amount
+                            affiliation_record.save()
+
+                    return custom_response(True, status.HTTP_201_CREATED, message)
+                message = chargeserializer.errors
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+            else:
+                message = "Card_id is required"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
         except Exception as inst:
