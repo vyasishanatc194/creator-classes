@@ -28,6 +28,8 @@ urlpatterns = [
     
     path("cancel-subscription/", views.CancelSubscriptionAPIView.as_view(), name="calcel-subscription"),
     path("paypal-subscription/", views.PayPalPlanPurchaseAPIView.as_view(), name="paypal-subscription"),
+    
+    path("change-subscription/", views.ChangePlanAPIView.as_view(), name="change-subscription"),
 
     # path("select-keywords/", views.UserSelectedKeywordsAPIView.as_view(), name="select-keywords"),
 

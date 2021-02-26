@@ -14,6 +14,7 @@ from .auth import (
     CancelSubscriptionAPIView,
     PayPalPlanPurchaseAPIView,
     # UserSelectedKeywordsAPIView,
+    ChangePlanAPIView,
 )
 from .review import CreatorReviewAPIView, ClassReviewAPIView
 from .favourites import FavouriteClassAPIView, FavouriteCreatorAPIView

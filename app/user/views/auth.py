@@ -528,8 +528,10 @@ class ChangePlanAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
             user = User.objects.get(pk=request.user.pk)
-            if "card_id" in request.data:
-                card_id = request.data["card_id"]
+            if user.card_id:
+                request_copy = request.data.copy()
+                request_copy["card_id"] = user.card_id
+                card_id = user.card_id
                 stripe = MyStripe()
                 customer_id = request.user.customer_id
 
@@ -537,15 +539,15 @@ class ChangePlanAPIView(APIView):
                     newcustomer = create_customer_id(request.user)
                     customer_id = newcustomer.id
                     print("<<<-----|| CUSTOMER CREATED ||----->>>")
-                newcard = stripe.create_card(customer_id, request.data)
+                newcard = stripe.create_card(customer_id, request_copy)
+
                 card_id = newcard.id
                 print("<<<-----|| CARD CREATED ||----->>>")
 
-                payment_method = stripe.CreatePaymentMethod(request.data["card_id"])
+                payment_method = stripe.CreatePaymentMethod(user.card_id)
                 stripe.PaymentMethodAttach(payment_method.id, customer_id)
-                
                 subscribe_new_plan = stripe.subscribePlan(customer_id, plan_check[0].stripe_plan_id, payment_method.id)
-                if subscribe_new_plan['status']=='active':    
+                if subscribe_new_plan['status']=='active':
                     subscription_stripe = stripe.CancelSubscriptionPlan(user.stripe_subscription_id)
 
                 subscribe_new_plan.user = user.pk
@@ -566,7 +568,6 @@ class ChangePlanAPIView(APIView):
                     user.stripe_subscription_id = subscribe_new_plan['id']
                     message = "Plan updated successfully!"
                     user.save()
-                    print(subscribe_new_plan['id'])
                     UserPlanPurchaseHistory.objects.create(
                         user = user,
                         plan = plan_check[0],

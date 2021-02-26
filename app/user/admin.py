@@ -27,6 +27,7 @@ class UserAdmin(UserAdmin):
                     "description",
                     "customer_id",
                     "plan_id",
+                    "card_id",
                     "plan_purchase_detail",
                     "is_creator",
                     "affiliated_with",
