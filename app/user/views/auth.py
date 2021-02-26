@@ -472,6 +472,9 @@ class PayPalPlanPurchaseAPIView(APIView):
             request_copy["user"] = request.user.pk
             chargeserializer = TransactionDetailSerializer(data=request_copy)
             if chargeserializer.is_valid():
+                transaction = TransactionDetail.objects.filter(
+                        pk=chargeserializer.data["id"]
+                    )
                 user.plan_id = plan_check[0]
                 user.plan_purchased_at = datetime.now()
                 user.plan_purchase_detail = transaction[0]
