@@ -230,10 +230,11 @@ class PopularClassListingSerializer(serializers.ModelSerializer):
     creator_name = serializers.SerializerMethodField()
     is_favourite = serializers.SerializerMethodField()
     creator_profile_image = serializers.SerializerMethodField('get_profile_image_url')
+    creator_key_skill = serializers.SerializerMethodField()
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'created_at', 'is_favourite']
+        fields = ['id', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'creator_key_skill', 'created_at', 'is_favourite']
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)
@@ -261,3 +262,6 @@ class PopularClassListingSerializer(serializers.ModelSerializer):
         if creator_class.creator.profile_image:
             profile_image_url = creator_class.creator.profile_image.url
             return request.build_absolute_uri(profile_image_url)
+
+    def get_creator_key_skill(self, instance):
+        return instance.creator.key_skill
