@@ -4,7 +4,7 @@ from .user_serializer import (
     PlanListingSerializer,
     UserProfileUpdateSerializer,
     UserPlanSerializer,
-    # UserSelectedKeywordSerializer,
+    UserSelectedKeywordSerializer,
 )
 from .review_serializer import (
     CreatorReviewSerializer,

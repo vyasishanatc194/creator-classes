@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.conf.urls import url, include
+from agora.views import Agora
 
 
 urlpatterns = [
@@ -31,8 +32,11 @@ urlpatterns = [
     
     path("change-subscription/", views.ChangePlanAPIView.as_view(), name="change-subscription"),
 
-    # path("select-keywords/", views.UserSelectedKeywordsAPIView.as_view(), name="select-keywords"),
+    path("select-keywords/", views.UserSelectedKeywordsAPIView.as_view(), name="select-keywords"),
+    path("select-keywords/", views.UserSelectedKeywordsAPIView.as_view(), name="select-keywords"),
 
+    path('agora/',Agora.as_view(app_id='<APP_ID>', channel='<CHANNEL_ID>'
+)),
 ]
 
 

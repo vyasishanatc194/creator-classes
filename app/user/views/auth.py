@@ -6,9 +6,9 @@ from ..serializers import (
     UserProfileUpdateSerializer,
     TransactionDetailSerializer,
     UserPlanSerializer,
-    # UserSelectedKeywordSerializer,
+    UserSelectedKeywordSerializer,
 )
-from ..models import User, TransactionDetail, UserPlanPurchaseHistory
+from ..models import User, TransactionDetail, UserPlanPurchaseHistory, UserKeyword
 from creator.models import CreatorAffiliation
 from creator_class.helpers import (
     custom_response,
@@ -384,20 +384,32 @@ class SetPasswordAPIView(APIView):
         return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
 
-# class UserSelectedKeywordsAPIView(APIView):
-#     """
-#     User keywords select view
-#     """
-#     serializer_class = UserSelectedKeywordSerializer
-#     permission_classes = (IsAccountOwner,)
+class UserSelectedKeywordsAPIView(APIView):
+    """
+    User keywords select view
+    """
+    serializer_class = UserSelectedKeywordSerializer
+    permission_classes = (IsAccountOwner,)
 
-#     def post(self, request, *args, **kwargs):
-#         request.data['user'] = request.user.pk
-#         message = "Keywords saved successfully!"
-#         serializer = self.serializer_class(data=request.data, context={"request": request})
-#         response_status, result, message = serialized_response(serializer, message)
-#         status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
-#         return custom_response(response_status, status_code, message, result)
+    def post(self, request, *args, **kwargs):
+        request_copy = request.data.copy()
+        request_copy["user"] = request.user.pk
+        message = "Keywords saved successfully!"
+        print(request_copy)
+        serializer = self.serializer_class(data=request_copy, context={"request": request})
+        response_status, result, message = serialized_response(serializer, message)
+        status_code = status.HTTP_200_OK if response_status else status.HTTP_400_BAD_REQUEST
+        return custom_response(response_status, status_code, message, result)
+
+
+    def delete(self, request, *args, **kwargs):
+        keyword = request.GET.get('keyword', None)
+        if keyword:
+            user_keyword = UserKeyword.objects.filter(user=request.user.pk, keyword=keyword)
+            if user_keyword:
+                user_keyword.delete()
+        message = "Keyword removed successfully!"
+        return custom_response(True, status.HTTP_200_OK, message)
 
 
 

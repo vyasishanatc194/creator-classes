@@ -13,7 +13,7 @@ from .auth import (
     SetPasswordAPIView,
     CancelSubscriptionAPIView,
     PayPalPlanPurchaseAPIView,
-    # UserSelectedKeywordsAPIView,
+    UserSelectedKeywordsAPIView,
     ChangePlanAPIView,
 )
 from .review import CreatorReviewAPIView, ClassReviewAPIView

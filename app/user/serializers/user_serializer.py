@@ -1,29 +1,45 @@
 from rest_framework import fields, serializers
-from ..models import User, UserSelectedKeyword
+from ..models import User, UserKeyword
 from rest_framework.authtoken.models import Token
-from customadmin.models import Testimonial, Plan, PlanCover
+from customadmin.models import Testimonial, Plan, PlanCover, AdminKeyword
 from creator_class.utils import MyStripe
 from creator.models import Creator
 # from creator.serializers import AdminKeywordSerializer
 
 
-# class UserSelectedKeywordSerializer(serializers.ModelSerializer):
-#     keyword = AdminKeywordSerializer()
-#     class Meta:
-#         model = UserSelectedKeyword
-#         fields = ['user', 'keyword']
+class AdminKeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminKeyword
+        fields = ['id', 'keyword']
 
-#     def create(self, validated_data):
-#         instance = validated_data
-#         user = validated_data.pop('user', None)
-#         keywords = validated_data.pop('keywords', None)
-#         for keyword in keywords:
-#             admin_keyword = AdminKeyword.objects.filter(pk=keyword)
-#             if admin_keyword:
-#                 keyword_exists = UserSelectedKeyword.obj.filter(user=user, keyword=keyword)
-#                 if not keyword_exists:   
-#                     UserSelectedKeyword.objects.create(keyword=keyword, user=user)
-#         return instance
+
+class UserKeywordListSerializer(serializers.ModelSerializer):
+    keyword = AdminKeywordSerializer()
+    class Meta:
+        model = AdminKeyword
+        fields = ['keyword']
+
+
+class UserSelectedKeywordSerializer(serializers.ModelSerializer):
+    keyword = serializers.CharField(required=True)
+    class Meta:
+        model = UserKeyword
+        fields = ['user', 'keyword']
+
+    def create(self, validated_data):
+        user = validated_data.pop('user', None)
+        keywords = validated_data.pop('keyword', None)
+        keywords = keywords.split(',')
+        for keyword in keywords:
+            admin_keyword = AdminKeyword.objects.filter(pk=keyword)
+            if admin_keyword:
+                keyword_exists = UserKeyword.objects.filter(user=user.pk, keyword=keyword)
+                if not keyword_exists:
+                    UserKeyword.objects.create(keyword=admin_keyword.first(), user=user)
+        instance = {}
+        instance['user'] = user
+        instance['keyword'] = keyword
+        return instance
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -35,11 +51,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
     confirm_password = serializers.CharField(read_only=True, required=False)
     affiliation_code = serializers.CharField(required=False)
-    # selected_keywords = serializers.SerializerMethodField()
+    selected_keywords = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image', 'is_creator', 'affiliation_code']
+        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image', 'is_creator', 'affiliation_code', 'selected_keywords']
     
         extra_kwargs = {"password":
                                 {"write_only": True}
@@ -62,7 +78,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 instance.affiliated_with = creators[0]
                 instance.save()
 
-
         # Create Stripe customer ID
         stripe = MyStripe()
         customer = stripe.create_customer(instance)
@@ -74,10 +89,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
 
-    # def get_selected_keywords(self, instance):
-    #     selected_keywords = UserSelectedKeyword.objects.filter(user=instance.pk)
-    #     serializer = UserSelectedKeywordSerializer(selected_keywords, many=True)
-    #     return serializer.data
+    def get_selected_keywords(self, instance):
+        selected_keywords = UserKeyword.objects.filter(user=instance.pk)
+        serializer = UserKeywordListSerializer(selected_keywords, many=True)
+        return serializer.data
 
 
 class TestimonialListingSerializer(serializers.ModelSerializer):
