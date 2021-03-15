@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ..serializers import SessionBookingSerializer, TransactionDetailSerializer, StreamSeatHolderSerializer, SessionSeatHolderSerializer
+from ..serializers import SessionBookingSerializer, TransactionDetailSerializer, StreamSeatHolderSerializer, SessionSeatHolderSerializer, UserBookedStreamListingSerializer, UserBookedSessionListingSerializer
 from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywords, StreamBooking, Notification
 from creator.models import TimeSlot, Stream
 from creator_class.helpers import custom_response, serialized_response
@@ -358,3 +358,31 @@ class PayPalSessionBookingAPIView(APIView):
             print(inst)
             message = str(inst)
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class UserStreamListingAPIView(APIView):
+    """
+    Favourite Class
+    """
+    serializer_class = UserBookedStreamListingSerializer
+    permission_classes = (IsAccountOwner, IsUser,)
+
+    def get(self, request):
+        booked_streams = StreamBooking.objects.filter(user=request.user.pk, completed=False)
+        serializer = self.serializer_class(booked_streams, many=True, context={"request": request})
+        message = "Stream Bookings fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class UserSessionListingAPIView(APIView):
+    """
+    Favourite Class
+    """
+    serializer_class = UserBookedSessionListingSerializer
+    permission_classes = (IsAccountOwner, IsUser,)
+
+    def get(self, request):
+        booked_sessions = SessionBooking.objects.filter(user=request.user.pk, completed=False)
+        serializer = self.serializer_class(booked_sessions, many=True, context={"request": request})
+        message = "Session Bookings fetched Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)

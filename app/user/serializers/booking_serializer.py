@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ..models import SessionBooking, StreamBooking, BookedSessionKeywords
-from ..serializers import UserProfileUpdateSerializer
-from creator.serializers import AdminKeywordSerializer
+from ..serializers import UserProfileUpdateSerializer, StreamListingSerializer
+from creator.serializers import AdminKeywordSerializer, SessionListingSerializer, CreatorListingSerializer
 
 
 class SessionBookingSerializer(serializers.ModelSerializer):
@@ -45,3 +45,19 @@ class SessionSeatHolderSerializer(serializers.ModelSerializer):
         if instance.time_slot:
             return instance.time_slot.tz.tz
         return None
+
+
+
+class UserBookedStreamListingSerializer(serializers.ModelSerializer):
+    stream = StreamListingSerializer()
+    class Meta:
+        model = StreamBooking
+        fields = ("id", "created_at", 'stream', 'completed')
+
+
+class UserBookedSessionListingSerializer(serializers.ModelSerializer):
+    time_slot = SessionListingSerializer()
+    creator = CreatorListingSerializer()
+    class Meta:
+        model = StreamBooking
+        fields = ("id", "created_at", "creator", 'time_slot', 'completed')

@@ -26,6 +26,7 @@ from .sessions_serializer import (
     OneToOneSessionSerializer,
     SessionListingSerializer,
     OneToOneSessionListingSerializer,
+    TimeSlotsListingSerializer,
 )
 from .stream_serializer import (
     AddStreamSerializer,

@@ -28,6 +28,8 @@ from .bookings import (
     BookedSessionSeatholdersAPIView,
     PayPalStreamBookingAPIView,
     PayPalSessionBookingAPIView,
+    UserStreamListingAPIView,
+    UserSessionListingAPIView,
 )
 from .user_materials import MaterialListingAPIView
 from .notifications import (
