@@ -23,6 +23,7 @@ class TimeSlot(ActivityTracking):
     agora_uid = models.CharField(null=True, blank=True, max_length=255)
     channel_name = models.CharField(null=True, blank=True, max_length=255)
     token_created_at = models.DateTimeField(null=True, blank=True)
+    screen_share = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.session.creator.email} | {self.slot_datetime}"

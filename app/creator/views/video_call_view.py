@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsCreator
-from ..models import Stream
+from ..models import Stream, TimeSlot
 from datetime import datetime
 from creator_class.settings import(
     AgoraAppID,
@@ -105,4 +105,36 @@ class GenerateAgoraTokenAPIView(APIView):
             }
         
         message = "Channel created Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, data)
+
+
+class SessionScreenShareAPIView(APIView):
+    """
+    GenerateAgoraTokenAPIView
+    """
+    permission_classes = (IsAccountOwner,)
+
+    def post(self, request, pk):
+        screen_share = request.GET.get('screen_share', False)
+        sessions = TimeSlot.objects.filter(pk=pk)
+        if not sessions:
+            message = "Session not found!"    
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        session = sessions.first()
+        session.screen_share = screen_share
+        session.save()        
+        message = "Screen share status updated Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message)
+
+
+    def get(self, request, pk):
+        sessions = TimeSlot.objects.filter(pk=pk)
+        if not sessions:
+            message = "Session not found!"    
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        session = sessions.first()
+        data = {
+            "screen_share": session.screen_share
+        } 
+        message = "Screen share status updated Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, data)
