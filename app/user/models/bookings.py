@@ -10,10 +10,6 @@ class SessionBooking(ActivityTracking):
     card_id = models.CharField(null=True, blank=True, max_length=255)
     transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(null=True, blank=True, max_length=255)
-    agora_token = models.CharField(null=True, blank=True, max_length=255)
-    completed = models.BooleanField(default=False)
-    agora_uid = models.CharField(null=True, blank=True, max_length=255)
-    channel_name = models.CharField(null=True, blank=True, max_length=255)
 
 
     def __str__(self):
@@ -44,10 +40,6 @@ class StreamBooking(ActivityTracking):
     stream = models.ForeignKey("creator.Stream", on_delete=models.CASCADE, related_name="booked_stream")
     card_id = models.CharField(null=True, blank=True, max_length=255)
     transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
-    agora_token = models.CharField(null=True, blank=True, max_length=255)
-    completed = models.BooleanField(default=False)
-    agora_uid = models.CharField(null=True, blank=True, max_length=255)
-    channel_name = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
         return f"{self.user.email}"

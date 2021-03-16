@@ -25,3 +25,6 @@ from .earnings import(
     AffiliationUsersDetailAPIView,
     PayoutsDetailAPIView,
 )
+from .video_call_view import(
+    GenerateAgoraTokenAPIView,
+)

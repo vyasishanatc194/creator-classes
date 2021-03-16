@@ -12,6 +12,11 @@ class Stream(ActivityTracking):
     stream_amount = models.FloatField(blank=True, null=True, default=10)
     total_seats = models.IntegerField(blank=True, null=True, default=10)
     tz = models.ForeignKey("customadmin.AvailableTimezone", on_delete=models.CASCADE, related_name="available_timezones", blank=True, null=True)
+    agora_token = models.CharField(null=True, blank=True, max_length=255)
+    completed = models.BooleanField(default=False)
+    agora_uid = models.CharField(null=True, blank=True, max_length=255)
+    channel_name = models.CharField(null=True, blank=True, max_length=255)
+    token_created_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.creator.username} | {self.title} "

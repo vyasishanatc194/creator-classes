@@ -288,3 +288,7 @@ RESET_PASSWORD_LINK = "http://3.139.122.63/reset-password/"
 PAYPAL_CLIENT_ID = "Aabc-D8rlBMneFlgavVKs9R1S5qDNcD0HXwuSP76BKM_8QGp6rhk6B1khGyRy8Bc0aELuhVIOYUImeR2"
 PAYPAL_SECRET_KEY = "EOuRkF9j0KAB2mbbWruHgQCdQpZeu5MOQEASF4fklPBwNHOGxn6YHf9IBgyy0fWQefCAFfYFugy1KuKl"
 PAYPAL_AUTH_TOKEN_URL = "https://api.sandbox.paypal.com/v1/oauth2/token"
+
+
+AgoraAppID = "6e6fee8bd9184f648e83a96779b31c5a"
+AgoraAppCertificate = "ecc8d73614d74076ae399ca8846bc4cd"

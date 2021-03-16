@@ -18,6 +18,11 @@ class TimeSlot(ActivityTracking):
     slot_datetime = models.DateTimeField(auto_now_add=False)
     tz = models.ForeignKey("customadmin.AvailableTimezone", on_delete=models.CASCADE, related_name="selected_timezones", blank=True, null=True)
     is_booked = models.BooleanField(default=False)
+    agora_token = models.CharField(null=True, blank=True, max_length=255)
+    completed = models.BooleanField(default=False)
+    agora_uid = models.CharField(null=True, blank=True, max_length=255)
+    channel_name = models.CharField(null=True, blank=True, max_length=255)
+    token_created_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.session.creator.email} | {self.slot_datetime}"
