@@ -32,7 +32,7 @@ class SessionSeatHolderSerializer(serializers.ModelSerializer):
     time_slot_id = serializers.SerializerMethodField()
     class Meta:
         model = SessionBooking
-        fields = ("id", "user", "created_at", 'booked_time_slot', 'tz_value', 'description', 'booked_session_keywords')
+        fields = ("id", "user", "created_at", 'time_slot_id', 'booked_time_slot', 'tz_value', 'description', 'booked_session_keywords')
 
     def get_booked_time_slot(self, instance):
         return instance.time_slot.slot_datetime
