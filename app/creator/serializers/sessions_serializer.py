@@ -68,7 +68,7 @@ class SessionListingSerializer(serializers.ModelSerializer):
     tz_value = serializers.SerializerMethodField()
     class Meta:
         model = TimeSlot
-        fields = ['id', 'session', 'amount', 'slot_datetime', 'tz', 'tz_value', 'is_booked']
+        fields = ['id', 'session', 'amount', 'slot_datetime', 'tz', 'tz_value', 'is_booked', 'completed']
     
     def get_amount(self, instance):
         return instance.session.amount

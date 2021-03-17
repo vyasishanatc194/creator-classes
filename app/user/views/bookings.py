@@ -4,7 +4,7 @@ from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywo
 from creator.models import TimeSlot, Stream
 from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
-from creator_class.permissions import IsAccountOwner, IsUser, IsCreator
+from creator_class.permissions import IsAccountOwner, IsUser, IsCreator, get_pagination_response
 from creator_class.utils import MyStripe, create_card_object, create_customer_id, create_charge_object
 from customadmin.models import AdminKeyword
 from datetime import datetime
@@ -368,10 +368,10 @@ class UserStreamListingAPIView(APIView):
     permission_classes = (IsAccountOwner, IsUser,)
 
     def get(self, request):
-        booked_streams = StreamBooking.objects.filter(user=request.user.pk, completed=False)
-        serializer = self.serializer_class(booked_streams, many=True, context={"request": request})
+        booked_streams = StreamBooking.objects.filter(user=request.user.pk, stream__completed=False)
         message = "Stream Bookings fetched Successfully!"
-        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+        result = get_pagination_response(booked_streams, request, self.serializer_class, context = {"request": request})
+        return custom_response(True, status.HTTP_200_OK, message, result)
 
 
 class UserSessionListingAPIView(APIView):
@@ -382,7 +382,7 @@ class UserSessionListingAPIView(APIView):
     permission_classes = (IsAccountOwner, IsUser,)
 
     def get(self, request):
-        booked_sessions = SessionBooking.objects.filter(user=request.user.pk, completed=False)
-        serializer = self.serializer_class(booked_sessions, many=True, context={"request": request})
+        booked_sessions = SessionBooking.objects.filter(user=request.user.pk, time_slot__completed=False)
+        result = get_pagination_response(booked_sessions, request, self.serializer_class, context = {"request": request})
         message = "Session Bookings fetched Successfully!"
-        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+        return custom_response(True, status.HTTP_200_OK, message, result)

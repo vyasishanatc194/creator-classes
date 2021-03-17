@@ -52,7 +52,7 @@ class UserBookedStreamListingSerializer(serializers.ModelSerializer):
     stream = StreamListingSerializer()
     class Meta:
         model = StreamBooking
-        fields = ("id", "created_at", 'stream', 'completed')
+        fields = ("id", "created_at", 'stream')
 
 
 class UserBookedSessionListingSerializer(serializers.ModelSerializer):
@@ -60,4 +60,4 @@ class UserBookedSessionListingSerializer(serializers.ModelSerializer):
     creator = CreatorListingSerializer()
     class Meta:
         model = StreamBooking
-        fields = ("id", "created_at", "creator", 'time_slot', 'completed')
+        fields = ("id", "created_at", "creator", 'time_slot')
