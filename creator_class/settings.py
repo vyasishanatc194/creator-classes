@@ -85,7 +85,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
     "http://localhost:3002",
     "http://3.139.122.63:8000",
-    "admin.creatorclasses.co",
+    "https://admin.creatorclasses.co",
 ]
 
 
