@@ -46,7 +46,9 @@ class GenerateAgoraTokenAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
             channel_name = stream.title
-            uid = random.getrandbits(32)
+            # TODO change UID
+            # uid = random.getrandbits(32)
+            uid=0
 
             token = RtcTokenBuilder.buildTokenWithUid(
                 AgoraAppID, AgoraAppCertificate,
@@ -81,7 +83,9 @@ class GenerateAgoraTokenAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
             channel_name = session.session.creator.first_name + " " + session.session.creator.last_name
-            uid = random.getrandbits(32)
+            # TODO change UID
+            # uid = random.getrandbits(32)
+            uid=0
 
             token = RtcTokenBuilder.buildTokenWithUid(
                 AgoraAppID, AgoraAppCertificate,

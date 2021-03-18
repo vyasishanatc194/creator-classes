@@ -8,7 +8,7 @@ class CreatorClass(ActivityTracking):
     creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="class_by")
     title = models.CharField(max_length=200, blank=True, null=True, default='')
     thumbnail_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("class thumbnail"))
-    class_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class video"))
+    class_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class file"))
     promo_file = models.FileField(upload_to="class_content", null=True,  blank=True, verbose_name=_("Class promo"))
 
     def __str__(self):

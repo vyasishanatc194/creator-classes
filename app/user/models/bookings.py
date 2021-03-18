@@ -10,6 +10,7 @@ class SessionBooking(ActivityTracking):
     card_id = models.CharField(null=True, blank=True, max_length=255)
     transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(null=True, blank=True, max_length=255)
+    user_joined = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -40,6 +41,7 @@ class StreamBooking(ActivityTracking):
     stream = models.ForeignKey("creator.Stream", on_delete=models.CASCADE, related_name="booked_stream")
     card_id = models.CharField(null=True, blank=True, max_length=255)
     transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
+    user_joined = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.email}"

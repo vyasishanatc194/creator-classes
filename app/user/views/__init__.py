@@ -38,3 +38,5 @@ from .notifications import (
     RemoveAllNotificationView,
     ReadNotificationView,
 )
+
+from .call_view import JoinCallAPIView
