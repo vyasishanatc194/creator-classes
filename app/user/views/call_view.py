@@ -79,6 +79,6 @@ class JoinCallAPIView(APIView):
                 "AgoraAppCertificate" : AgoraAppCertificate
             } 
   
-        message = "Call ended successfully!"
+        message = "Call joined successfully!"
         return custom_response(True, status.HTTP_200_OK, message, data)
 
