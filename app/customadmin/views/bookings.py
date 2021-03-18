@@ -48,7 +48,7 @@ class StreamBookingListView(MyListView):
     permission_required = ("customadmin.view_stream_booking",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class StreamBookingCreateView(MyCreateView):
     """View to create Stream booking"""
@@ -150,7 +150,7 @@ class SessionBookingListView(MyListView):
     permission_required = ("customadmin.view_session_booking",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class SessionBookingCreateView(MyCreateView):
     """View to create Session Booking"""

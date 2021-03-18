@@ -69,9 +69,6 @@ class MyListView(
 
     def has_permission(self):
 
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
         if(self.request.user.is_staff == True):
             return True
         else:
@@ -97,9 +94,6 @@ class MyDetailView(
 
     def has_permission(self):
 
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
         if(self.request.user.is_staff == True):
             return True
         else:
@@ -127,9 +121,6 @@ class MyCreateView(
 
     def has_permission(self):
 
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
         if(self.request.user.is_staff == True):
             return True
         else:
@@ -174,10 +165,6 @@ class MyUpdateView(
         #     )
 
     def has_permission(self):
-
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
         if(self.request.user.is_staff == True):
             return True
         else:
@@ -243,9 +230,6 @@ class MyDeleteView(
 
     def has_permission(self):
 
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
         if(self.request.user.is_staff == True):
             return True
         else:
@@ -315,9 +299,6 @@ class MyNewFormsetCreateView(
 
     def has_permission(self):
 
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
         if(self.request.user.is_staff == True):
             return True
         else:
@@ -342,10 +323,7 @@ class MyNewFormsetUpdateView(
         return reverse(admin_urlname(opts, "list"))
 
     def has_permission(self):
-
-        print('----------------------------is staff------------------------------------')
-        print(self.request.user.is_staff)
-        print('----------------------------is staff------------------------------------')
+        
         if(self.request.user.is_staff == True):
             return True
         else:

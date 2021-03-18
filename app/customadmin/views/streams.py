@@ -57,7 +57,7 @@ class StreamListView(MyListView):
     permission_required = ("customadmin.view_stream",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class StreamKeywordInline(InlineFormSetFactory):
     """Inline view to show Keyword within the Parent View"""

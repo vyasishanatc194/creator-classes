@@ -31,7 +31,7 @@ class MaterialCategoryListView(MyListView):
     permission_required = ("customadmin.view_material_category",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class MaterialCategoryCreateView(MyCreateView):
     """View to create Material Category"""
@@ -143,7 +143,7 @@ class MaterialListView(MyListView):
     permission_required = ("customadmin.view_material",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class MaterialCreateView(MyCreateView):
     """View to create Material"""

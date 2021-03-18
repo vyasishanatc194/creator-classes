@@ -29,7 +29,7 @@ class CreatorReviewListView(MyListView):
     permission_required = ("customadmin.view_creator_review",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class CreatorReviewCreateView(MyCreateView):
     """View to create CreatorReviews"""
@@ -131,7 +131,7 @@ class ClassReviewListView(MyListView):
     permission_required = ("customadmin.view_class_review",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class ClassReviewCreateView(MyCreateView):
     """View to create ClassReviews"""

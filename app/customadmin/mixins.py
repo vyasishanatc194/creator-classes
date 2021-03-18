@@ -49,10 +49,6 @@ class HasPermissionsMixin(object):
 
     def has_add_permission(self, request):
 
-        print('-------------------has_add_permission----------------')
-        print('-------------------has_add_permission----------------')
-        print('-------------------has_add_permission----------------')
-
 
         """
         Return True if the given request has permission to add an object.
@@ -107,8 +103,6 @@ class HasPermissionsMixin(object):
         opts = self.model._meta
         codename_view = get_permission_codename("view", opts)
         codename_change = get_permission_codename("change", opts)
-
-        print('----------------------------------', "%s.%s" % (opts.app_label, codename_view),  '----------------------------------' )
 
         return request.user.has_perm(
             "%s.%s" % (opts.app_label, codename_view)

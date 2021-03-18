@@ -120,14 +120,13 @@ class CreatorDetailView(MyDetailView):
 class CreatorListView(MyListView):
     """View for Creator listing"""
 
-    ordering = ["id"]
     model = Creator
-    queryset = model.objects.all()
+    queryset = model.objects.all().order_by('-created_at')
     template_name = "customadmin/creator/creator_list.html"
     permission_required = ("customadmin.view_creator",)
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-created_at')
 
 class CreatorSkillInline(InlineFormSetFactory):
     """Inline view to show Skill within the Parent View"""

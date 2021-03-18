@@ -9,6 +9,7 @@ var userroles = {
     users: {
         index: function () {
             $('#user-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -38,6 +39,7 @@ var userroles = {
     usercards: {
         index: function () {
             $('#usercard-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -64,6 +66,7 @@ var userroles = {
 
         index: function () {
             $('#creator-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -90,6 +93,7 @@ var userroles = {
 
         index: function () {
             $('#adminkeyword-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -116,6 +120,7 @@ var userroles = {
 
         index: function () {
             $('#testimonial-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -142,6 +147,7 @@ var userroles = {
 
         index: function () {
             $('#creatorclass-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -168,6 +174,7 @@ var userroles = {
 
         index: function () {
             $('#stream-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -194,6 +201,7 @@ var userroles = {
 
         index: function () {
             $('#streambooking-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -220,6 +228,7 @@ var userroles = {
 
         index: function () {
             $('#sessionbooking-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -246,6 +255,7 @@ var userroles = {
 
         index: function () {
             $('#classreview-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -272,6 +282,7 @@ var userroles = {
 
         index: function () {
             $('#onetoonesession-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -298,6 +309,7 @@ var userroles = {
 
         index: function () {
             $('#creatorreview-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -324,6 +336,7 @@ var userroles = {
 
         index: function () {
             $('#material-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -351,6 +364,7 @@ var userroles = {
 
         index: function () {
             $('#materialcategory-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -377,6 +391,7 @@ var userroles = {
 
         index: function () {
             $('#plan-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -403,6 +418,7 @@ var userroles = {
 
         index: function () {
             $('#group-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -423,578 +439,5 @@ var userroles = {
 
     },
 
-
-    // ------------------------------------------------------------------------
-
-    genre: {
-        index: function () {
-            $('#genre-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // ------------------------------------------------------------------------
-
-    artist: {
-        index: function () {
-            $('#artist-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // ----------------------------------------------------------------
-
-    language: {
-        index: function () {
-            $('#language-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // ----------------------------------------------------------------
-
-    tag: {
-        index: function () {
-            $('#tag-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //-------------------------------------------------------------------------
-    plan: {
-        index: function () {
-            $('#plan-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-    //------------------------------------------------------------------------
-
-    playlist: {
-        index: function () {
-            $('#playlist-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //------------------------------------------------------------------------
-    song: {
-        index: function () {
-            $('#song-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-    //------------------------------------------------------------------------
-
-    channel: {
-        index: function () {
-            $('#channel-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-    //-------------------------------------------------------------------------
-    podcast: {
-        index: function () {
-            $('#podcast-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //------------------------------------------------------------------------
-    
-    live_streaming: {
-        index: function () {
-            $('#livestreaming-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //-------------------------------------------------------------------------
-    planfeature: {
-        index: function () {
-            $('#planfeature-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-
-    //-------------------------------------------------------------------------
-    podcastpart: {
-        index: function () {
-            $('#podcastpart-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-    // ------------------------------------------------------------------------
-
-    productinterest: {
-        index: function () {
-            $('#productinterest-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // -------------------------------------------------------------------
-
-    productcategory: {
-        index: function () {
-            $('#productcategories-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // -------------------------------------------------------------------
-
-    events: {
-        index: function () {
-            $('#event-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // ----------------------------------------------------------------------
-
-    event_registration: {
-
-        index: function () {
-            $('#eventregistration-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // --------------------------------------------------------------------
-
-    productorders: {
-
-        index: function () {
-            $('#productorder-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //---------------------------------------------------------------------
-
-    eventorders: {
-
-        index: function () {
-            $('#eventorder-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //---------------------------------------------------------------------
-
-    chatsettings: {
-        index: function () {
-            $('#chatsettings-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // ----------------------------------------------------------------
-
-    payment_request: {
-        index: function () {
-            $('#paymentrequest-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // ----------------------------------------------------------------
-
-    flashdealorders: {
-
-        index: function () {
-            $('#flashdealorder-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //---------------------------------------------------------------------
-
-    flashdealinterest: {
-        index: function () {
-            $('#flashdealinterest-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // -------------------------------------------------------------------
-
-    flashdeals: {
-        index: function () {
-            $('#flashdeal-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // -------------------------------------------------------------------
 
 };

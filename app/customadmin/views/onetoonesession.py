@@ -53,7 +53,7 @@ class OneToOneSessionListView(MyListView):
     permission_required = ("customadmin.view_session",)
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-created_at')
 
 class TimeSlotInline(InlineFormSetFactory):
     """Inline view to show TimeSlot within the Parent View"""

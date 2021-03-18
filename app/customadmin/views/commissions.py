@@ -36,7 +36,7 @@ class CreatorClassCommissionListView(MyListView):
             data.affiliation_deduction = 10
             data.creator_class_deduction = 10
             data.save()
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class CreatorClassCommissionCreateView(MyCreateView):
     """View to create CreatorClassCommission"""
@@ -75,7 +75,7 @@ class CreatorClassCommissionAjaxPagination(DataTableMixin, HasPermissionsMixin, 
     https://bitbucket.org/pigletto/django-datatables-view."""
 
     model = CreatorClassCommission
-    queryset = CreatorClassCommission.objects.all().order_by("created_at")
+    queryset = CreatorClassCommission.objects.all().order_by("-created_at")
 
     def _get_is_superuser(self, obj):
         """Get boolean column markup."""

@@ -107,15 +107,13 @@ class IndexView(LoginRequiredMixin, TemplateView):
 class UserListView(MyListView):
     """View for User listing"""
 
-    # paginate_by = 25
-    ordering = ["id"]
     model = User
-    queryset = model.objects.exclude(username="admin")
+    queryset = model.objects.exclude(username="admin").exclude(is_creator=True).order_by('-created_at')
     template_name = "customadmin/adminuser/user_list.html"
     permission_required = ("customadmin.view_user",)
 
     def get_queryset(self):
-        return self.model.objects.exclude(username="admin").exclude(email=self.request.user).exclude(is_creator=True)
+        return self.model.objects.exclude(username="admin").exclude(email=self.request.user).exclude(is_creator=True).order_by('-created_at')
 
 
 class UserCreateView(MyCreateView):

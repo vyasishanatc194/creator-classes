@@ -4,7 +4,6 @@ from customadmin.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyDetailView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView
@@ -52,14 +51,14 @@ class PlanListView(MyListView):
     permission_required = ("customadmin.view_plan",)
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-created_at')
 
 class PlanCoverInline(InlineFormSetFactory):
     """Inline view to show Cover within the Parent View"""
 
     model = PlanCover
     form_class = PlanCoverCreationForm
-    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 6, 'max_num': None, 'can_order': False, 'can_delete': True}
 
 class PlanCreateView(MyNewFormsetCreateView):
     """View to create Plan"""
@@ -72,15 +71,16 @@ class PlanCreateView(MyNewFormsetCreateView):
     permission_required = ("customadmin.add_plan",)
 
     def get_success_url(self):
-        messages.success(self.request, MSG_CREATED.format(self.object))
+        messages.success(self.request, MSG_UPDATED.format(self.object))
         return reverse("customadmin:plan-list")
+
 
 class PlanCoverUpdateInline(InlineFormSetFactory):
     """View to update Cover which is a inline view"""
 
     model = PlanCover
     form_class = PlanCoverChangeForm
-    factory_kwargs = {'extra': 4, 'max_num': 4, 'can_order': False, 'can_delete': True}
+    factory_kwargs = {'extra': 6, 'max_num': None, 'can_order': False, 'can_delete': True}
 
 class PlanUpdateView(MyNewFormsetUpdateView):
     """View to update Plan"""

@@ -99,7 +99,7 @@
         $('.formset_row-plancover_set').formset({
             addText: 'Add Another',
             deleteText: 'Remove',
-            prefix: 'creator',
+            prefix: 'covers',
             addCssClass: 'add-row btn btn-success',
             deleteCssClass: 'hidden btn-delete btn btn-danger',
 
@@ -113,22 +113,5 @@
         userroles.creators.details();
     });
 </script>
-<script>
-    $(function() {
-        var d = new Date().getDate()
-        $('#id_sessiontimeslot-0-slot_datetime').datetimepicker({
-            format:'Y-m-d H:i',
-            minDate:`${d}`,
-        });
-        $('#id_sessiontimeslot-1-slot_datetime').datetimepicker({
-            format:'Y-m-d H:i',
-        });
-        $('#id_sessiontimeslot-2-slot_datetime').datetimepicker({
-            format:'Y-m-d H:i',
-        });
-        $('#id_sessiontimeslot-3-slot_datetime').datetimepicker({
-            format:'Y-m-d H:i',
-        });
-});
-</script>
+
 {% endblock %}

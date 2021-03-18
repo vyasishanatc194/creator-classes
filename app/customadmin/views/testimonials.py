@@ -30,7 +30,7 @@ class TestimonialListView(MyListView):
     permission_required = ("customadmin.view_testimonial",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class TestimonialCreateView(MyCreateView):
     """View to create Testimonial"""

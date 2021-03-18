@@ -43,7 +43,7 @@ class TestimonialCreationForm(forms.ModelForm):
             )
         if not image :
             raise forms.ValidationError(
-                "Please add profile image."
+                "Please add testimonial image."
             )
         if not testimonial_text :
             raise forms.ValidationError(
@@ -96,7 +96,7 @@ class TestimonialChangeForm(forms.ModelForm):
             )
         if not image :
             raise forms.ValidationError(
-                "Please add profile image."
+                "Please add testimonial image."
             )
         if not testimonial_text :
             raise forms.ValidationError(

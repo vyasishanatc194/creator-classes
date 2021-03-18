@@ -30,7 +30,7 @@ class AdminKeywordListView(MyListView):
     permission_required = ("customadmin.view_admin_keyword",)
 
     def get_queryset(self):
-        return self.model.objects.all().exclude(active=False)
+        return self.model.objects.all().exclude(active=False).order_by('-created_at')
 
 class AdminKeywordCreateView(MyCreateView):
     """View to create AdminKeyword"""
