@@ -30,7 +30,7 @@ class JoinCallAPIView(APIView):
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
         if call_type == valid_call_type[0]:
-            streams = Stream.objects.filter(pk=call_id, creator=request.user.pk)
+            streams = Stream.objects.filter(pk=call_id)
             if not streams:
                 message = "Invalid Stream ID!"    
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
@@ -53,7 +53,7 @@ class JoinCallAPIView(APIView):
             }
 
         if call_type == valid_call_type[1]:
-            sessions = TimeSlot.objects.filter(pk=call_id, session__creator=request.user.pk)
+            sessions = TimeSlot.objects.filter(pk=call_id)
             if not sessions:
                 message = "Invalid Session ID!"    
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
