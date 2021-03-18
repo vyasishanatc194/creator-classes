@@ -93,7 +93,7 @@ class GenerateAgoraTokenAPIView(APIView):
 
             session.channel_name = channel_name
             session.agora_uid = uid
-            session.agora_token = agora_token
+            session.agora_token = token
             session.token_created_at = datetime.now()
             session.save()
             data = {
