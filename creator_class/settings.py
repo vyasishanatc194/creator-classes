@@ -28,7 +28,7 @@ SECRET_KEY = 'e#krlbd^nxk$b8@6a(mosksb*)1lf@9^v^e&svv26^4c#lkab6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','3.139.122.63']
+ALLOWED_HOSTS = ['127.0.0.1','3.139.122.63', 'admin.creatorclasses.co']
 
 
 # Application definition
@@ -85,6 +85,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
     "http://localhost:3002",
     "http://3.139.122.63:8000",
+    "admin.creatorclasses.co",
 ]
 
 
