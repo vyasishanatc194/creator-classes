@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'crispy_forms',
     'rest_auth',
-    'agora',
+    # 'agora',
 
     "allauth",
     "allauth.account",
