@@ -46,7 +46,7 @@ class JoinCallAPIView(APIView):
 
             data = {
                 "channel_name" : stream.channel_name,
-                "uid" : stream.uid,
+                "uid" : stream.agora_uid,
                 "appID" : AgoraAppID,
                 "token" : stream.agora_token,
                 "AgoraAppCertificate" : AgoraAppCertificate
@@ -73,7 +73,7 @@ class JoinCallAPIView(APIView):
 
             data = {
                 "channel_name" : session.channel_name,
-                "uid" : session.uid,
+                "uid" : session.agora_uid,
                 "appID" : AgoraAppID,
                 "token" : session.agora_token,
                 "AgoraAppCertificate" : AgoraAppCertificate
