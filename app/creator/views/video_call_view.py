@@ -10,7 +10,7 @@ from creator_class.settings import(
 )
 import time
 from .RtcTokenBuilder import RtcTokenBuilder
-expireTimeInSeconds = 3600
+expireTimeInSeconds = 21600
 currentTimestamp = int(time.time())
 privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
@@ -68,7 +68,8 @@ class GenerateAgoraTokenAPIView(APIView):
                 "uid" : uid,
                 "appID" : AgoraAppID,
                 "token" : token,
-                "AgoraAppCertificate" : AgoraAppCertificate
+                "AgoraAppCertificate" : AgoraAppCertificate,
+                "privilegeExpiredTs": privilegeExpiredTs
             }
         
         if call_type == valid_call_type[1]:
@@ -105,7 +106,8 @@ class GenerateAgoraTokenAPIView(APIView):
                 "uid" : uid,
                 "appID" : AgoraAppID,
                 "token" : token,
-                "AgoraAppCertificate" : AgoraAppCertificate
+                "AgoraAppCertificate" : AgoraAppCertificate,
+                "privilegeExpiredTs": privilegeExpiredTs
             }
         
         message = "Channel created Successfully!"
