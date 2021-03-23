@@ -29,4 +29,6 @@ from .video_call_view import(
     GenerateAgoraTokenAPIView,
     SessionScreenShareAPIView,
     EndCallAPIView,
+    StreamScreenShareAPIView,
+    StreamActiveMembersAPIView,
 )

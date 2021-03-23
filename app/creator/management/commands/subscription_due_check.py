@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from models import User
+from user.models import User
 from creator_class.utils import MyStripe
 from django.conf import settings
 

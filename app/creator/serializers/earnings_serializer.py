@@ -87,3 +87,5 @@ class CreatorTransferredMoneyListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreatorTransferredMoney
         fields = ['transaction_id', 'created_at', 'transferred_amount', 'affiliation_commission_total', 'stream_amount_received', 'session_amount_received']
+
+

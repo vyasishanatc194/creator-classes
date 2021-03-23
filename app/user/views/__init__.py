@@ -39,4 +39,4 @@ from .notifications import (
     ReadNotificationView,
 )
 
-from .call_view import JoinCallAPIView
+from .call_view import JoinCallAPIView, LeaveStreamCallAPIView

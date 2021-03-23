@@ -8,9 +8,11 @@ from creator_class.settings import(
     AgoraAppID,
     AgoraAppCertificate,
 )
+from user.serializers import StreamSeatHolderSerializer
+from user.models import StreamBooking
 import time
 from .RtcTokenBuilder import RtcTokenBuilder
-expireTimeInSeconds = 21600
+expireTimeInSeconds = 100800
 currentTimestamp = int(time.time())
 privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
@@ -146,6 +148,7 @@ class SessionScreenShareAPIView(APIView):
         return custom_response(True, status.HTTP_200_OK, message, data)
 
 
+
 class EndCallAPIView(APIView):
     """
     EndCallAPIView
@@ -218,3 +221,49 @@ class EndCallAPIView(APIView):
   
         message = "Call status fetched successfully!"
         return custom_response(True, status.HTTP_200_OK, message, {'completed': completed})
+
+
+class StreamScreenShareAPIView(APIView):
+    """
+    StreamScreenShareAPIView
+    """
+    permission_classes = (IsAccountOwner,)
+
+    def post(self, request, pk):
+        screen_share = request.GET.get('screen_share', False)
+        streams = Stream.objects.filter(pk=pk)
+        if not streams:
+            message = "Stream not found!"    
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        stream = streams.first()
+        stream.screen_share = screen_share
+        stream.save()        
+        message = "Screen share status updated Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message)
+
+
+    def get(self, request, pk):
+        streams = Stream.objects.filter(pk=pk)
+        if not streams:
+            message = "Stream not found!"    
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        stream = streams.first()
+        data = {
+            "screen_share": stream.screen_share
+        } 
+        message = "Screen share status updated Successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, data)
+
+
+class StreamActiveMembersAPIView(APIView):
+    """
+    StreamScreenShareAPIView
+    """
+    permission_classes = (IsAccountOwner,)
+    serializer_class = StreamSeatHolderSerializer
+
+    def get(self, request, pk):
+        users = StreamBooking.objects.filter(stream=pk, user_joined=True)
+        serializer = self.serializer_class(users, many=True, context={"request": request})
+        message = "Active users fetched successfully!"
+        return custom_response(True, status.HTTP_200_OK, message, serializer.data)
