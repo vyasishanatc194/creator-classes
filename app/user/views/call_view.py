@@ -21,7 +21,7 @@ class JoinCallAPIView(APIView):
         call_type = request.GET.get('call_type', None)
         call_id = request.GET.get('call_id', None)
         user_uid = request.GET.get('user_uid', None)
-        if not call_type or not call_id or user_uid:
+        if not call_type or not call_id or not user_uid:
             message = "user_uid, call_type and call_id are required!"    
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
