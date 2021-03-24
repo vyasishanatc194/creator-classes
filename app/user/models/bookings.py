@@ -42,6 +42,7 @@ class StreamBooking(ActivityTracking):
     card_id = models.CharField(null=True, blank=True, max_length=255)
     transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
     user_joined = models.BooleanField(default=False)
+    user_uid = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
         return f"{self.user.email}"

@@ -21,7 +21,7 @@ class StreamSeatHolderSerializer(serializers.ModelSerializer):
     user = UserProfileUpdateSerializer()
     class Meta:
         model = StreamBooking
-        fields = ("id", "user", "created_at")
+        fields = ("id", "user", "created_at", "user_uid")
 
 
 class SessionSeatHolderSerializer(serializers.ModelSerializer):

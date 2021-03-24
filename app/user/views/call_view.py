@@ -20,8 +20,9 @@ class JoinCallAPIView(APIView):
     def post(self, request):
         call_type = request.GET.get('call_type', None)
         call_id = request.GET.get('call_id', None)
-        if not call_type or not call_id:
-            message = "call_type and call_id are required!"    
+        user_uid = request.GET.get('user_uid', None)
+        if not call_type or not call_id or user_uid:
+            message = "user_uid, call_type and call_id are required!"    
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
         valid_call_type = ['stream', 'session']
@@ -42,6 +43,7 @@ class JoinCallAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             booking = user_booking.first()
             booking.user_joined = True
+            booking.user_uid = user_uid
             booking.save()
 
             data = {
