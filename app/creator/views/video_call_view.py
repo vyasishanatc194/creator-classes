@@ -12,7 +12,7 @@ from user.serializers import StreamSeatHolderSerializer
 from user.models import StreamBooking
 import time
 from .RtcTokenBuilder import RtcTokenBuilder
-expireTimeInSeconds = 100800
+expireTimeInSeconds = 86400
 currentTimestamp = int(time.time())
 privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
@@ -71,7 +71,8 @@ class GenerateAgoraTokenAPIView(APIView):
                 "appID" : AgoraAppID,
                 "token" : token,
                 "AgoraAppCertificate" : AgoraAppCertificate,
-                "privilegeExpiredTs": privilegeExpiredTs
+                "privilegeExpiredTs": privilegeExpiredTs,
+                "currentTimestamp": currentTimestamp
             }
         
         if call_type == valid_call_type[1]:
