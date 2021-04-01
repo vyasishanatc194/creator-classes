@@ -31,4 +31,5 @@ from .video_call_view import(
     EndCallAPIView,
     StreamScreenShareAPIView,
     StreamActiveMembersAPIView,
+    StreamHostAPIView,
 )

@@ -234,7 +234,7 @@ class StreamScreenShareAPIView(APIView):
         screen_share = request.GET.get('screen_share', False)
         streams = Stream.objects.filter(pk=pk)
         if not streams:
-            message = "Stream not found!"    
+            message = "Stream not found!"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         stream = streams.first()
         stream.screen_share = screen_share
@@ -246,7 +246,7 @@ class StreamScreenShareAPIView(APIView):
     def get(self, request, pk):
         streams = Stream.objects.filter(pk=pk)
         if not streams:
-            message = "Stream not found!"    
+            message = "Stream not found!"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         stream = streams.first()
         data = {
@@ -268,3 +268,45 @@ class StreamActiveMembersAPIView(APIView):
         serializer = self.serializer_class(users, many=True, context={"request": request})
         message = "Active users fetched successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
+
+
+class StreamHostAPIView(APIView):
+    """
+    StreamScreenShareAPIView
+    """
+    permission_classes = (IsAccountOwner, IsCreator)
+
+    def post(self, request, pk):
+        user = request.GET.get('user', False)
+        streams = Stream.objects.filter(pk=pk)
+        if not streams:
+            message = "Stream not found!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        stream = streams.first()
+        bookings = StreamBooking.objects.filter(user=user, stream=stream.pk)
+        if not bookings:
+            message = "User has not booked the Stream!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        booking=bookings.first()
+        booking.host = True
+        booking.save()
+        message = "User added as host successfully!"
+        return custom_response(True, status.HTTP_200_OK, message)
+
+
+    def delete(self, request, pk):
+        user = request.GET.get('user', False)
+        streams = Stream.objects.filter(pk=pk)
+        if not streams:
+            message = "Stream not found!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        stream = streams.first()
+        bookings = StreamBooking.objects.filter(user=user, stream=stream.pk)
+        if not bookings:
+            message = "User has not booked the Stream!"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+        booking=bookings.first()
+        booking.host = False
+        booking.save()
+        message = "User removed from host successfully!"
+        return custom_response(True, status.HTTP_200_OK, message)

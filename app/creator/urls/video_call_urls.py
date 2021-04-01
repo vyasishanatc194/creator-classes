@@ -9,4 +9,7 @@ urlpatterns = [
     path("stream-screen-share/<int:pk>/", views.StreamScreenShareAPIView.as_view(), name="stream-screen-share"),
     path("stream-users/<int:pk>/", views.StreamActiveMembersAPIView.as_view(), name="stream-users"),
 
+    path("stream-host/<int:pk>/", views.StreamHostAPIView.as_view(), name="stream-host"),
+
+
 ]
