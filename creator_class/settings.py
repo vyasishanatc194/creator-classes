@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     # 'rest_auth',
     # 'dj_rest_auth',
+    
+    'storages',
 
     'creator',
     'user',
@@ -305,3 +307,13 @@ CREATOR_SESSION_BOOKING = 'd-b7f31477db7244bcb5c6cf96bdfffa4a'
 USER_SESSION_BOOKING = 'd-6b3d26650b2c419c88e5ffff26696bd0'
 CREATOR_REGISTRATION_ACCEPTED_TEMPLATE = 'd-c06e50b5680a4461b4483c9c3bc8151f'
 CREATOR_REGISTRATION_REJECTED_TEMPLATE = 'd-99ca283ce7ac431caaf55eb79fc9cb30'
+
+
+AWS_ACCESS_KEY_ID = 'AKIATDU745XSAAZYI3PX'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'creator-class-dev-bucket'
+
+AWS_DEFAULT_ACL = 'public-read'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE = False
