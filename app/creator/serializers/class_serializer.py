@@ -9,7 +9,7 @@ from . import CreatorListingSerializer
 class AdminKeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminKeyword
-        fields = ['id', 'keyword']
+        fields = ['id', 'keyword','image']
 
 
 class AddClassSerializer(serializers.ModelSerializer):

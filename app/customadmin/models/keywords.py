@@ -4,6 +4,7 @@ from creator_class.models import ActivityTracking
 
 class AdminKeyword(ActivityTracking):
     keyword = models.CharField(max_length=55, blank=False, null=False, default='')
+    image = models.ImageField('keyword/')
 
     def __str__(self):
         return f"{self.keyword}"

@@ -91,10 +91,14 @@ class MyStreamSerializer(serializers.ModelSerializer):
     total_seats = serializers.IntegerField(required=True)
     stream_keywords = serializers.SerializerMethodField()
     stream_covers = serializers.SerializerMethodField()
+    profile_image = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = ['id','profile_image','username','first_name','last_name','creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
 
     def get_stream_covers(self, instance):
         stream_covers = StreamCovers.objects.filter(stream=instance)
@@ -109,6 +113,19 @@ class MyStreamSerializer(serializers.ModelSerializer):
             return instance.tz.tz
         return None
 
+    def get_profile_image(self, instance):
+        if instance.creator.profile_image:
+            return instance.creator.profile_image.url
+        return None
+
+    def get_username(self, instance):
+        return instance.creator.username
+
+    def get_first_name(self, instance):
+        return instance.creator.first_name
+
+    def get_last_name(self, instance):
+        return instance.creator.last_name
 
 class UpdateStreamSerializer(serializers.ModelSerializer):
     """
