@@ -23,7 +23,7 @@ class FavouriteCreatorSerializer(serializers.ModelSerializer):
 class FavouriteClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavouriteClass
-        fields = ('id','user', 'creator_class',)
+        fields = ('id','user', 'creator_class','created_at')
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -54,7 +54,7 @@ class FavouriteClassListSerializer(serializers.ModelSerializer):
     creator_class = ClassSerializer()
     class Meta:
         model = FavouriteClass
-        fields = ('id','user', 'creator_class',)
+        fields = ('id','user', 'creator_class','created_at')
 
 
 class FavouriteCreatorListSerializer(serializers.ModelSerializer):
