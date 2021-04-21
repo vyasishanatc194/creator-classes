@@ -19,9 +19,29 @@ class SessionBookingSerializer(serializers.ModelSerializer):
 
 class StreamSeatHolderSerializer(serializers.ModelSerializer):
     user = UserProfileUpdateSerializer()
+    title = serializers.SerializerMethodField()
+    tz_value = serializers.SerializerMethodField()
+    keywords = serializers.SerializerMethodField()
     class Meta:
         model = StreamBooking
-        fields = ("id", "user", "created_at", "user_uid", "host")
+        fields = ("id", "user", "created_at", "user_uid", "host","title","tz_value","keywords")
+
+    def get_title(self, instance):
+        if instance.stream:
+            return instance.stream.title
+        return None
+
+    def get_tz_value(self, instance):
+        if instance.stream:
+            if instance.stream.tz:
+                return instance.stream.tz.tz
+            return None
+        return None
+
+    def get_keywords(self,instance):
+        if instance.keywords:
+            return instance.keywords.keyword
+        return None
 
 
 class SessionSeatHolderSerializer(serializers.ModelSerializer):

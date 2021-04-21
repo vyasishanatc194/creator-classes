@@ -9,6 +9,12 @@ class NotificationUserSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     user = NotificationUserSerializer()
+    stream_start_time = serializers.SerializerMethodField()
     class Meta:
         model = Notification
-        fields = ('id', 'title', 'description', 'user', 'notification_type', 'is_read', 'created_at')
+        fields = ('id', 'title', 'description', 'user', 'notification_type', 'is_read', 'created_at','stream_start_time')
+
+    def get_stream_start_time(self,instance):
+        if instance.stream:
+            return instance.stream.stream_datetime
+        return None

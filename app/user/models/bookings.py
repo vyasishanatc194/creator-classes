@@ -39,6 +39,7 @@ class BookedSessionKeywords(ActivityTracking):
 class StreamBooking(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="stream_booking_by")
     stream = models.ForeignKey("creator.Stream", on_delete=models.CASCADE, related_name="booked_stream")
+    keywords = models.ForeignKey("customadmin.AdminKeyword",on_delete=models.CASCADE, null=True, blank=True,related_name='keyword_booking')
     card_id = models.CharField(null=True, blank=True, max_length=255)
     transaction_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, null=True, blank=True)
     user_joined = models.BooleanField(default=False)

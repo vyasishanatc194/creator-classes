@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib.auth.admin import UserAdmin
-from .models import User, CreatorReview, ClassReview, SessionBooking, StreamBooking, FavouriteCreator, FavouriteClass, TransactionDetail, UserKeyword
+from .models import User, CreatorReview, ClassReview, SessionBooking, StreamBooking, FavouriteCreator, FavouriteClass, TransactionDetail, UserKeyword, Notification
 from .forms import AccountUpdateForm, AccountCreationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -111,3 +111,4 @@ admin.site.register(FavouriteClass, FavouriteClassAdmin)
 admin.site.register(FavouriteCreator, FavouriteCreatorAdmin)
 admin.site.register(TransactionDetail, TransactionDetailAdmin)
 admin.site.register(UserKeyword, UserKeywordAdmin)
+admin.site.register(Notification)

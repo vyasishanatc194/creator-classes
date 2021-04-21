@@ -22,6 +22,7 @@ class Notification(ActivityTracking):
         help_text=_("Notification Description"),
         verbose_name=_("Description"),
     )
+    stream = models.ForeignKey("creator.Stream", on_delete=models.CASCADE, null=True, blank=True, related_name="notification_stream")
     user = models.ForeignKey(
         "User", related_name="user_notification", on_delete=models.CASCADE
     )
