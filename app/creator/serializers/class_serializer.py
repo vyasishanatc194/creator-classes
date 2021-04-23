@@ -25,7 +25,7 @@ class AddClassSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'class_keywords', 'class_covers', 'class_materials']
+        fields = ['id', 'creator','class_description', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'class_keywords', 'class_covers', 'class_materials']
 
     def create(self, validated_data):
         class_keywords = validated_data.pop('class_keywords', None)
