@@ -15,7 +15,7 @@ class ClassReviewSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(required=False)
     class Meta:
         model = ClassReview
-        fields = ('id','user', 'creator_class','review','rating',)
+        fields = ('id','user', 'creator_class','review','rating','created_at')
 
 
 class CreatorReviewListSerializer(serializers.ModelSerializer):

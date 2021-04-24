@@ -16,6 +16,7 @@ from .auth import (
     UserSelectedKeywordsAPIView,
     ChangePlanAPIView,
 )
+from .country_list import CountryListAPIView
 from .review import CreatorReviewAPIView, ClassReviewAPIView
 from .favourites import FavouriteClassAPIView, FavouriteCreatorAPIView
 from .user_class import ClassFilterAPIView, ClassSearchAPIView

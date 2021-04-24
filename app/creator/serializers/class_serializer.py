@@ -182,7 +182,7 @@ class ClassDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'is_favourite', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator', 'class_keywords', 'class_covers', 'class_materials', 'created_at', 'class_reviews']
+        fields = ['id', 'is_favourite', 'title', 'class_description','thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator', 'class_description','class_keywords', 'class_covers', 'class_materials', 'created_at', 'class_reviews']
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)

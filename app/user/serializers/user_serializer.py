@@ -1,10 +1,16 @@
 from rest_framework import fields, serializers
-from ..models import User, UserKeyword
+from ..models import User, UserKeyword, CountryField
 from rest_framework.authtoken.models import Token
 from customadmin.models import Testimonial, Plan, PlanCover, AdminKeyword
 from creator_class.utils import MyStripe
 from creator.models import Creator
 # from creator.serializers import AdminKeywordSerializer
+
+
+class CountryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountryField
+        fields = ['country_name', 'country_flag']
 
 
 class AdminKeywordSerializer(serializers.ModelSerializer):
@@ -55,7 +61,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password', 'profile_image', 'is_creator', 'affiliation_code', 'selected_keywords']
+        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password','profile_image', 'is_creator', 'affiliation_code', 'selected_keywords']
     
         extra_kwargs = {"password":
                                 {"write_only": True}
@@ -118,7 +124,12 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image']
+        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image','country_details']
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['country'] = CountryListSerializer(instance.country_details).data
+        return response
 
 
 class UserPlanSerializer(serializers.ModelSerializer):

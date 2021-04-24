@@ -4,7 +4,7 @@ from user.models import CreatorReview
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 from user.models import User
-from user.serializers import PlanListingSerializer
+from user.serializers import PlanListingSerializer, CountryListSerializer
 import uuid
 from django.conf import settings
 from customadmin.models import CreatorClassCommission, AvailableTimezone
@@ -29,10 +29,9 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only=True)
     token = serializers.SerializerMethodField(read_only=True)
     other_skills = serializers.ListField()
-
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token','profile_image', 'description', 'country_details','key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url']
 
 
     def update(self, instance, validated_data):
@@ -47,7 +46,6 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
                 CreatorSkill.objects.create(creator=instance, skill=skill)
         instance.other_skills=other_skills
         return instance
-
 
     def get_token(self, obj):
         return f"Token {Token.objects.get_or_create(user=obj)[0]}"
@@ -77,10 +75,9 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
     other_skills = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
     creator_reviews = serializers.SerializerMethodField()
-
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description', 'key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews', 'affiliation_link']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description','country_details','key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews', 'affiliation_link']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
@@ -95,7 +92,12 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
         reviews = CreatorReview.objects.filter(creator=instance)
         print(reviews)
         serializer = CreatorReviewListSerializer(reviews, many=True, context={"request": self.context.get('request')})
-        return serializer.data  
+        return serializer.data
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['country'] = CountryListSerializer(instance.country_details).data
+        return response
 
 
 class CreatorListingSerializer(serializers.ModelSerializer):
