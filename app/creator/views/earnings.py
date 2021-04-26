@@ -471,7 +471,7 @@ class SessionUserListingAPIView(APIView):
             session_bookings = session_bookings.filter(created_at__date__lte=end_date)
 
         if search:
-            search_bookings = session_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
+            search_bookings = session_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search)|Q(user__first_name__icontains=search) |Q(user__last_name__icontains=search) | Q(created_at__date__icontains=search))
             booking_list = []
             for booking in search_bookings:
                 booking_list.append(booking)
@@ -512,7 +512,7 @@ class AffiliationUsersDetailAPIView(APIView):
             plans_purchased = plans_purchased.filter(created_at__date__lte=end_date)
 
         if search:
-            search_plans = plans_purchased.filter(Q(plan_purchase_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
+            search_plans = plans_purchased.filter(Q(plan_purchase_detail__brand__icontains=search) | Q(user__username__icontains=search) |Q(user__first_name__icontains=search) |Q(user__last_name__icontains=search) | Q(created_at__date__icontains=search))
             plan_purchase_list = []
             for booking in search_plans:
                 plan_purchase_list.append(booking)
