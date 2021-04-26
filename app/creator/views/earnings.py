@@ -430,7 +430,7 @@ class StreamUserListingAPIView(APIView):
             stream_bookings = stream_bookings.filter(created_at__date__lte=end_date)
 
         if search:
-            search_bookings = stream_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) | Q(created_at__date__icontains=search))
+            search_bookings = stream_bookings.filter(Q(transaction_detail__brand__icontains=search) | Q(user__username__icontains=search) |Q(user__first_name__icontains=search) |Q(user__last_name__icontains=search) | Q(created_at__date__icontains=search))
             booking_list = []
             for booking in search_bookings:
                 booking_list.append(booking)
