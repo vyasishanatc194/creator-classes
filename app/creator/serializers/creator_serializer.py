@@ -123,8 +123,8 @@ class CreatorListingSerializer(serializers.ModelSerializer):
 
     def get_is_fav(self, instance):
         flag = False
-        if self.context['request'].user.is_authenticated or 1==1:
-            creator = Creator.objects.filter(creator=1)
+        if self.context['request'].user.is_authenticated:
+            creator = Creator.objects.filter(creator=self.context['request'].user.is_authenticated)
             if creator:
                 flag = False
                 return flag
