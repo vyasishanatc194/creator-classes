@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import Creator, CreatorSkill, CreatorAffiliation, CreatorTransferredMoney
-from user.models import CreatorReview 
+from user.models import CreatorReview , User, FavouriteCreator
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
 from user.models import User
@@ -107,10 +107,11 @@ class CreatorListingSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only=True)
     other_skills = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
+    is_fav = serializers.SerializerMethodField()
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'full_name', 'username', 'profile_image', 'key_skill', 'other_skills',]
+        fields = ['id', 'email', 'full_name', 'username', 'profile_image', 'key_skill', 'other_skills','is_fav']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
@@ -119,6 +120,21 @@ class CreatorListingSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, instance):
         return f"{instance.first_name} {instance.last_name}"
+
+    def get_is_fav(self, instance):
+        flag = False
+        if self.context['request'].user.is_authenticated or 1==1:
+            creator = Creator.objects.filter(creator=1)
+            if creator:
+                flag = False
+                return flag
+            else:
+                fav_creator = FavouriteCreator.objects.filter(user=1, creator=instance)
+                if fav_creator:
+                    flag = True
+                else:
+                    flag = False
+            return flag
 
 
 class CreatorRegisterSerializer(serializers.ModelSerializer):
