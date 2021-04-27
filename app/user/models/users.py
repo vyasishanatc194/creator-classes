@@ -35,6 +35,7 @@ class AccountManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    flag_login = models.BooleanField(default=False)
     email = models.EmailField(null=True, blank=True, unique=True)
     username = models.CharField(max_length=40, blank=True, null=True,default='')
     first_name = models.CharField(max_length=40, blank=True)

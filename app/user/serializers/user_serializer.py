@@ -124,7 +124,7 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'description', 'profile_image','country_details']
+        fields = ['id','flag_login' ,'first_name', 'last_name', 'username', 'description', 'profile_image','country_details']
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
