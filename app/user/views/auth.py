@@ -122,9 +122,13 @@ class LoginAPIView(APIView):
             if account.is_creator:
                 message = "Invalid user credentials!"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+            if account.last_login is None:
+                account.flag_login = True
+                account.save()
+            else:
+                account.flag_login = False
+                account.save()
             login(request, account)
-            account.flag_login = True
-            account.save()
             serializer = UserProfileSerializer(account, context={"request": request})
             return custom_response(
                 True, status.HTTP_200_OK, "Login Successful!", serializer.data

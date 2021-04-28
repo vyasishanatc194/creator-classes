@@ -15,9 +15,12 @@ class AddClassAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def post(self, request, *args, **kwargs):
-        request.data["creator"] = request.user.pk
+        data = {"creator": request.user.pk}
+        if request.data:
+            for keys, values in request.data.items():
+                data[keys] = values
         message = "Class created successfully!"
-        serializer = self.serializer_class(data=request.data, context={"request": request})
+        serializer = self.serializer_class(data=data, context={"request": request})
         response_status, result, message = serialized_response(serializer, message)
         status_code = status.HTTP_201_CREATED if response_status else status.HTTP_400_BAD_REQUEST
         return custom_response(response_status, status_code, message, result)

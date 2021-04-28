@@ -75,9 +75,10 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
     other_skills = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
     creator_reviews = serializers.SerializerMethodField()
+    is_fav = serializers.SerializerMethodField()
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description','country_details','key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews', 'affiliation_link']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'profile_image', 'description','country_details','key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url', 'total_rating', 'creator_reviews', 'affiliation_link','is_fav']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
@@ -90,7 +91,6 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
 
     def get_creator_reviews(self, instance):
         reviews = CreatorReview.objects.filter(creator=instance)
-        print(reviews)
         serializer = CreatorReviewListSerializer(reviews, many=True, context={"request": self.context.get('request')})
         return serializer.data
 
@@ -98,6 +98,23 @@ class CreatorProfileDisplaySerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response['country'] = CountryListSerializer(instance.country_details).data
         return response
+
+    def get_is_fav(self, instance):
+        flag = False
+        if self.context['request'].user.is_authenticated:
+            creator = Creator.objects.filter(creator=self.context['request'].user.id)
+            if creator:
+                flag = False
+                return flag
+            else:
+                fav_creator = FavouriteCreator.objects.filter(user=self.context['request'].user.id, creator=instance)
+                if fav_creator:
+                    flag = True
+                else:
+                    flag = False
+            return flag
+        else:
+            return flag
 
 
 class CreatorListingSerializer(serializers.ModelSerializer):
@@ -124,16 +141,18 @@ class CreatorListingSerializer(serializers.ModelSerializer):
     def get_is_fav(self, instance):
         flag = False
         if self.context['request'].user.is_authenticated:
-            creator = Creator.objects.filter(creator=self.context['request'].user.is_authenticated)
+            creator = Creator.objects.filter(creator=self.context['request'].user.id)
             if creator:
                 flag = False
                 return flag
             else:
-                fav_creator = FavouriteCreator.objects.filter(user=1, creator=instance)
+                fav_creator = FavouriteCreator.objects.filter(user=self.context['request'].user.id, creator=instance)
                 if fav_creator:
                     flag = True
                 else:
                     flag = False
+            return flag
+        else:
             return flag
 
 
