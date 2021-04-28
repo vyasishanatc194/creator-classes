@@ -61,7 +61,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'token', 'password', 'confirm_password','profile_image', 'is_creator', 'affiliation_code', 'selected_keywords']
+        fields = ['id','flag_login', 'email', 'username', 'token', 'password', 'confirm_password','profile_image', 'is_creator', 'affiliation_code', 'selected_keywords']
     
         extra_kwargs = {"password":
                                 {"write_only": True}
@@ -124,7 +124,7 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['id','flag_login' ,'first_name', 'last_name', 'username', 'description', 'profile_image','country_details']
+        fields = ['id','first_name', 'last_name', 'username', 'description', 'profile_image','country_details']
 
     def to_representation(self, instance):
         response = super().to_representation(instance)

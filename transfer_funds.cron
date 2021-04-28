@@ -1,1 +1,1 @@
-* * * * * /home/ubuntu/creator-classes/venv/bin/python3 /home/ubuntu/creator-classes/manage.py weekly_payouts >> /home/ubuntu/creator-classes/cron.log 2>&1
+* * * * * /home/ubuntu/creator-classes/creatorenv/bin/python3 /home/ubuntu/creator-classes/manage.py weekly_payouts >> /home/ubuntu/creator-classes/cron.log 2>&1
