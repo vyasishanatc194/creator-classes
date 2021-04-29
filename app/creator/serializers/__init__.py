@@ -15,6 +15,7 @@ from .class_serializer import (
     ClassDetailSerializer,
     ClassMaterialListSerializer,
     AdminKeywordSerializer,
+    AdminKeywordSerializerList,
     PopularClassListingSerializer,
 )
 from .material_serializer import (

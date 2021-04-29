@@ -1,6 +1,6 @@
 from rest_framework import fields, serializers
 from ..models import Creator, CreatorClass, ClassKeyword, ClassCovers, Material, ClassMaterial
-from user.models import ClassReview, FavouriteClass
+from user.models import ClassReview, FavouriteClass, BookedSessionKeywords
 from django.db.models import Sum
 from customadmin.models import AdminKeyword
 from . import CreatorListingSerializer
@@ -10,6 +10,23 @@ class AdminKeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminKeyword
         fields = ['id', 'keyword','image']
+
+
+class AdminKeywordSerializerList(serializers.ModelSerializer):
+    keyword = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
+    class Meta:
+        model = BookedSessionKeywords
+        fields = ['id', 'keyword','image']
+
+    def get_keyword(self,instance):
+        return instance.keyword.keyword
+
+    def get_image(self,instance):
+        if instance.keyword.image:
+            return instance.keyword.image.url
+        return None
+
 
 
 class AddClassSerializer(serializers.ModelSerializer):

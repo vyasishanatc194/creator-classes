@@ -26,4 +26,5 @@ urlpatterns = [
     path("api/v1/user/", include("user.urls")),
     path("api/v1/creator/", include("creator.urls")),
     path('customadmin/', include("customadmin.urls")),
+    path('accounts/', include('allauth.urls'), name="socialaccount_signup")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

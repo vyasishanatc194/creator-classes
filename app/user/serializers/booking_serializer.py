@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from ..models import SessionBooking, StreamBooking, BookedSessionKeywords
 from ..serializers import UserProfileUpdateSerializer, StreamListingSerializer
-from creator.serializers import AdminKeywordSerializer, SessionListingSerializer, CreatorListingSerializer
+from creator.serializers import AdminKeywordSerializer, SessionListingSerializer, CreatorListingSerializer, AdminKeywordSerializerList
+from customadmin.models import AdminKeyword
+
 
 
 class SessionBookingSerializer(serializers.ModelSerializer):
@@ -62,7 +64,7 @@ class SessionSeatHolderSerializer(serializers.ModelSerializer):
 
     def get_booked_session_keywords(self, instance):
         booked_keywords = BookedSessionKeywords.objects.filter(session=instance)
-        serializer = AdminKeywordSerializer(booked_keywords, many=True)
+        serializer = AdminKeywordSerializerList(booked_keywords, many=True)
         return serializer.data
 
     def get_tz_value(self, instance):
