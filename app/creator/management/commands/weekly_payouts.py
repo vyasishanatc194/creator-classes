@@ -2,6 +2,8 @@ from datetime import date, timedelta
 from django.db.models import Sum
 import stripe
 
+import datetime
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
@@ -13,12 +15,12 @@ from user.models import SessionBooking, StreamBooking
 
 # Date Format
 
-today = date.today()
-yesterday = today - timedelta(days=1)
+today = datetime.datetime.now()
+yesterday = today - timedelta(minutes=15)
 
-yesterday_date = today - timedelta(days=7)
-start_date_week = f"{yesterday_date} 00:00:00"
-end_date = f"{yesterday} 23:59:00"
+yesterday_date = today
+start_date_week = yesterday
+end_date = yesterday_date
 
 
 class Command(BaseCommand):
