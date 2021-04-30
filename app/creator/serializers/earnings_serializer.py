@@ -5,7 +5,7 @@ from ..models import Stream, OneToOneSession, CreatorTransferredMoney
 from customadmin.models import CreatorClassCommission
 
 
-creator_class_commission = CreatorClassCommission.objects.all().first()
+creator_class_commission = CreatorClassCommission.objects.all()
 if not creator_class_commission:
     creator_class_commission = CreatorClassCommission()
     creator_class_commission.affiliation_deduction = 10

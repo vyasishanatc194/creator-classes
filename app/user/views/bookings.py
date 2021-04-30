@@ -2,12 +2,13 @@ from rest_framework.views import APIView
 from ..serializers import SessionBookingSerializer, TransactionDetailSerializer, StreamSeatHolderSerializer, SessionSeatHolderSerializer, UserBookedStreamListingSerializer, UserBookedSessionListingSerializer
 from ..models import User, SessionBooking, TransactionDetail, BookedSessionKeywords, StreamBooking, Notification
 from creator.models import TimeSlot, Stream
-from creator_class.helpers import custom_response, serialized_response
+from creator_class.helpers import custom_response, serialized_response, send_templated_email
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsUser, IsCreator, get_pagination_response
 from creator_class.utils import MyStripe, create_card_object, create_customer_id, create_charge_object
 from customadmin.models import AdminKeyword
 from datetime import datetime
+from django.conf import settings
 
 
 class OneToOneSessionBookingAPIView(APIView):
@@ -93,6 +94,28 @@ class OneToOneSessionBookingAPIView(APIView):
                     notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is boked successfully"
                     notification_user.save()
 
+                    # User Email
+                    name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                    if request.user.email:
+                        email_data = {
+                            'name': name,
+                            'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
+                            'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
+                            'creator_name':  f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}"
+                        }
+                        send_templated_email(request.user.email, settings.USER_SESSION_BOOKING, email_data)
+
+                    # Creator Email
+                    name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                    email_data = {
+                        'name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}",
+                        'user_name' : name, 
+                        'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
+                        'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
+                        'comments': session_booking.description,
+                        'cost' : check_booking[0].session.amount,
+                    }
+                    send_templated_email(check_booking[0].session.creator.email, settings.CREATOR_SESSION_BOOKING, email_data)
 
                     return custom_response(True, status.HTTP_201_CREATED, message)
             else:
@@ -174,8 +197,30 @@ class StreamBookingAPIView(APIView):
                     notification_user.title = "Booking"
                     notification_user.profile_image = streams[0].creator.profile_image
                     notification_user.save()
+                    # User Email
+                    name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                    if request.user.email:
+                        email_data = {
+                            'name': name,
+                            'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
+                            'time': streams[0].stream_datetime.time().strftime("%H:%M"),
+                            'stream_name': streams[0].title,
+                            'creator_name':  f"{streams[0].creator.first_name} {streams[0].creator.last_name}"
+                        }
+                        send_templated_email(request.user.email, settings.USER_LIVE_STREAM_BOOKING_TEMPLATE, email_data)
 
-
+                    # Creator Email
+                    name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                    email_data = {
+                        'name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
+                        'user_name' : name, 
+                        'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
+                        'time': streams[0].stream_datetime.time().strftime("%H:%M"),
+                        'stream_name': streams[0].title,
+                        'cost' : streams[0].stream_amount,
+                        'seats_left': int(check_seats.count()) + 1
+                    }
+                    send_templated_email(streams[0].creator.email, settings.CREATOR_LIVE_STREAM_BOOKING_TEMPLATE, email_data)
                     return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = "Card_id is required"
@@ -267,6 +312,33 @@ class PayPalStreamBookingAPIView(APIView):
                 notification_user.profile_image = streams[0].creator.profile_image
                 notification_user.save()
 
+
+                # User Email
+                name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                if request.user.email:
+                    email_data = {
+                        'name': name,
+                        'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
+                        'time': streams[0].stream_datetime.time().strftime("%H:%M"),
+                        'stream_name': streams[0].title,
+                        'creator_name':  f"{streams[0].creator.first_name} {streams[0].creator.last_name}"
+                    }
+                    send_templated_email(request.user.email, settings.USER_LIVE_STREAM_BOOKING_TEMPLATE, email_data)
+
+                # Creator Email
+                name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                email_data = {
+                    'name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
+                    'user_name' : name, 
+                    'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
+                    'time': streams[0].stream_datetime.time().strftime("%H:%M"),
+                    'stream_name': streams[0].title,
+                    'cost' : streams[0].stream_amount,
+                    'seats_left': int(check_seats.count()) + 1
+                }
+                send_templated_email(streams[0].creator.email, settings.CREATOR_LIVE_STREAM_BOOKING_TEMPLATE, email_data)
+        
+
                 return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = chargeserializer.errors
@@ -348,6 +420,30 @@ class PayPalSessionBookingAPIView(APIView):
                 notification_user.profile_image = check_booking[0].session.creator.profile_image
                 notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is boked successfully"
                 notification_user.save()
+
+
+                # User Email
+                name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                if request.user.email:
+                    email_data = {
+                        'name': name,
+                        'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
+                        'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
+                        'creator_name':  f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}"
+                    }
+                    send_templated_email(request.user.email, settings.USER_SESSION_BOOKING, email_data)
+
+                # Creator Email
+                name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                email_data = {
+                    'name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}",
+                    'user_name' : name, 
+                    'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
+                    'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
+                    'comments': session_booking.description,
+                    'cost' : check_booking[0].session.amount,
+                }
+                send_templated_email(check_booking[0].session.creator.email, settings.CREATOR_SESSION_BOOKING, email_data)
 
                 return custom_response(True, status.HTTP_201_CREATED, message)
             else:

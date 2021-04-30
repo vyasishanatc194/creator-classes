@@ -15,6 +15,7 @@ from creator_class.helpers import (
     serialized_response,
     get_object,
     send_email,
+    send_templated_email,
 )
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
@@ -360,10 +361,14 @@ class ForgotPasswordAPIView(APIView):
 
         user.password_reset_link = uuid.uuid4()
         user.save()
-        subject = "[CreatorClasses] Request to change Password"
-        text_content = f"Hello, \nYou recently requested to reset your password for your Creator Class account. Please click the below link to change your password. \n {settings.RESET_PASSWORD_LINK}{user.password_reset_link}"
-        email_response = send_email(user, subject, text_content)
-        return custom_response(True, status.HTTP_200_OK, email_response)
+        name = user.username if user.username else f"{user.first_name} {user.last_name}"
+        email_data = {
+            'name': name,
+            'link': f"{settings.RESET_PASSWORD_LINK}{user.password_reset_link}"
+        }
+        send_templated_email(request.data["email"], settings.FORGET_PASSWORD_TEMPLATE, email_data)
+        message = "Email with password reset link has been sent successfully!"
+        return custom_response(True, status.HTTP_200_OK, message)
 
 
 class SetPasswordAPIView(APIView):
