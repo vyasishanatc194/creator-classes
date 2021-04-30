@@ -254,8 +254,8 @@ class PlanPurchaseAPIView(APIView):
                     newcustomer = create_customer_id(request.user)
                     customer_id = newcustomer.id
                     print("<<<-----|| CUSTOMER CREATED ||----->>>")
-                newcard = stripe.create_card(customer_id, request.data)
-                card_id = newcard.id
+                #newcard = stripe.create_card(customer_id, request.data)
+                #card_id = newcard.id
                 print("<<<-----|| CARD CREATED ||----->>>")
 
                 # newcharge = stripe.create_charge(
