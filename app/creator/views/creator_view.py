@@ -164,18 +164,16 @@ class CreatorLoginAPIView(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request, format=None):
-        email = request.data.get("email", None)
+        email_or_username = request.data.get("email_or_username", None)
         password = request.data.get("password", None)
 
-        if not email or not password:
-            message = "Email and password is required"
+        if not email_or_username or not password:
+            message = "Email/Username and password is required"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
-        creator_exist = Creator.objects.filter(email=email)
+        creator_exist = Creator.objects.filter(email=email_or_username)
         if not creator_exist:
-            message = "Email/password combination invalid"
-            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
+            creator_exist = Creator.objects.filter(username=email_or_username)
         if not creator_exist[0].check_password(password):
             message = "Email/password combination invalid"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
@@ -183,11 +181,8 @@ class CreatorLoginAPIView(APIView):
         if not creator_exist[0].is_active:
             message = "Account is not activated by admin yet!"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-        login(
-            request,
-            creator_exist[0],
-            backend="django.contrib.auth.backends.ModelBackend",
-        )
+        if creator_exist is not None:
+            login(request,creator_exist[0],backend="django.contrib.auth.backends.ModelBackend",)
         serializer = CreatorLoginSerializer(
             creator_exist[0], context={"request": request}
         )

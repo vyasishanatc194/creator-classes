@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import gettext as _
 from creator_class.models import ActivityTracking
+from django.shortcuts import reverse
 # Create your models here.
 
 
