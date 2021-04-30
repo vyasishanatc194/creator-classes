@@ -106,7 +106,11 @@ class MyStreamSerializer(serializers.ModelSerializer):
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
-        return [{'keyword':stream_keyword.keyword.keyword,'image':stream_keyword.keyword.image.url}  for stream_keyword in stream_keywords]
+        for stream_keyword in stream_keywords:
+            if stream_keyword.keyword.image:
+                return [{'keyword':stream_keyword.keyword.keyword,'image':stream_keyword.keyword.image.url}  for stream_keyword in stream_keywords]
+            else:
+                return [{'keyword':stream_keyword.keyword.keyword,'image':None} for stream_keyword in stream_keywords]
 
     def get_tz_value(self, instance):
         if instance.tz:
