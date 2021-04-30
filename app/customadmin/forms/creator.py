@@ -150,7 +150,7 @@ class MyCreatorChangeForm(forms.ModelForm):
                 instance.is_active = True
             if instance.status=='REJECT':
                 instance.is_active = False
-            instance.password = make_password(instance.password)
+            #instance.password = make_password(instance.password)
             instance.save()
         return instance
 
