@@ -1,9 +1,8 @@
 from rest_framework import fields, serializers
-from ..models import Creator, CreatorSkill, CreatorAffiliation, CreatorTransferredMoney
-from user.models import CreatorReview , User, FavouriteCreator
+from ..models import Creator, CreatorSkill, CreatorAffiliation, CreatorTransferredMoney, TimeSlot
+from user.models import CreatorReview , User, FavouriteCreator, SessionBooking
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
-from user.models import User
 from user.serializers import PlanListingSerializer, CountryListSerializer
 import uuid
 from django.conf import settings
@@ -125,10 +124,11 @@ class CreatorListingSerializer(serializers.ModelSerializer):
     other_skills = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
     is_fav = serializers.SerializerMethodField()
+    session = serializers.SerializerMethodField()
 
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'full_name', 'username', 'profile_image', 'key_skill', 'other_skills','is_fav']
+        fields = ['id', 'email', 'full_name', 'username', 'profile_image', 'key_skill', 'other_skills','is_fav','session']
 
     def get_other_skills(self, instance):
         other_skills = CreatorSkill.objects.filter(creator=instance.pk)
@@ -141,17 +141,23 @@ class CreatorListingSerializer(serializers.ModelSerializer):
     def get_is_fav(self, instance):
         flag = False
         if self.context['request'].user.is_authenticated:
-            creator = Creator.objects.filter(creator=self.context['request'].user.id)
-            if creator:
-                flag = False
-                return flag
+            fav_creator = FavouriteCreator.objects.filter(user=self.context['request'].user.id, creator=instance)
+            if fav_creator:
+                flag = True
             else:
-                fav_creator = FavouriteCreator.objects.filter(user=self.context['request'].user.id, creator=instance)
-                if fav_creator:
-                    flag = True
-                else:
-                    flag = False
+                flag = False
             return flag
+        else:
+            return flag
+
+    def get_session(self, instance):
+        flag = False
+        if self.context['request'].user.is_authenticated:
+            session_status = TimeSlot.objects.filter(session__creator=instance)
+            if session_status:
+                return True
+            else:
+                return False
         else:
             return flag
 

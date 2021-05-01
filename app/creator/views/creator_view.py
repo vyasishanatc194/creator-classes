@@ -174,6 +174,9 @@ class CreatorLoginAPIView(APIView):
         creator_exist = Creator.objects.filter(email=email_or_username)
         if not creator_exist:
             creator_exist = Creator.objects.filter(username=email_or_username)
+        if not creator_exist:
+            message = "Email/password combination invalid"
+            return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         if not creator_exist[0].check_password(password):
             message = "Email/password combination invalid"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
