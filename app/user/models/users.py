@@ -116,7 +116,7 @@ class UserSelectedKeyword(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="users")
     keyword = models.ForeignKey("customadmin.AdminKeyword", on_delete=models.CASCADE, related_name="user_selected_keyword")
     def __str__(self):
-        return self.user.pk
+        return str(self.user.pk)
 
     class Meta:
         verbose_name = "User Selected Keyword"
@@ -129,7 +129,7 @@ class UserPlanPurchaseHistory(ActivityTracking):
     plan = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="user_plan", null=True, blank=True)
     plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, related_name="transaction_detail", null=True, blank=True)
     def __str__(self):
-        return self.user.pk
+        return str(self.user.pk)
 
     class Meta:
         verbose_name = "Plan Purchase History"

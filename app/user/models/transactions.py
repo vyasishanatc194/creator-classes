@@ -90,4 +90,4 @@ class TransactionDetail(ActivityTracking):
         verbose_name_plural = "Transaction Details"
 
     def __str__(self):
-        return "{0}".format(self.user)
+        return "{0}".format(self.user.email)
