@@ -23,6 +23,7 @@ from multi_form_view import MultiFormView, MultiModelFormView
 
 from ..mixins import HasPermissionsMixin, ModelOptsMixin, SuccessMessageMixin
 from ..utils import admin_urlname, get_deleted_objects
+from django.conf import settings
 
 MSG_CREATED = '"{}" created successfully.'
 MSG_UPDATED = '"{}" updated successfully.'
@@ -387,3 +388,18 @@ class MyTodayArchiveView(
     """TodayArchiveView CBV with LoginRequiredMixin and PermissionRequiredMixin."""
 
     pass
+
+
+
+def get_aws_s3_creds():
+    
+    context = {
+        'AWS_ACCESS_KEY_ID' : settings.AWS_ACCESS_KEY_ID,
+        'AWS_SECRET_ACCESS_KEY' : settings.AWS_SECRET_ACCESS_KEY,
+        'AWS_STORAGE_BUCKET_NAME' : settings.AWS_STORAGE_BUCKET_NAME,
+        'ENDPOINT_URL' : settings.ENDPOINT_URL,
+        'BUCKET_NAME' : settings.BUCKET_NAME,
+        'REGION_NAME' : settings.REGION_NAME,
+        'SIGNATURE_VERSION' : settings.SIGNATURE_VERSION,
+    }
+    return context

@@ -7,7 +7,8 @@ from customadmin.views.generic import (
     MyView,
     MyDetailView,
     MyNewFormsetCreateView,
-    MyNewFormsetUpdateView
+    MyNewFormsetUpdateView,
+    get_aws_s3_creds
 )
 from django.db.models import Q
 from django.http import JsonResponse
@@ -20,6 +21,7 @@ from django.shortcuts import reverse, render
 from creator.models import CreatorClass, ClassKeyword, ClassCovers, ClassMaterial, Material
 from user.models import ClassReview
 from extra_views import InlineFormSetFactory
+
 
 from django.contrib import messages
 
@@ -104,6 +106,13 @@ class CreatorClassCreateView(MyNewFormsetCreateView):
     form_class = MyCreatorClassCreationForm
     template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.add_creator_class",)
+    
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data( *args, **kwargs)
+        context.update(get_aws_s3_creds())
+        context['path'] = 'class_content'
+        return context
 
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
@@ -138,6 +147,13 @@ class CreatorClassUpdateView(MyNewFormsetUpdateView):
     form_class = MyCreatorClassChangeForm
     template_name = "customadmin/classes/creator_class_form.html"
     permission_required = ("customadmin.change_creator_class",)
+    
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data( *args, **kwargs)
+        context.update(get_aws_s3_creds())
+        context['path'] = 'class_content'
+        return context
 
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
