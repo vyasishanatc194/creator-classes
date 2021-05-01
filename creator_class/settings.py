@@ -293,8 +293,8 @@ PAYPAL_SECRET_KEY = "EOuRkF9j0KAB2mbbWruHgQCdQpZeu5MOQEASF4fklPBwNHOGxn6YHf9IBgy
 PAYPAL_AUTH_TOKEN_URL = "https://api.sandbox.paypal.com/v1/oauth2/token"
 
 
-AgoraAppID = "5f7ec74b7106406d8b168ede42d823cc"
-AgoraAppCertificate = "54f8081be4dc4937ae135f0ddff98efb"
+AgoraAppID = "eac21ff98de64fe9b9821de92ee715a3"
+AgoraAppCertificate = "3598fbec00de48bea9b968c12c246635"
 
 
 
