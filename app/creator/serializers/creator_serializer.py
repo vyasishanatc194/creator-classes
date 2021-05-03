@@ -30,7 +30,7 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
     other_skills = serializers.ListField()
     class Meta:
         model = Creator
-        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token','profile_image', 'description', 'country_details','key_skill', 'other_skills', 'instagram_url', 'linkedin_url', 'twitter_url', 'google_url', 'facebook_url', 'creator_website_url']
+        fields = ['id', 'email', 'first_name', 'last_name', 'username', 'token','profile_image', 'description', 'country_details','key_skill', 'other_skills', 'instagram_url', 'youtube_url', 'facebook_url', 'creator_website_url']
 
 
     def update(self, instance, validated_data):

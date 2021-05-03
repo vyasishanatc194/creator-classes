@@ -31,9 +31,7 @@ class MyCreatorCreationForm(forms.ModelForm):
 
             "key_skill",
             "instagram_url",
-            "linkedin_url",
-            "twitter_url",
-            "google_url",
+            "youtube_url",
             "facebook_url",
         ]
 
@@ -106,9 +104,7 @@ class MyCreatorChangeForm(forms.ModelForm):
 
             "key_skill",
             "instagram_url",
-            "linkedin_url",
-            "twitter_url",
-            "google_url",
+            "youtube_url",
             "facebook_url",
         )
 

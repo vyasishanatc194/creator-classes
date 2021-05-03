@@ -20,7 +20,7 @@ class StripeAccountConnectAPI(APIView):
                     account = stripe.Account.create(
                             type='express',
                             settings = {
-                                "payouts":{"schedule":{"interval":"weekly", "weekly_anchor":"sunday"}}
+                                "payouts":{"schedule":{"interval":"monthly", "monthly_anchor":"31"}}
                                 },
                         )   
 

@@ -11,13 +11,11 @@ STATUS_CHOICE = (
 class Creator(User):
     status = models.CharField(max_length=7,choices=STATUS_CHOICE, default='PENDING')
     key_skill = models.CharField(max_length=40, blank=True, null=True, default='')
-    instagram_url = models.CharField(max_length=40, blank=True, null=True, default='')
-    linkedin_url = models.CharField(max_length=40, blank=True, null=True, default='')
-    twitter_url = models.CharField(max_length=40, blank=True, null=True, default='')
-    google_url = models.CharField(max_length=40, blank=True, null=True, default='')
-    facebook_url = models.CharField(max_length=40, blank=True, null=True, default='')
-    creator_website_url = models.CharField(max_length=40, blank=True, null=True, default='')
-    affiliation_link = models.CharField(max_length=255, blank=True, null=True, default='')
+    instagram_url = models.CharField(max_length=100, blank=True, null=True, default='')
+    youtube_url = models.CharField(max_length=100, blank=True, null=True, default='')
+    facebook_url = models.CharField(max_length=100, blank=True, null=True, default='')
+    creator_website_url = models.CharField(max_length=100, blank=True, null=True, default='')
+    affiliation_link = models.CharField(max_length=1000, blank=True, null=True, default='')
 
 
     def __str__(self):
