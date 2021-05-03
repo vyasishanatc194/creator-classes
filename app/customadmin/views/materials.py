@@ -7,6 +7,7 @@ from customadmin.views.generic import (
     MyDetailView,
     MyLoginRequiredView,
     MyUpdateView,
+    get_aws_s3_creds
 )
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.db.models import Q
@@ -154,6 +155,13 @@ class MaterialCreateView(MyCreateView):
     template_name = "customadmin/materials/material_form.html"
     permission_required = ("customadmin.add_material",)
 
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data( *args, **kwargs)
+        context.update(get_aws_s3_creds())
+        context['path'] = 'materials'
+        return context
+
     def get_success_url(self):
         return reverse("customadmin:material-list")
 
@@ -164,6 +172,13 @@ class MaterialUpdateView(MyUpdateView):
     form_class = MyMaterialChangeForm
     template_name = "customadmin/materials/material_form.html"
     permission_required = ("customadmin.change_material",)
+    
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data( *args, **kwargs)
+        context.update(get_aws_s3_creds())
+        context['path'] = 'materials'
+        return context
 
     def get_success_url(self):
         return reverse("customadmin:material-list")

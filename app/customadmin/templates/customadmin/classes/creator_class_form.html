@@ -36,7 +36,13 @@
                         {{ form.thumbnail_file|as_crispy_field }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form.class_file|as_crispy_field }}
+                        <input type="file"  id="id_class_file_placeholder">
+                        <button type="button" class="btn btn-primary btn-sm" id="id_upload">Upload</button>
+                        <div id="results"></div>
+                        {{ form.class_file|attr:'hidden'|as_crispy_field }}
+                            {% if form.class_file.value.url %}
+                                <a href="{{form.class_file.value.url}}" target="blank">{{form.class_file.value.url}}</a>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -181,6 +187,57 @@
 
 {% block js %}
 {{ block.super }}
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
+<script type="text/javascript">
+    const ENDPOINT_URL = "{{ENDPOINT_URL}}"
+    const ACCESS_KEY_ID = "{{AWS_ACCESS_KEY_ID}}"
+    const ACCESS_KEY_SECRET = "{{AWS_SECRET_ACCESS_KEY}}"
+    const BUCKET_NAME = "{{AWS_STORAGE_BUCKET_NAME}}"
+    const AWS_S3_REGION_NAME = '{{REGION_NAME}}'
+    const AWS_S3_SIGNATURE_VERSION = '{{SIGNATURE_VERSION}}'
+    
+    var bucket = new AWS.S3({
+        accessKeyId: ACCESS_KEY_ID,
+        secretAccessKey: ACCESS_KEY_SECRET,
+        signatureVersion: AWS_S3_SIGNATURE_VERSION,
+        region :AWS_S3_REGION_NAME,
+        endpoint: new AWS.Endpoint(ENDPOINT_URL),
+        params: {
+            Bucket: BUCKET_NAME
+        }
+    })
+    
+    var fileChooser = document.getElementById('id_class_file_placeholder')
+    var class_file = document.getElementById('id_class_file')
+    var button = document.getElementById('id_upload')
+    var results = document.getElementById('results')
+    
+    button.addEventListener('click', function() {
+        var file = fileChooser.files[0]
+        results.innerHTML = ''
+        if (!file) {
+            results.innerHTML = 'Nothing to upload.'
+            return
+        }
+
+        file_path = '{{path}}/' + file.name;
+        results.innerHTML = "uploading...";
+        var params = {
+            Key: file_path,
+            ContentType: file.type,
+            Body: file,
+            ACL: 'public-read'
+        }
+        bucket.putObject(params, function(err, data) {
+            if (err) {
+                results.innerHTML = 'ERROR: ' + err;
+                return
+            }
+            results.innerHTML = file_path;
+            class_file.value = file_path;
+        })
+    }, false)
+</script>
 <script src="{% static 'customadmin/js/jquery.formset.js' %}"></script>
 <script>
     $(function() {

@@ -90,6 +90,8 @@ class MyMaterialCategoryChangeForm(forms.ModelForm):
 
 class MyMaterialCreationForm(forms.ModelForm):
     """Custom MaterialCreationForm."""
+    
+    material_file = forms.CharField(required=False)
 
     class Meta:
         model = Material
@@ -152,6 +154,8 @@ class MyMaterialCreationForm(forms.ModelForm):
 
 class MyMaterialChangeForm(forms.ModelForm):
     """Custom MaterialChangeForm."""
+    
+    material_file = forms.CharField(required=False)
 
     class Meta:
         model = Material

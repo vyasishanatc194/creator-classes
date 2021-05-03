@@ -13,6 +13,8 @@ class ChoiceFieldNoValidation(forms.ChoiceField):
 
 class MyCreatorClassCreationForm(forms.ModelForm):
     """Custom CreatorCreationForm."""
+    
+    class_file = forms.CharField(required=False)
 
     class Meta:
         model = CreatorClass
@@ -62,6 +64,8 @@ class MyCreatorClassCreationForm(forms.ModelForm):
 
 class MyCreatorClassChangeForm(forms.ModelForm):
     """Custom CreatorChangeForm."""
+
+    class_file = forms.CharField(required=False)
 
     class Meta:
         model = CreatorClass
