@@ -284,7 +284,7 @@ CURRENCY = "usd"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
 
-USER_SIGNUP_LINK = "http://ccmike.creatorclasses.co/"
+USER_SIGNUP_LINK = "http://ccmike.creatorclasses.co/user/signup/"
 RESET_PASSWORD_LINK = "http://3.139.122.63/reset-password/"
 
 
