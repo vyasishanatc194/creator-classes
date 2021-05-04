@@ -10,6 +10,8 @@ from django.utils import timezone
 
 class StreamCreationForm(forms.ModelForm):
     """Custom CreatorCreationForm."""
+    
+    sneak_peak_file = forms.CharField(required=False)
 
     class Meta:
         model = Stream
@@ -78,6 +80,8 @@ class StreamCreationForm(forms.ModelForm):
 
 class StreamChangeForm(forms.ModelForm):
     """Custom CreatorChangeForm."""
+    
+    sneak_peak_file = forms.CharField(required=False)
 
     class Meta:
         model = Stream

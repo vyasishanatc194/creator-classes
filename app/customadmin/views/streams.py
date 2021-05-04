@@ -6,7 +6,8 @@ from customadmin.views.generic import (
     MyLoginRequiredView,
     MyDetailView,
     MyNewFormsetCreateView,
-    MyNewFormsetUpdateView
+    MyNewFormsetUpdateView,
+    get_aws_s3_creds
 )
 from django.db.models import Q
 from django.template.loader import get_template
@@ -82,6 +83,14 @@ class StreamCreateView(MyNewFormsetCreateView):
     template_name = "customadmin/streams/stream_form.html"
     permission_required = ("customadmin.add_stream",)
 
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data( *args, **kwargs)
+        context.update(get_aws_s3_creds())
+        context['path'] = 'stream'
+        return context
+
+
     def get_success_url(self):
         messages.success(self.request, MSG_CREATED.format(self.object))
         return reverse("customadmin:stream-list")
@@ -108,6 +117,13 @@ class StreamUpdateView(MyNewFormsetUpdateView):
     form_class = StreamChangeForm
     template_name = "customadmin/streams/stream_form.html"
     permission_required = ("customadmin.change_stream",)
+
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data( *args, **kwargs)
+        context.update(get_aws_s3_creds())
+        context['path'] = 'stream'
+        return context    
 
     def get_success_url(self):
         messages.success(self.request, MSG_UPDATED.format(self.object))
