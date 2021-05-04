@@ -22,7 +22,6 @@ from dateutil.relativedelta import relativedelta
 import calendar
 from customadmin.models import CreatorClassCommission, AvailableTimezone
 
-
 class TimezonesListingAPIView(APIView):
     """
     Timezones listing view
@@ -180,7 +179,9 @@ class CreatorLoginAPIView(APIView):
         if not creator_exist[0].check_password(password):
             message = "Email/password combination invalid"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-
+        if creator_exist[0].status == "REJECT":
+            message = "Your Request is Rejected!"
+            return custom_response(False,status.HTTP_400_BAD_REQUEST, message)
         if not creator_exist[0].is_active:
             message = "Account is not activated by admin yet!"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)

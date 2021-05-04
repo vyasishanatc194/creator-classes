@@ -5,6 +5,7 @@ from creator_class.models import ActivityTracking
 class Plan(ActivityTracking):
     name = models.CharField(max_length=200, blank=True, null=True, default='')
     plan_amount = models.FloatField(blank=True, null=True, default=1)
+    discount_amount = models.FloatField(blank=True, null=True, default=1)
     duration_in_months = models.IntegerField(blank=True, null=True, default=1)
     stripe_plan_id = models.CharField(max_length=200, blank=True, null=True, default='')
     paypal_plan_id = models.CharField(max_length=200, blank=True, null=True, default='')

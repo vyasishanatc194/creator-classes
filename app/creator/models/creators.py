@@ -15,7 +15,7 @@ class Creator(User):
     youtube_url = models.CharField(max_length=100, blank=True, null=True, default='')
     facebook_url = models.CharField(max_length=100, blank=True, null=True, default='')
     creator_website_url = models.CharField(max_length=100, blank=True, null=True, default='')
-    affiliation_link = models.CharField(max_length=1000, blank=True, null=True, default='')
+    affiliation_link = models.CharField(max_length=255, blank=True, null=True, default='')
 
 
     def __str__(self):

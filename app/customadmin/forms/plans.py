@@ -14,6 +14,7 @@ class PlanCreationForm(forms.ModelForm):
         fields = [
             "name",
             "plan_amount",
+            "discount_amount",
             "duration_in_months",
             "stripe_plan_id",
             "paypal_plan_id",
@@ -27,6 +28,7 @@ class PlanCreationForm(forms.ModelForm):
         cleaned_data = super(PlanCreationForm, self).clean()
         name = cleaned_data.get("name")
         plan_amount = cleaned_data.get("plan_amount")
+        discount_amount = cleaned_data.get("discount_amount")
         duration_in_months = cleaned_data.get("duration_in_months")
         instance = Plan.objects.filter(name=name, plan_amount=plan_amount,duration_in_months=duration_in_months).first()
 
@@ -47,7 +49,10 @@ class PlanCreationForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Duration of Plan is grater than and equal to 1."
             )
-
+        if float(discount_amount)<0.0:
+            raise forms.ValidationError(
+                "Amount must be grater than zero."
+            )
     def save(self, commit=True):
         instance = super().save(commit=False)
         if commit:
@@ -63,6 +68,7 @@ class PlanChangeForm(forms.ModelForm):
         fields = (
             "name",
             "plan_amount",
+            "discount_amount",
             "duration_in_months",
             "stripe_plan_id",
             "paypal_plan_id",
@@ -77,6 +83,7 @@ class PlanChangeForm(forms.ModelForm):
         cleaned_data = super(PlanChangeForm, self).clean()
         name = cleaned_data.get("name")
         plan_amount = cleaned_data.get("plan_amount")
+        discount_amount = cleaned_data.get("discount_amount")
         duration_in_months = cleaned_data.get("duration_in_months")
 
         if Plan.objects.filter(name=name, plan_amount=plan_amount, duration_in_months=duration_in_months).exclude(pk=self.instance.id).count() > 0:
@@ -88,6 +95,10 @@ class PlanChangeForm(forms.ModelForm):
                 "Please enter plan name."
             )
         if float(plan_amount) < 0.0:
+            raise forms.ValidationError(
+                "Amount must be grater than zero."
+            )
+        if float(discount_amount) < 0.0:
             raise forms.ValidationError(
                 "Amount must be grater than zero."
             )

@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
     profile_image = models.ImageField(upload_to="profile_image", default="sample.jpg", null=True,  blank=True, verbose_name=_("Profile Image"))
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=1000, blank=True)
     customer_id = models.CharField(_("Customer Id"), blank=True, max_length=255)
     plan_id = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="selected_plan", null=True, blank=True)
     plan_purchased_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
