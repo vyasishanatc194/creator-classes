@@ -312,6 +312,10 @@ CREATOR_REGISTRATION_REJECTED_TEMPLATE = 'd-99ca283ce7ac431caaf55eb79fc9cb30'
 AWS_ACCESS_KEY_ID = 'AKIATDU745XSAAZYI3PX'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'creator-class-dev-bucket'
+ENDPOINT_URL = "s3.amazonaws.com"
+BUCKET_NAME = "creator-class-dev-bucket"
+REGION_NAME = "us-east-2"
+SIGNATURE_VERSION = 'v4'
 
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
