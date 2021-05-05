@@ -87,7 +87,7 @@ class StreamCreateView(MyNewFormsetCreateView):
         
         context = super().get_context_data( *args, **kwargs)
         context.update(get_aws_s3_creds())
-        context['path'] = 'stream'
+        context['path'] = 'public/stream'
         return context
 
 
@@ -122,7 +122,7 @@ class StreamUpdateView(MyNewFormsetUpdateView):
         
         context = super().get_context_data( *args, **kwargs)
         context.update(get_aws_s3_creds())
-        context['path'] = 'stream'
+        context['path'] = 'public/stream'
         return context    
 
     def get_success_url(self):

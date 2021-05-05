@@ -159,7 +159,7 @@ class MaterialCreateView(MyCreateView):
         
         context = super().get_context_data( *args, **kwargs)
         context.update(get_aws_s3_creds())
-        context['path'] = 'materials'
+        context['path'] = 'public/materials'
         return context
 
     def get_success_url(self):
@@ -177,7 +177,7 @@ class MaterialUpdateView(MyUpdateView):
         
         context = super().get_context_data( *args, **kwargs)
         context.update(get_aws_s3_creds())
-        context['path'] = 'materials'
+        context['path'] = 'public/materials'
         return context
 
     def get_success_url(self):

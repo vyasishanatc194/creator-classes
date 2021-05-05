@@ -27,7 +27,10 @@ class AddMaterialAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def post(self, request, *args, **kwargs):
-        request.data["creator"] = request.user
+        data = {"creator": request.user.pk}
+        if request.data:
+            for keys, values in request.data.items():
+                data[keys] = values
         message = "Material created successfully!"
         serializer = self.serializer_class(data=request.data, context={"request": request})
         response_status, result, message = serialized_response(serializer, message)

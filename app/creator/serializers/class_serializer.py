@@ -34,7 +34,7 @@ class AddClassSerializer(serializers.ModelSerializer):
     Add Class serializer
     """
     title = serializers.CharField(required=True)
-    class_file = serializers.FileField(required=True)
+    class_file = serializers.CharField(required=False)
     thumbnail_file = serializers.FileField(required=True)
     class_keywords = serializers.CharField()
     class_covers = serializers.CharField()
@@ -123,7 +123,7 @@ class ClassListingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'created_at', 'is_favourite', 'creator_key_skill']
+        fields = ['id', 'title', 'thumbnail_file', 'promo_file', 'class_file','avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'created_at', 'is_favourite', 'creator_key_skill']
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)
@@ -199,7 +199,7 @@ class ClassDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'is_favourite', 'title', 'class_description','thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator', 'class_description','class_keywords', 'class_covers', 'class_materials', 'created_at', 'class_reviews']
+        fields = ['id', 'is_favourite', 'title', 'class_description','thumbnail_file', 'promo_file', 'class_file','avg_rating', 'total_rating', 'creator', 'class_description','class_keywords', 'class_covers', 'class_materials', 'created_at', 'class_reviews']
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)
@@ -255,7 +255,7 @@ class PopularClassListingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreatorClass
-        fields = ['id', 'title', 'thumbnail_file', 'promo_file', 'class_file', 'avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'creator_key_skill', 'created_at', 'is_favourite']
+        fields = ['id', 'title', 'thumbnail_file', 'promo_file', 'class_file','avg_rating', 'total_rating', 'creator_name', 'creator_profile_image', 'creator_key_skill', 'created_at', 'is_favourite']
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)

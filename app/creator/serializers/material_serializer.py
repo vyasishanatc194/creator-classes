@@ -12,7 +12,7 @@ class MaterialSerializer(serializers.ModelSerializer):
     material_category = serializers.CharField(required=True)
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
-    material_file = serializers.FileField(required=True)
+    material_file = serializers.CharField(required=False)
     class Meta:
         model = Material
         fields = ['id', 'creator', 'material_category', 'title', 'thumbnail_file', 'material_file']

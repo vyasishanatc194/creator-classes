@@ -9,7 +9,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
     """ 
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
-    sneak_peak_file = serializers.FileField(required=False)
+    sneak_peak_file = serializers.CharField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
     tz = serializers.CharField(required=True)
     stream_amount = serializers.FloatField(required=True)
@@ -137,7 +137,7 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
     """ 
     title = serializers.CharField(required=False)
     thumbnail_file = serializers.FileField(required=False)
-    sneak_peak_file = serializers.FileField(required=False)
+    sneak_peak_file = serializers.CharField(required=False)
     stream_datetime = serializers.DateTimeField(required=False)
     tz = serializers.CharField(required=False)
     stream_amount = serializers.FloatField(required=False)

@@ -111,7 +111,7 @@ class CreatorClassCreateView(MyNewFormsetCreateView):
         
         context = super().get_context_data( *args, **kwargs)
         context.update(get_aws_s3_creds())
-        context['path'] = 'class_content'
+        context['path'] = 'public/classes'
         return context
 
     def get_success_url(self):
@@ -152,7 +152,7 @@ class CreatorClassUpdateView(MyNewFormsetUpdateView):
         
         context = super().get_context_data( *args, **kwargs)
         context.update(get_aws_s3_creds())
-        context['path'] = 'class_content'
+        context['path'] = 'public/classes'
         return context
 
     def get_success_url(self):
