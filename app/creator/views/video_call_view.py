@@ -43,9 +43,9 @@ class GenerateAgoraTokenAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             stream = streams.first()
 
-            if stream.agora_token:
+            '''if stream.agora_token:
                 message = "Call has already started!"    
-                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)'''
 
             channel_name = stream.title
             # TODO change UID
@@ -82,9 +82,9 @@ class GenerateAgoraTokenAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             session = sessions.first()
 
-            if session.agora_token:
+            '''if session.agora_token:
                 message = "Call has already started!"    
-                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)'''
 
             channel_name = session.session.creator.first_name + " " + session.session.creator.last_name
             # TODO change UID
