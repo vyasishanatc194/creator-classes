@@ -43,7 +43,7 @@
                         <button type="button" class="btn btn-primary btn-sm" id="id_upload">Upload</button>
                         <div id="results"></div>
                         {{ form.sneak_peak_file|attr:'hidden'|as_crispy_field }}
-                            {% if form.sneak_peak_file.value.url %}
+                            {% if form.sneak_peak_file.value %}
                                 <a href="{{form.sneak_peak_file.value.url}}" target="blank">{{form.sneak_peak_file.value.url}}</a>
                         {% endif %}
                     </div>

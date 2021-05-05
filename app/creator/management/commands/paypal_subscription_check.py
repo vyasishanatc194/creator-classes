@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 import requests
+from creator_class.helpers import send_templated_email
+from creator_class import settings
 # from user.models import User
 
 
@@ -43,9 +45,16 @@ class Command(BaseCommand):
                     cancel_sub = requests.post(cancel_sub_url, headers=headers, data={})
 
                     user.paypal_subscription_id = None
+                    plan_name = user.plan_id.name
                     user.plan_id=None
                     user.save()
 
                     # TODO Send Email- subscription is canceled
+                    name = user.username if user.username else f"{user.first_name} {user.last_name}"
+                    email_data = {
+                        'name': name,
+                        'plan_name': plan_name
+                    }
+                    send_templated_email(user.email, settings.CANCEL_SUBSCRIPTION_TEMPLATE, email_data)
         except:
             self.stdout.write(self.style.ERROR("Error in paypal subscription check"))

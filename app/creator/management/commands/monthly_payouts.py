@@ -9,6 +9,7 @@ from django.conf import settings
 from creator.models import CreatorTransferredMoney, Creator, CreatorAffiliation, PayoutErrorLog
 from customadmin.models import CreatorClassCommission
 from user.models import SessionBooking, StreamBooking
+from creator_class.helpers import send_templated_email
 
 # Date Format
 
@@ -124,6 +125,13 @@ class Command(BaseCommand):
                                                                            stream_amount_received=stream_amount_received
                                                                            )
                                     print(".........................................success")
+                                    # Send Email
+                                    email_data = {
+                                        'name': f"{creator.first_name} {creator.last_name}",
+                                        'amount': int(final_amount) * 100
+                                    }
+                                    send_templated_email(creator.email, settings.CREATOR_SIGNUP_TEMPLATE, email_data)
+
 
                                 except Exception as e:
                                     print("....................................................Error", e)

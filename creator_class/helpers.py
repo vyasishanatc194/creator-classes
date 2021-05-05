@@ -9,6 +9,12 @@ from django.core.mail import EmailMultiAlternatives
 import os
 from user.models import User
 
+import sendgrid
+from .settings import SENDGRID_API_KEY
+from sendgrid.helpers.mail import Email, Substitution, Mail, Personalization
+from python_http_client import exceptions
+
+
 # Pagination
 PAGINATOR = PageNumberPagination()
 PAGINATOR.page_size = 10
@@ -78,3 +84,18 @@ def delete_media(path):
     if(os.path.exists(os.path.join(media_root, str(path))) and path):
         os.remove(os.path.join(media_root, str(path)))
     return True
+
+def send_templated_email(to_email, email_temlpate_id, dynamic_data_for_template):
+    sg = sendgrid.SendGridAPIClient(SENDGRID_API_KEY)
+    personalization = Personalization()
+    personalization.add_to(Email(to_email))
+    mail = Mail()
+    mail.from_email = Email("aaradhana.citrusbug@gmail.com")
+    mail.template_id = email_temlpate_id
+    personalization.dynamic_template_data = dynamic_data_for_template
+    mail.add_personalization(personalization)
+    try:
+        sg.client.mail.send.post(request_body=mail.get())
+        return
+    except exceptions.BadRequestsError as e:
+        exit()

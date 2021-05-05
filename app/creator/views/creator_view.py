@@ -12,7 +12,7 @@ from ..serializers import (
 )
 from ..models import Creator, CreatorAffiliation, CreatorTransferredMoney
 from user.models import User, StreamBooking, SessionBooking
-from creator_class.helpers import custom_response, serialized_response, get_object
+from creator_class.helpers import custom_response, serialized_response, get_object, send_templated_email
 from rest_framework import status, parsers, renderers
 from django.contrib.auth import authenticate, login, logout
 from creator_class.permissions import IsAccountOwner, IsCreator, get_pagination_response
@@ -21,6 +21,8 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
 from customadmin.models import CreatorClassCommission, AvailableTimezone
+from creator_class.settings import CREATOR_SIGNUP_TEMPLATE
+
 
 class TimezonesListingAPIView(APIView):
     """
@@ -146,7 +148,10 @@ class CreatorRegisterView(APIView):
         status_code = (
             status.HTTP_201_CREATED if response_status else status.HTTP_400_BAD_REQUEST
         )
-        # TODO Email
+        email_data = {
+            'name': f"{request.data['first_name']} {request.data['last_name']}"
+        }
+        send_templated_email(request.data["email"], CREATOR_SIGNUP_TEMPLATE, email_data)
         return custom_response(response_status, status_code, message, result)
 
 

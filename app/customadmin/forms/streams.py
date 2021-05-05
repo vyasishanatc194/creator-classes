@@ -53,10 +53,6 @@ class StreamCreationForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Please add thumbnail file for stream."
             )
-        if not sneak_peak_file :
-            raise forms.ValidationError(
-                "Please add Sneak Peak file for stream."
-            )
         if today_date > stream_datetime:
             raise forms.ValidationError(
                 "Please add valid date and time."
@@ -123,10 +119,6 @@ class StreamChangeForm(forms.ModelForm):
         if not thumbnail_file :
             raise forms.ValidationError(
                 "Please add thumbnail file for stream."
-            )
-        if not sneak_peak_file :
-            raise forms.ValidationError(
-                "Please add Sneak Peak file for stream."
             )
         if today_date > stream_datetime:
             raise forms.ValidationError(

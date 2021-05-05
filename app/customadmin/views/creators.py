@@ -21,6 +21,9 @@ from user.models import CreatorReview
 from extra_views import InlineFormSetFactory
 from django.views.generic import DetailView
 
+from creator_class.helpers import send_templated_email
+from django.conf import settings
+
 import csv
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -68,11 +71,10 @@ def CreatorRejectRequestAjax(request):
         if creator_obj.is_active:
             creator_obj.is_active = False
         creator_obj.save()
-        subject = 'Request rejected !!!'
-        message = f'Hi {creator_obj.username}, your request is rejected by creatorclass admin.'
-        email_from = settings.EMAIL_HOST_USER 
-        recipient_list = [creator_obj.email, ] 
-        send_mail( subject, message, email_from, recipient_list )
+        email_data = {
+            'name': f"{creator_obj.first_name} {creator_obj.last_name}"
+        }
+        send_templated_email(creator_obj.email, settings.CREATOR_REGISTRATION_REJECTED_TEMPLATE, email_data)
         messages.success(request, "'Request rejected successfully'")
     return JsonResponse({"success": True})
 
@@ -84,11 +86,10 @@ def CreatorAcceptRequestAjax(request):
         if not creator_obj.is_active:
             creator_obj.is_active = True
         creator_obj.save()
-        subject = 'Request Accepted !!!'
-        message = f'Hi {creator_obj.username}, your request is accepted by creatorclass admin.'
-        email_from = settings.EMAIL_HOST_USER 
-        recipient_list = [creator_obj.email, ] 
-        send_mail( subject, message, email_from, recipient_list ) 
+        email_data = {
+            'name': f"{creator_obj.first_name} {creator_obj.last_name}"
+        }
+        send_templated_email(creator_obj.email, settings.CREATOR_REGISTRATION_ACCEPTED_TEMPLATE, email_data)
         messages.success(request, "'Request accept successfully'")
     return JsonResponse({"success": True})
 
