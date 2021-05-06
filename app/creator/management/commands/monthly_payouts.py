@@ -105,7 +105,7 @@ class Command(BaseCommand):
                                 final_amount = round(transfer_amount, 2)
                                 try:
                                     transaction = stripe.Transfer.create(
-                                        amount=int(final_amount) * 100,
+                                        amount=int(final_amount),
                                         currency="usd",
                                         destination=str(creator.stripe_account_id),
                                     )
