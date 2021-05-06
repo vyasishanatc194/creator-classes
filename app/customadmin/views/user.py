@@ -19,9 +19,12 @@ from django_datatables_too.mixins import DataTableMixin
 from ..forms import MyUserChangeForm, MyUserCreationForm, UserCardChangeForm, UserCardCreationForm
 from django.shortcuts import reverse, render
 
+from creator.models import Stream, TimeSlot, CreatorTransferredMoney
 from user.models import User, UserCard, SessionBooking, StreamBooking, UserPlanPurchaseHistory
 from creator.models import Creator, CreatorAffiliation
 from customadmin.models import CreatorClassCommission
+
+import datetime
 
 import csv
 
@@ -92,11 +95,16 @@ class IndexView(LoginRequiredMixin, TemplateView):
         plan_earnings = (plan_purchase if plan_purchase else 0) - (commission_amount if commission_amount else 0)
 
         creator_classes_earnings = stream_earnings + session_earnings + plan_earnings
-
+        self.context['orders_count'] = []
         self.context['user_count']=User.objects.all().exclude(is_creator=True).exclude(username='admin').count()
         self.context['creator_count']=Creator.objects.all().filter(status='ACCEPT').count()
         self.context['creator_classes_earnings']=creator_classes_earnings
         self.context['pending_creator_count']=Creator.objects.filter(status='PENDING').count()
+        self.context['live_stream'] = Stream.objects.filter(stream_datetime__gte=datetime.datetime.now()).count()
+        self.context['transfer_money'] = CreatorTransferredMoney.objects.all().count()
+        for i in range(1, 13):
+            self.context['orders_count'].append(Stream.objects.filter(created_at__month=i).count())
+        print(self.context['orders_count'])
         return render(request, self.template_name, self.context)
 
 # -----------------------------------------------------------------------------

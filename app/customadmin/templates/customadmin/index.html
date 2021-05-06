@@ -84,9 +84,131 @@
     </div>
   </div>
 </div>
+<div class="wrapper wrapper-content">
+  <div class="row">
+    <div class="col-lg-3">
+          <div class="ibox ">
+            <div class="ibox-title">
+              <div class="ibox-tools">
+              </div>
+              <h5>Upcoming Streams</h5>
+            </div>
+            <div class="ibox-content">
+              <h3 class="no-margins">{{ live_stream }}</h3>
+            </div>
+          </div>
+    </div>
+    <div class="col-lg-3">
+          <div class="ibox ">
+            <div class="ibox-title">
+              <div class="ibox-tools">
+              </div>
+              <h5>Transferred Money</h5>
+            </div>
+            <div class="ibox-content">
+              <h3 class="no-margins">{{ transfer_money }}</h3>
+            </div>
+          </div>
+    </div>
+  </div>
+  <div class="chart-main">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="heading">
+                    <h4>Streams Per Month</h4>
+                  </div>
+                </div>
+              </div>
+  <div class="chart-area">
+      <canvas id="myChart"  style="height: 300px;" class="chart-summary"></canvas>
+  </div>
+  </div>
+</div>
 
 
 
+<script src="{% static 'customadmin/js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'customadmin/js/plugins/chartJs/Chart.js' %}"></script>
+<script src="{% static 'customadmin/js/plugins/chartJs/Chart.min.js' %}"></script>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var gradient = ctx.createLinearGradient(0, 0, 0, 250);
+    gradient.addColorStop(0, 'rgba(30,183,179,1)');
+    gradient.addColorStop(1, 'rgba(30,183,179,0)');
+
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+            label: '# Streams',
+            data: {{orders_count}},
+            borderColor: [
+               "#1EB7B3"
+            ],
+            backgroundColor: gradient,
+            borderWidth: 3,
+            strokeColor : "#1EB7B3",
+            pointColor : "#1EB7B3",
+            pointStrokeColor : "#1EB7B3",
+            pointStrokeWidth: 3,
+            pointHighlightFill: "#1EB7B3",
+            pointHighlightStroke: "#1EB7B3",
+        }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+        scales: {
+          xAxes: [{
+                    gridLines: {
+                        display: false
+                    }
+                  }],
+            yAxes: [{
+              gridLines: {
+                lineHeight: 0
+              },
+                ticks: {
+                    beginAtZero: true,
+                    padding: 0,
+                }
+            }]
+        },
+
+      legend: {
+        position: 'top',
+        display: false
+      },
+      title: {
+            display: false,
+            text: 'Bar Chart'
+      },
+      tooltips: {
+        backgroundColor: '#fafafa',
+        titleFontColor: '#000',
+            callbacks: {
+                labelColor: function(tooltipItem, chart) {
+                    return {
+                        borderColor: 'rgb(255, 0, 0)',
+                    };
+                },
+
+                labelTextColor: function(tooltipItem, chart) {
+                    return '#000';
+
+                },
+
+            }
+        }
+    },
+
+
+
+
+});
+
+</script>
 
 
 
