@@ -14,7 +14,7 @@ from creator_class.helpers import send_templated_email
 # Date Format
 
 today = date.today()
-yesterday = today - timedelta(days=1)
+yesterday = today - timedelta(days=0)
 
 yesterday_date = today - timedelta(days=31)
 start_date_month = f"{yesterday_date} 00:00:00"
