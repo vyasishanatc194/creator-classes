@@ -280,12 +280,12 @@ EMAIL_USE_TLS = True
 STRIPE_API_KEY = "sk_test_51I4l0BFwJZnPqrrsqMzlMuR72JD4GNsR4sf3Hd6q28xUoB2vs4hYWCf1fw1DZSYgCVsWx1w3XNhtMfZcydD0xBmv00umHC3nYO"
 
 
-CURRENCY = "usd"
+CURRENCY = "gbp"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
 
 USER_SIGNUP_LINK = "http://ccmike.creatorclasses.co/user/signup/"
-RESET_PASSWORD_LINK = "http://3.139.122.63/reset-password/"
+RESET_PASSWORD_LINK = "http://ccmike.creatorclasses.co/user/forgot-password/"
 
 
 PAYPAL_CLIENT_ID = "Aabc-D8rlBMneFlgavVKs9R1S5qDNcD0HXwuSP76BKM_8QGp6rhk6B1khGyRy8Bc0aELuhVIOYUImeR2"

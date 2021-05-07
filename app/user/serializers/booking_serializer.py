@@ -85,5 +85,5 @@ class UserBookedSessionListingSerializer(serializers.ModelSerializer):
     time_slot = SessionListingSerializer()
     creator = CreatorListingSerializer()
     class Meta:
-        model = StreamBooking
-        fields = ("id", "created_at", "creator", 'time_slot')
+        model = SessionBooking
+        fields = ("id", "created_at", "creator", 'time_slot','description')

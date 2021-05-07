@@ -106,7 +106,7 @@ class Command(BaseCommand):
                                 try:
                                     transaction = stripe.Transfer.create(
                                         amount=int(final_amount),
-                                        currency="usd",
+                                        currency="gbp",
                                         destination=str(creator.stripe_account_id),
                                     )
 
