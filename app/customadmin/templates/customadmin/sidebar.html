@@ -173,6 +173,14 @@
                 </a>
             </li>
             {% endif %}
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'session-bookings/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'customadmin:availabletimezone-list' %}">
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Timezone</span>
+                </a>
+            </li>
+            {% endif %}
             
 
         </ul>

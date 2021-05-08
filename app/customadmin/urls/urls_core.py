@@ -169,6 +169,11 @@ urlpatterns +=[
     path("commission/<int:pk>/delete/", views.CreatorClassCommissionDeleteView.as_view(), name="creatorclasscommission-delete"),
     path("ajax-commission", views.CreatorClassCommissionAjaxPagination.as_view(), name="creatorclasscommission-list-ajax"),
 
-
+#------------------------------------------------------------------------------------------------------
+    #Timezones
+    path("timezone/", views.TimezoneListView.as_view(), name="availabletimezone-list"),
+    path("timezone/create/", views.TimezoneCreateView.as_view(), name="availabletimezone-create"),
+    path("timezone/<int:pk>/update/", views.TimezoneUpdateView.as_view(), name="availabletimezone-update"),
+    path("timezone/<int:pk>/delete/", views.TimezoneDeleteView.as_view(), name="availabletimezone-delete"),
 
 ]

@@ -5,6 +5,7 @@ from django.conf.urls import url, include
 
 
 urlpatterns = [
+    path("get-timezone/", views.TimezoneAPIView.as_view(), name="timezone"),
     path("signup/", views.SignUpApiView.as_view(), name="signup"),
     path("login/", views.LoginAPIView.as_view(), name="login"),
     path("logout/", views.LogoutAPIView.as_view(), name="logout"),

@@ -15,6 +15,7 @@ from .auth import (
     PayPalPlanPurchaseAPIView,
     UserSelectedKeywordsAPIView,
     ChangePlanAPIView,
+    TimezoneAPIView,
 )
 from .country_list import CountryListAPIView
 from .review import CreatorReviewAPIView, ClassReviewAPIView

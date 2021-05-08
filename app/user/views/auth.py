@@ -7,6 +7,7 @@ from ..serializers import (
     TransactionDetailSerializer,
     UserPlanSerializer,
     UserSelectedKeywordSerializer,
+    TimeZoneSerializer,
 )
 from ..models import User, TransactionDetail, UserPlanPurchaseHistory, UserKeyword
 from creator.models import CreatorAffiliation
@@ -30,7 +31,7 @@ from rest_auth.registration.serializers import SocialLoginSerializer
 
 from google.views import GoogleOAuth2Adapter
 from rest_framework import generics
-from customadmin.models import Testimonial, Plan, CreatorClassCommission
+from customadmin.models import Testimonial, Plan, CreatorClassCommission, AvailableTimezone
 from creator_class.utils import (
     MyStripe,
     create_card_object,
@@ -619,3 +620,14 @@ class ChangePlanAPIView(APIView):
             print(inst)
             message = str(inst)
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
+class TimezoneAPIView(APIView):
+    def get(self,request):
+        timezone = AvailableTimezone.objects.filter(active=True)
+        if timezone:
+            print(timezone)
+            serialize = TimeZoneSerializer(timezone,many=True)
+            print(serialize.data)
+            return custom_response(True, status.HTTP_200_OK, message="TimeZones fetched successfully", result=serialize.data)
+        return custom_response(False, status.HTTP_400_BAD_REQUEST, message="No TimeZone Fetched")

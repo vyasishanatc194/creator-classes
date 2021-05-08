@@ -1,10 +1,18 @@
 from rest_framework import fields, serializers
 from ..models import User, UserKeyword, CountryField
 from rest_framework.authtoken.models import Token
-from customadmin.models import Testimonial, Plan, PlanCover, AdminKeyword
+from customadmin.models import Testimonial, Plan, PlanCover, AdminKeyword, AvailableTimezone
 from creator_class.utils import MyStripe
 from creator.models import Creator
 # from creator.serializers import AdminKeywordSerializer
+
+
+
+class TimeZoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvailableTimezone
+        fields = ['id','tz']
+
 
 
 class CountryListSerializer(serializers.ModelSerializer):

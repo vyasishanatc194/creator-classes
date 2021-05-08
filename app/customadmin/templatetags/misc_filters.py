@@ -67,6 +67,9 @@ def admin_urlname(value, arg):
         pattern = "%s:%s-%s" % ('customadmin', 'streambooking', arg)
     if value.model_name == 'sessionbooking':
         pattern = "%s:%s-%s" % ('customadmin', 'sessionbooking', arg)
+    if value.model_name == 'availabletimezone':
+        pattern = "%s:%s-%s" % ('customadmin', 'availabletimezone', arg)
+
     # print('---------------------------------------------------------------------------------',pattern)
     return pattern
 
