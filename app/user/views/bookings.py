@@ -46,7 +46,7 @@ class OneToOneSessionBookingAPIView(APIView):
                 card_id = newcard.id
                 print("<<<-----|| CARD CREATED ||----->>>", check_booking[0])
 
-                newcharge = stripe.create_charge(check_booking[0].session.amount, card_id, customer_id)
+                newcharge = stripe.create_charge((check_booking[0].session.amount)*100, card_id, customer_id)
                 charge_object = create_charge_object(newcharge, request)
 
                 chargeserializer = TransactionDetailSerializer(data=charge_object)
@@ -164,7 +164,7 @@ class StreamBookingAPIView(APIView):
                 card_id = newcard.id
                 print("<<<-----|| CARD CREATED ||----->>>")
 
-                newcharge = stripe.create_charge(streams[0].stream_amount, card_id, customer_id)
+                newcharge = stripe.create_charge(streams[0].stream_amount * 100, card_id, customer_id)
                 charge_object = create_charge_object(newcharge, request)
 
                 chargeserializer = TransactionDetailSerializer(data=charge_object)

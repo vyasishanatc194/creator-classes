@@ -104,7 +104,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
         self.context['transfer_money'] = CreatorTransferredMoney.objects.all().count()
         for i in range(1, 13):
             self.context['orders_count'].append(Stream.objects.filter(created_at__month=i).count())
-        print(self.context['orders_count'])
         return render(request, self.template_name, self.context)
 
 # -----------------------------------------------------------------------------
