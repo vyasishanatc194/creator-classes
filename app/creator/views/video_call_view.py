@@ -13,7 +13,7 @@ from user.models import StreamBooking
 import time
 from .RtcTokenBuilder import RtcTokenBuilder
 expireTimeInSeconds = 86400
-currentTimestamp = int(time.time())
+currentTimestamp = int(time.time()) + 21600
 privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
 
