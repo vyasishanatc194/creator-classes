@@ -43,6 +43,10 @@ class GenerateAgoraTokenAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             stream = streams.first()
 
+            if stream.completed:
+                message = "Stream is completed!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
             '''if stream.agora_token:
                 message = "Call has already started!"    
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)'''
@@ -81,6 +85,10 @@ class GenerateAgoraTokenAPIView(APIView):
                 message = "Invalid Session ID!"    
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             session = sessions.first()
+
+            if session.completed:
+                message = "Session is completed!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
             '''if session.agora_token:
                 message = "Call has already started!"    

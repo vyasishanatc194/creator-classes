@@ -42,6 +42,12 @@ class JoinCallAPIView(APIView):
                 message = "You are not allowed to join the Live stream!"    
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             booking = user_booking.first()
+
+            if booking.stream.completed:
+                message = "Stream is completed!"    
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+
             booking.user_joined = True
             booking.user_uid = user_uid
             booking.save()
@@ -66,6 +72,9 @@ class JoinCallAPIView(APIView):
                 message = "You are not allowed to join the session!"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             booking = user_booking.first()
+            if booking.time_slot.completed:
+                message = "Session is completed!"    
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             booking.user_joined = True
             booking.save()
 
