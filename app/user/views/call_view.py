@@ -145,9 +145,5 @@ class LeaveStreamCallAPIView(APIView):
             booking.user_joined = False
             booking.save()
 
-            session.completed = True
-            session.session_completed_at = datetime.now()
-            session.save()
-  
         message = "Call left successfully!"
         return custom_response(True, status.HTTP_200_OK, message)

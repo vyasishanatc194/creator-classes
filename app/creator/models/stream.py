@@ -19,6 +19,7 @@ class Stream(ActivityTracking):
     token_created_at = models.DateTimeField(null=True, blank=True)
     stream_completed_at = models.DateTimeField(null=True, blank=True)
     screen_share = models.BooleanField(default=False)
+    screen_share_uuid = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
         return f"{self.creator.username} | {self.title} "

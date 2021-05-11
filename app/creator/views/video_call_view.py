@@ -240,12 +240,14 @@ class StreamScreenShareAPIView(APIView):
 
     def post(self, request, pk):
         screen_share = request.GET.get('screen_share', False)
+        screen_share_uuid = request.GET.get('screen_share_uuid', None)
         streams = Stream.objects.filter(pk=pk)
         if not streams:
             message = "Stream not found!"
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         stream = streams.first()
         stream.screen_share = screen_share
+        stream.screen_share_uuid = screen_share_uuid
         stream.save()        
         message = "Screen share status updated Successfully!"
         return custom_response(True, status.HTTP_200_OK, message)
@@ -258,7 +260,8 @@ class StreamScreenShareAPIView(APIView):
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
         stream = streams.first()
         data = {
-            "screen_share": stream.screen_share
+            "screen_share": stream.screen_share,
+            "screen_share_uuid": stream.screen_share_uuid,
         } 
         message = "Screen share status updated Successfully!"
         return custom_response(True, status.HTTP_200_OK, message, data)
