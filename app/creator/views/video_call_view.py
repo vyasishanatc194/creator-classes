@@ -285,7 +285,7 @@ class StreamHostAPIView(APIView):
     """
     StreamScreenShareAPIView
     """
-    permission_classes = (IsAccountOwner, IsCreator)
+    permission_classes = (IsAccountOwner, )
 
     def post(self, request, pk):
         user = request.GET.get('user', False)
