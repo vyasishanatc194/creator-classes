@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 from os import path
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env(str(".env"))
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -136,11 +142,11 @@ WSGI_APPLICATION = 'creator_class.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'creator_class',
-        'USER': 'postgres',
-        'HOST': 'creatorclass.cemmg26jcbac.us-east-2.rds.amazonaws.com',
-        'PASSWORD': 'lOb4Rd6yq8TlYIQWAK2n',
-        'PORT': '5432'
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'HOST': env("DB_HOST"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'PORT': env("DB_PORT")
     }
 }
 
@@ -148,10 +154,10 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'creator_class',
+#         'NAME': 'creator_classes',
 #         'USER': 'postgres',
 #         'HOST': 'localhost',
-#         'PASSWORD': 'root',
+#         'PASSWORD': '1234',
 #         'PORT': '5432'
 #     }
 # }
@@ -242,16 +248,16 @@ STATICFILES_FINDERS = (
 
 
 #Local Facebook social login
-SOCIAL_AUTH_FACEBOOK_KEY = '188875569725216'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '15ded118e17eb65bbd9bfae81f151563'  # App Secret
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}  # optional
+SOCIAL_AUTH_FACEBOOK_KEY = env.str('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = env.str('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
 
 
 #Local Twitter social login
-SOCIAL_AUTH_TWITTER_KEY = 'ekZ5wn6z1RczPQdfLDkgGDCqW'
-SOCIAL_AUTH_TWITTER_SECRET = 'od6C3iKBjYlL5oaHNzp2mG6lU4dKttJ0cKlOZl9c83Mp7cxGGx'
-LOGIN_REDIRECT_URL = "customadmin:user-list"
+SOCIAL_AUTH_TWITTER_KEY = env.str('SOCIAL_AUTH_TWITTER_KEY')
+SOCIAL_AUTH_TWITTER_SECRET = env.str('SOCIAL_AUTH_TWITTER_SECRET')
+LOGIN_REDIRECT_URL = 'customadmin:user-list'
 
 LOGIN_URL = "auth:auth_login"
 
@@ -277,7 +283,7 @@ EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
 EMAIL_USE_TLS = True
 
 # Stripe token
-STRIPE_API_KEY = "sk_test_51I4l0BFwJZnPqrrsqMzlMuR72JD4GNsR4sf3Hd6q28xUoB2vs4hYWCf1fw1DZSYgCVsWx1w3XNhtMfZcydD0xBmv00umHC3nYO"
+STRIPE_API_KEY = env.str('STRIPE_API_KEY')
 
 
 CURRENCY = "gbp"
@@ -288,33 +294,30 @@ USER_SIGNUP_LINK = "http://ccmike.creatorclasses.co/user/signup/"
 RESET_PASSWORD_LINK = "http://ccmike.creatorclasses.co/user/forgot-password/"
 
 
-PAYPAL_CLIENT_ID = "Aabc-D8rlBMneFlgavVKs9R1S5qDNcD0HXwuSP76BKM_8QGp6rhk6B1khGyRy8Bc0aELuhVIOYUImeR2"
-PAYPAL_SECRET_KEY = "EOuRkF9j0KAB2mbbWruHgQCdQpZeu5MOQEASF4fklPBwNHOGxn6YHf9IBgyy0fWQefCAFfYFugy1KuKl"
-PAYPAL_AUTH_TOKEN_URL = "https://api.sandbox.paypal.com/v1/oauth2/token"
+PAYPAL_CLIENT_ID = env.str('PAYPAL_CLIENT_ID')
+PAYPAL_SECRET_KEY = env.str('PAYPAL_SECRET_KEY')
+PAYPAL_AUTH_TOKEN_URL = env.str('PAYPAL_AUTH_TOKEN_URL')
 
 
-AgoraAppID = "eac21ff98de64fe9b9821de92ee715a3"
-AgoraAppCertificate = "3598fbec00de48bea9b968c12c246635"
+AgoraAppID = env.str('AgoraAppID')
+AgoraAppCertificate = env.str('AgoraAppCertificate')
 
+SENDGRID_API_KEY = env.str('SENDGRID_API_KEY')
+CREATOR_SIGNUP_TEMPLATE = env.str('CREATOR_SIGNUP_TEMPLATE')
+FORGET_PASSWORD_TEMPLATE = env.str('FORGET_PASSWORD_TEMPLATE')
+USER_LIVE_STREAM_BOOKING_TEMPLATE = env.str('USER_LIVE_STREAM_BOOKING_TEMPLATE')
+CREATOR_LIVE_STREAM_BOOKING_TEMPLATE = env.str('CREATOR_LIVE_STREAM_BOOKING_TEMPLATE')
+CREATOR_SESSION_BOOKING = env.str('CREATOR_SESSION_BOOKING')
+USER_SESSION_BOOKING = env.str('USER_SESSION_BOOKING')
+CREATOR_REGISTRATION_ACCEPTED_TEMPLATE = env.str('CREATOR_REGISTRATION_ACCEPTED_TEMPLATE')
+CREATOR_REGISTRATION_REJECTED_TEMPLATE = env.str('CREATOR_REGISTRATION_REJECTED_TEMPLATE')
+USER_STREAM_REMINDER_TEMPLATE = env.str('USER_STREAM_REMINDER_TEMPLATE')
+USER_SESSION_REMINDER_TEMPLATE = env.str('USER_SESSION_REMINDER_TEMPLATE')
+CREATOR_PAYOUT_TEMPLATE = env.str('CREATOR_PAYOUT_TEMPLATE')
+CANCEL_SUBSCRIPTION_TEMPLATE = env.str('CANCEL_SUBSCRIPTION_TEMPLATE')
 
-
-SENDGRID_API_KEY='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'
-CREATOR_SIGNUP_TEMPLATE = 'd-baa6392bb791427ca59e09c942358582'
-FORGET_PASSWORD_TEMPLATE = 'd-4281f3a4802942adaff477e9964d4dbc'
-USER_LIVE_STREAM_BOOKING_TEMPLATE = 'd-34ec6f9c567d48aaa4f22bc37081edf9'
-CREATOR_LIVE_STREAM_BOOKING_TEMPLATE = 'd-531cd6df28b54a599c42954fc9734fb2'
-CREATOR_SESSION_BOOKING = 'd-b7f31477db7244bcb5c6cf96bdfffa4a'
-USER_SESSION_BOOKING = 'd-6b3d26650b2c419c88e5ffff26696bd0'
-CREATOR_REGISTRATION_ACCEPTED_TEMPLATE = 'd-99ca283ce7ac431caaf55eb79fc9cb30'
-CREATOR_REGISTRATION_REJECTED_TEMPLATE = 'd-c06e50b5680a4461b4483c9c3bc8151f'
-USER_STREAM_REMINDER_TEMPLATE = 'd-9bb5f097c9eb47be8039fc169add8c82'
-USER_SESSION_REMINDER_TEMPLATE = 'd-f8286e7dfe5d48709f43e3dda215315a'
-CREATOR_PAYOUT_TEMPLATE = 'd-bc2f68e9864744118913a06e95996815'
-CANCEL_SUBSCRIPTION_TEMPLATE = 'd-bbd3aa2c79ff4c1db9a8b55b23a1c860'
-
-
-AWS_ACCESS_KEY_ID = 'AKIATDU745XSKRJVB2WO'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = env.str('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'myapp-user-uploads154822-dev'
 ENDPOINT_URL = "s3.amazonaws.com"
 BUCKET_NAME = "myapp-user-uploads154822-dev"
