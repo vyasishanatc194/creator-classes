@@ -30,8 +30,8 @@ class StripeAccountConnectAPI(APIView):
 
                     account_links = stripe.AccountLink.create(
                         account=account.id,
-                        refresh_url='http://3.139.122.63/creator-transfer-funds',
-                        return_url='http://3.139.122.63/creator-transfer-funds',
+                        refresh_url='http://3.139.122.63/ccmike.creatorclasses.co/creator-home',
+                        return_url='http://3.139.122.63/ccmike.creatorclasses.co/creator-home',
                         type='account_onboarding',
                     )
 
