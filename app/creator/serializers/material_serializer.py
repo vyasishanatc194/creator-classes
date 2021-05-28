@@ -15,7 +15,15 @@ class MaterialSerializer(serializers.ModelSerializer):
     material_file = serializers.CharField(required=False)
     class Meta:
         model = Material
-        fields = ['id', 'creator', 'material_category', 'title', 'thumbnail_file', 'material_file']
+        fields = [
+            'id',
+            'creator',
+            'material_category',
+            'title',
+            'thumbnail_file',
+            'material_file',
+            'transcoded_material_file'
+        ]
 
     def create(self, validated_data):
         material_category = validated_data.pop('material_category', None)
@@ -38,5 +46,13 @@ class MaterialDetailSerializer(serializers.ModelSerializer):
     material_category = MaterialCategorySerializer()
     class Meta:
         model = Material
-        fields = ['id', 'creator', 'material_category', 'title', 'thumbnail_file', 'material_file']
+        fields = [
+            'id',
+            'creator',
+            'material_category',
+            'title',
+            'thumbnail_file',
+            'material_file',
+            'transcoded_material_file'
+        ]
 

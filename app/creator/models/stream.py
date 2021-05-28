@@ -8,6 +8,7 @@ class Stream(ActivityTracking):
     title = models.CharField(max_length=200, blank=True, null=True, default='')
     thumbnail_file = models.FileField(upload_to="public/stream", null=True,  blank=True, verbose_name=_("Stream thumbnail"))
     sneak_peak_file = models.FileField(upload_to="public/stream", null=True,  blank=True, verbose_name=_("Stream sneak peak"))
+    transcoded_sneak_peak_file = models.TextField(blank=True, null=True)
     stream_datetime = models.DateTimeField(null=True, blank=True, help_text=_("Stream Datetime"), verbose_name=_("Stream Datetime"))
     stream_amount = models.FloatField(blank=True, null=True, default=10)
     total_seats = models.IntegerField(blank=True, null=True, default=10)

@@ -324,6 +324,9 @@ BUCKET_NAME = "myapp-user-uploads154822-dev"
 REGION_NAME = "us-east-2"
 SIGNATURE_VERSION = 'v4'
 
+AWS_PIPELINE_ID = env.str('AWS_PIPELINE_ID')
+AWS_PRESET_ID = env.str('AWS_PRESET_ID')
+
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_QUERYSTRING_AUTH = False

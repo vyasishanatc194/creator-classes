@@ -19,7 +19,20 @@ class AddStreamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = [
+            'id',
+            'creator',
+            'title',
+            'thumbnail_file',
+            'sneak_peak_file',
+            'transcoded_sneak_peak_file',
+            'stream_datetime',
+            'tz',
+            'stream_amount',
+            'total_seats',
+            'stream_keywords',
+            'stream_covers'
+        ]
 
     def create(self, validated_data):
         tz = validated_data.pop('tz', None)
@@ -98,7 +111,25 @@ class MyStreamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id','profile_image','username','first_name','last_name','creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = [
+            'id',
+            'profile_image',
+            'username',
+            'first_name',
+            'last_name',
+            'creator',
+            'title',
+            'thumbnail_file',
+            'sneak_peak_file',
+            'transcoded_sneak_peak_file',
+            'stream_datetime',
+            'tz',
+            'tz_value',
+            'stream_amount',
+            'total_seats',
+            'stream_keywords',
+            'stream_covers'
+        ]
 
     def get_stream_covers(self, instance):
         stream_covers = StreamCovers.objects.filter(stream=instance)
@@ -147,7 +178,19 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers']
+        fields = [
+            'id',
+            'title',
+            'thumbnail_file',
+            'sneak_peak_file',
+            'transcoded_sneak_peak_file',
+            'stream_datetime',
+            'tz',
+            'stream_amount',
+            'total_seats',
+            'stream_keywords',
+            'stream_covers'
+        ]
 
     def update(self, instance, validated_data):
         stream_keywords = validated_data.pop('stream_keywords', None)

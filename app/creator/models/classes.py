@@ -11,6 +11,7 @@ class CreatorClass(ActivityTracking):
     thumbnail_file = models.FileField(upload_to="public/classes", null=True,  blank=True, verbose_name=_("class thumbnail"))
     class_file = models.FileField(upload_to="public/classes", null=True,  blank=True, verbose_name=_("Class file"))
     promo_file = models.FileField(upload_to="public/classes", null=True,  blank=True, verbose_name=_("Class promo"))
+    transcoded_class_file = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.creator.username} | {self.title}"
