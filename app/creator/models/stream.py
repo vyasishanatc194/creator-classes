@@ -6,8 +6,8 @@ from creator_class.models import ActivityTracking
 class Stream(ActivityTracking):
     creator = models.ForeignKey("Creator", on_delete=models.CASCADE, related_name="stream_by")
     title = models.CharField(max_length=200, blank=True, null=True, default='')
-    thumbnail_file = models.FileField(upload_to="public/stream", null=True,  blank=True, verbose_name=_("Stream thumbnail"))
-    sneak_peak_file = models.FileField(upload_to="public/stream", null=True,  blank=True, verbose_name=_("Stream sneak peak"))
+    thumbnail_file = models.FileField(upload_to="public/streams", null=True,  blank=True, verbose_name=_("Stream thumbnail"))
+    sneak_peak_file = models.FileField(upload_to="public/streams", null=True,  blank=True, verbose_name=_("Stream sneak peak"))
     transcoded_sneak_peak_file = models.TextField(blank=True, null=True)
     stream_datetime = models.DateTimeField(null=True, blank=True, help_text=_("Stream Datetime"), verbose_name=_("Stream Datetime"))
     stream_amount = models.FloatField(blank=True, null=True, default=10)

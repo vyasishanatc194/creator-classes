@@ -289,7 +289,6 @@ class PlanPurchaseAPIView(APIView):
                     user.stripe_subscription_id = subscribe_new_plan['id']
                     message = "Plan purchased successfully!"
                     user.save()
-                    print(subscribe_new_plan['id'])
                     UserPlanPurchaseHistory.objects.create(
                         user = user,
                         plan = plan_check[0],

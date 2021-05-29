@@ -116,44 +116,45 @@ def creator_stream_post_save_receiver(sender, instance, raw, created, update_fie
     """Fires a Signal after storing the Creator Stream data into database"""
 
     print("<<<-----|| SIGNAL FIRED = Creator Stream (Post) ||----->>>")
+    if instance.sneak_peak_file:
+        sneak_peak_file = str(settings.ENDPOINT_URL) + str(instance.sneak_peak_file)
+        print(sneak_peak_file)
 
-    sneak_peak_file = str(settings.ENDPOINT_URL) + str(instance.sneak_peak_file)
+        client = boto3.client(
+            'elastictranscoder',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.REGION_NAME
+        )
 
-    client = boto3.client(
-        'elastictranscoder',
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.REGION_NAME
-    )
+        in_key = sneak_peak_file.split('.com/')[1]
+        file_name = sneak_peak_file.split('/streams/')[1]
+        name = file_name.split(Path(file_name).suffix)[0]
+        out_path = in_key.replace('/streams/', '/streams/transcoded/')
+        out_key = out_path.split(file_name)[0]
 
-    in_key = sneak_peak_file.split('.com/')[1]
-    file_name = sneak_peak_file.split('/stream/')[1]
-    name = file_name.split(Path(file_name).suffix)[0]
-    out_path = in_key.replace('/stream/', '/stream/transcoded/')
-    out_key = out_path.split(file_name)[0]
-
-    client.create_job(
-        PipelineId=str(settings.AWS_PIPELINE_ID),
-        Input={
-            'Key': in_key,
-        },
-        Outputs=[
-            {
-                'Key': name + '.mp4',
-                'PresetId': str(settings.AWS_PRESET_ID),
+        client.create_job(
+            PipelineId=str(settings.AWS_PIPELINE_ID),
+            Input={
+                'Key': in_key,
             },
-        ],
-        OutputKeyPrefix=out_key,
-    )
+            Outputs=[
+                {
+                    'Key': name + '.mp4',
+                    'PresetId': str(settings.AWS_PRESET_ID),
+                },
+            ],
+            OutputKeyPrefix=out_key,
+        )
 
-    print("Job created successfully")
+        print("Job created successfully")
 
-    new_file_name = sneak_peak_file.split('/stream/')[1]
-    new_name = new_file_name.split(Path(new_file_name).suffix)[0]
+        new_file_name = sneak_peak_file.split('/streams/')[1]
+        new_name = new_file_name.split(Path(new_file_name).suffix)[0]
 
-    new_path = sneak_peak_file.replace('/stream/', '/stream/transcoded/')
-    key1 = new_path.split('stream/transcoded/')[0]
-    key2 = 'stream/transcoded/' + new_name + '.mp4'
-    transcoded_sneak_peak_file = key1 + key2
-    Stream.objects.filter(pk=instance.id).update(transcoded_sneak_peak_file=transcoded_sneak_peak_file)
+        new_path = sneak_peak_file.replace('/streams/', '/streams/transcoded/')
+        key1 = new_path.split('streams/transcoded/')[0]
+        key2 = 'streams/transcoded/' + new_name + '.mp4'
+        transcoded_sneak_peak_file = key1 + key2
+        Stream.objects.filter(pk=instance.id).update(transcoded_sneak_peak_file=transcoded_sneak_peak_file)
     return

@@ -51,14 +51,20 @@ class SessionUserListingSerializer(serializers.ModelSerializer):
         fields = ['user', 'created_at', 'payment_method', 'session_amount', 'creator_session_amount']
 
     def get_payment_method(self, instance):
-        return instance.transaction_detail.brand
+        if instance.transaction_detail:
+            return instance.transaction_detail.brand
+        return None
 
     def get_session_amount(self, instance):
-        return instance.transaction_detail.amount
+        if instance.transaction_detail:
+            return instance.transaction_detail.amount/100
+        return 0
 
     def get_creator_session_amount(self, instance):
-        amount = instance.transaction_detail.amount
-        return amount - (amount * creator_class_commission.creator_class_deduction/100)
+        if instance.transaction_detail:
+            amount = instance.transaction_detail.amount
+            return amount - (amount * creator_class_commission.creator_class_deduction/100)/100
+        return 0
 
 
 class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):

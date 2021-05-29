@@ -290,8 +290,8 @@ CURRENCY = "gbp"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
 
-USER_SIGNUP_LINK = "http://ccmike.creatorclasses.co/user/signup/"
-RESET_PASSWORD_LINK = "http://ccmike.creatorclasses.co/user/forgot-password/"
+USER_SIGNUP_LINK = "https://ccmike.creatorclasses.co/user/signup/"
+RESET_PASSWORD_LINK = "https://ccmike.creatorclasses.co/user/forgot-password/"
 
 
 PAYPAL_CLIENT_ID = env.str('PAYPAL_CLIENT_ID')
@@ -318,14 +318,14 @@ CANCEL_SUBSCRIPTION_TEMPLATE = env.str('CANCEL_SUBSCRIPTION_TEMPLATE')
 
 AWS_ACCESS_KEY_ID = env.str('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env.str('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'myapp-user-uploads154822-dev'
-ENDPOINT_URL = "s3.amazonaws.com"
-BUCKET_NAME = "myapp-user-uploads154822-dev"
-REGION_NAME = "us-east-2"
+AWS_STORAGE_BUCKET_NAME = 'myapp-user-uploads124112-creators'
+ENDPOINT_URL = "https://myapp-user-uploads124112-creators.s3-eu-west-1.amazonaws.com/"
+BUCKET_NAME = "myapp-user-uploads124112-creators"
+REGION_NAME = "eu-west-1"
 SIGNATURE_VERSION = 'v4'
 
-AWS_PIPELINE_ID = env.str('AWS_PIPELINE_ID')
-AWS_PRESET_ID = env.str('AWS_PRESET_ID')
+AWS_PIPELINE_ID = env('AWS_PIPELINE_ID')
+AWS_PRESET_ID = env('AWS_PRESET_ID')
 
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

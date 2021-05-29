@@ -14,7 +14,7 @@ from creator_class.helpers import send_templated_email
 # Date Format
 
 today = date.today()
-yesterday = today - timedelta(days=0)
+yesterday = today - timedelta(days=1)
 
 yesterday_date = today - timedelta(days=31)
 start_date_month = f"{yesterday_date} 00:00:00"
@@ -64,8 +64,8 @@ class Command(BaseCommand):
                             streams_booked = StreamBooking.objects.filter(stream__creator=creator.pk,
                                                                           created_at__range=[start_date_month,
                                                                                              end_date])
-                            stream_earnings = streams_booked.aggregate(Sum('stream__stream_amount'))[
-                                'stream__stream_amount__sum']
+                            stream_earnings = streams_booked.aggregate(Sum('transaction_detail__amount'))[
+                                'transaction_detail__amount__sum']
                             if stream_earnings is None:
                                 stream_earnings = 0
 
