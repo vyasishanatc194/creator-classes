@@ -13,6 +13,8 @@ class MaterialSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
     material_file = serializers.CharField(required=False)
+    transcoded_material_file = serializers.CharField(required=False)
+
     class Meta:
         model = Material
         fields = [
@@ -44,6 +46,7 @@ class MaterialSerializer(serializers.ModelSerializer):
 
 class MaterialDetailSerializer(serializers.ModelSerializer):
     material_category = MaterialCategorySerializer()
+    transcoded_material_file = serializers.SerializerMethodField('get_transcoded_material_file')
     class Meta:
         model = Material
         fields = [
@@ -56,3 +59,12 @@ class MaterialDetailSerializer(serializers.ModelSerializer):
             'transcoded_material_file'
         ]
 
+    def get_transcoded_material_file(self, instance):
+        try:
+            if instance.transcoded_material_file:
+                return instance.transcoded_material_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""

@@ -35,6 +35,7 @@ class AddClassSerializer(serializers.ModelSerializer):
     """
     title = serializers.CharField(required=True)
     class_file = serializers.CharField(required=False)
+    transcoded_class_file = serializers.CharField(required=False)
     thumbnail_file = serializers.FileField(required=True)
     class_keywords = serializers.CharField()
     class_covers = serializers.CharField()
@@ -126,6 +127,7 @@ class ClassListingSerializer(serializers.ModelSerializer):
     """
     Class listing serializer
     """
+    transcoded_class_file = serializers.SerializerMethodField('get_transcoded_class_file')
     avg_rating = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
     creator_name = serializers.SerializerMethodField()
@@ -150,6 +152,16 @@ class ClassListingSerializer(serializers.ModelSerializer):
             'is_favourite',
             'creator_key_skill'
         ]
+
+    def get_transcoded_class_file(self, instance):
+        try:
+            if instance.transcoded_class_file:
+                return instance.transcoded_class_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)
@@ -183,9 +195,21 @@ class ClassListingSerializer(serializers.ModelSerializer):
 
 
 class ClassMaterialListSerializer(serializers.ModelSerializer):
+    transcoded_material_file = serializers.SerializerMethodField('get_transcoded_material_file')
+
     class Meta:
         model = Material
         fields = ['id', 'title', 'thumbnail_file', 'material_file', 'transcoded_material_file']
+
+    def get_transcoded_material_file(self, instance):
+        try:
+            if instance.transcoded_material_file:
+                return instance.transcoded_material_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
 
 class ClassCreatorSerializer(serializers.ModelSerializer):
@@ -214,6 +238,7 @@ class ClassDetailSerializer(serializers.ModelSerializer):
     """
     Class detail serializer
     """
+    transcoded_class_file = serializers.SerializerMethodField('get_transcoded_class_file')
     avg_rating = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
     class_keywords = serializers.SerializerMethodField()
@@ -244,6 +269,16 @@ class ClassDetailSerializer(serializers.ModelSerializer):
             'created_at',
             'class_reviews'
         ]
+
+    def get_transcoded_class_file(self, instance):
+        try:
+            if instance.transcoded_class_file:
+                return instance.transcoded_class_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)
@@ -290,6 +325,7 @@ class PopularClassListingSerializer(serializers.ModelSerializer):
     """
     Class listing serializer
     """
+    transcoded_class_file = serializers.SerializerMethodField('get_transcoded_class_file')
     avg_rating = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
     creator_name = serializers.SerializerMethodField()
@@ -314,6 +350,16 @@ class PopularClassListingSerializer(serializers.ModelSerializer):
             'created_at',
             'is_favourite'
         ]
+
+    def get_transcoded_class_file(self, instance):
+        try:
+            if instance.transcoded_class_file:
+                return instance.transcoded_class_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
     def get_avg_rating(self, instance):
         ratings = ClassReview.objects.filter(creator_class=instance)

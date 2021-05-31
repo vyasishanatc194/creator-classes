@@ -10,6 +10,7 @@ class StreamDetailSerializer(serializers.ModelSerializer):
     """
     Stream detail serializer
     """
+    transcoded_sneak_peak_file = serializers.SerializerMethodField('get_transcoded_sneak_peak_file')
     stream_keywords = serializers.SerializerMethodField()
     stream_covers = serializers.SerializerMethodField()
     creator = CreatorListingSerializer()
@@ -41,6 +42,16 @@ class StreamDetailSerializer(serializers.ModelSerializer):
             'available_seats',
             'created_at'
         ]
+
+    def get_transcoded_sneak_peak_file(self, instance):
+        try:
+            if instance.transcoded_sneak_peak_file:
+                return instance.transcoded_sneak_peak_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
@@ -92,6 +103,7 @@ class StreamListingSerializer(serializers.ModelSerializer):
     stream_covers = serializers.SerializerMethodField()
     creator = CreatorListingSerializer()
     tz_value = serializers.SerializerMethodField()
+    transcoded_sneak_peak_file = serializers.SerializerMethodField('get_transcoded_sneak_peak_file')
 
     class Meta:
         model = Stream
@@ -111,6 +123,16 @@ class StreamListingSerializer(serializers.ModelSerializer):
             'stream_covers',
             'completed'
         ]
+
+    def get_transcoded_sneak_peak_file(self, instance):
+        try:
+            if instance.transcoded_sneak_peak_file:
+                return instance.transcoded_sneak_peak_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)

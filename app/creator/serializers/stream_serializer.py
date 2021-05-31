@@ -10,6 +10,7 @@ class AddStreamSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.CharField(required=False)
+    transcoded_sneak_peak_file = serializers.CharField(required=False)
     stream_datetime = serializers.DateTimeField(required=True)
     tz = serializers.CharField(required=True)
     stream_amount = serializers.FloatField(required=True)
@@ -98,6 +99,7 @@ class MyStreamSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     thumbnail_file = serializers.FileField(required=True)
     sneak_peak_file = serializers.FileField(required=False)
+    transcoded_sneak_peak_file = serializers.SerializerMethodField('get_transcoded_sneak_peak_file')
     tz = serializers.CharField(required=True)
     tz_value = serializers.SerializerMethodField()
     stream_amount = serializers.FloatField(required=True)
@@ -130,6 +132,16 @@ class MyStreamSerializer(serializers.ModelSerializer):
             'stream_keywords',
             'stream_covers'
         ]
+
+    def get_transcoded_sneak_peak_file(self, instance):
+        try:
+            if instance.transcoded_sneak_peak_file:
+                return instance.transcoded_sneak_peak_file
+            else:
+                return ""
+        except Exception as inst:
+            print(inst)
+            return ""
 
     def get_stream_covers(self, instance):
         stream_covers = StreamCovers.objects.filter(stream=instance)
@@ -169,6 +181,7 @@ class UpdateStreamSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=False)
     thumbnail_file = serializers.FileField(required=False)
     sneak_peak_file = serializers.CharField(required=False)
+    transcoded_sneak_peak_file = serializers.CharField(required=False)
     stream_datetime = serializers.DateTimeField(required=False)
     tz = serializers.CharField(required=False)
     stream_amount = serializers.FloatField(required=False)
