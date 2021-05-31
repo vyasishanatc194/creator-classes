@@ -21,7 +21,26 @@ class StreamDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers', 'creator_reviews', 'is_favourite', 'is_booked', 'available_seats','created_at']
+        fields = [
+            'id',
+            'creator',
+            'title',
+            'thumbnail_file',
+            'sneak_peak_file',
+            'transcoded_sneak_peak_file',
+            'stream_datetime',
+            'tz',
+            'tz_value',
+            'stream_amount',
+            'total_seats',
+            'stream_keywords',
+            'stream_covers',
+            'creator_reviews',
+            'is_favourite',
+            'is_booked',
+            'available_seats',
+            'created_at'
+        ]
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
@@ -76,7 +95,22 @@ class StreamListingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stream
-        fields = ['id', 'creator', 'title', 'thumbnail_file', 'sneak_peak_file', 'stream_datetime', 'tz', 'tz_value', 'stream_amount', 'total_seats', 'stream_keywords', 'stream_covers', 'completed']
+        fields = [
+            'id',
+            'creator',
+            'title',
+            'thumbnail_file',
+            'sneak_peak_file',
+            'transcoded_sneak_peak_file',
+            'stream_datetime',
+            'tz',
+            'tz_value',
+            'stream_amount',
+            'total_seats',
+            'stream_keywords',
+            'stream_covers',
+            'completed'
+        ]
 
     def get_stream_keywords(self, instance):
         stream_keywords = StreamKeyword.objects.filter(stream=instance)
