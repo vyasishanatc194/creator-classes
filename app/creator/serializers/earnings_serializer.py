@@ -5,19 +5,11 @@ from ..models import Stream, OneToOneSession, CreatorTransferredMoney
 from customadmin.models import CreatorClassCommission
 
 
-creator_class_commission = CreatorClassCommission.objects.all().first()
-if not creator_class_commission:
-    creator_class_commission = CreatorClassCommission()
-    creator_class_commission.affiliation_deduction = 10
-    creator_class_commission.creator_class_deduction = 10
-    creator_class_commission.save()
-
-
 
 class StreamEarningSerializer(serializers.ModelSerializer):
     """
     Stream Earning serializer
-    """ 
+    """
     creator_amount = serializers.SerializerMethodField()
 
     class Meta:
@@ -25,6 +17,12 @@ class StreamEarningSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'stream_datetime', 'stream_amount', 'creator_amount']
 
     def get_creator_amount(self, instance):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         return instance.stream_amount - (instance.stream_amount * creator_class_commission.creator_class_deduction/100)
 
 
@@ -61,9 +59,15 @@ class SessionUserListingSerializer(serializers.ModelSerializer):
         return 0
 
     def get_creator_session_amount(self, instance):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         if instance.transaction_detail:
             amount = instance.transaction_detail.amount
-            return amount - (amount * creator_class_commission.creator_class_deduction/100)/100
+            return (amount - (amount * creator_class_commission.creator_class_deduction/100))/100
         return 0
 
 
@@ -84,6 +88,12 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
         return instance.plan_purchase_detail.amount
 
     def get_commission_amount(self, instance):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         plan_amount = instance.plan_purchase_detail.amount
         if not plan_amount:
             plan_amount = 0
@@ -91,9 +101,23 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
 
 
 class CreatorTransferredMoneyListingSerializer(serializers.ModelSerializer):
+    transferred_amount = serializers.SerializerMethodField()
+    stream_amount_received = serializers.SerializerMethodField()
+    session_amount_received = serializers.SerializerMethodField()
 
     class Meta:
         model = CreatorTransferredMoney
         fields = ['transaction_id', 'created_at', 'transferred_amount', 'affiliation_commission_total', 'stream_amount_received', 'session_amount_received']
 
+
+    def get_transferred_amount(self, instance):
+        return instance.transferred_amount/100
+
+
+    def get_stream_amount_received(self, instance):
+        return instance.stream_amount_received/100
+
+
+    def get_session_amount_received(self, instance):
+        return instance.session_amount_received/100
 

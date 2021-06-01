@@ -28,12 +28,6 @@ import datetime
 
 import csv
 
-creator_class_commission = CreatorClassCommission.objects.all().first()
-if not creator_class_commission:
-    creator_class_commission = CreatorClassCommission()
-    creator_class_commission.affiliation_deduction = 10
-    creator_class_commission.creator_class_deduction = 10
-    creator_class_commission.save()
 
 # Export CSV FILE
 
@@ -84,11 +78,17 @@ class IndexView(LoginRequiredMixin, TemplateView):
     context = {}
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         stream_bookings = StreamBooking.objects.all().aggregate(Sum("stream__stream_amount"))["stream__stream_amount__sum"]
         stream_earnings = (stream_bookings * creator_class_commission.creator_class_deduction / 100) if stream_bookings else 0
 
         session_bookings = SessionBooking.objects.all().aggregate(Sum("transaction_detail__amount"))["transaction_detail__amount__sum"]
-        session_earnings = (session_bookings * creator_class_commission.creator_class_deduction / 100) if session_bookings else 0
+        session_earnings = (session_bookings * creator_class_commission.creator_class_deduction / 100)/100 if session_bookings else 0
 
         plan_purchase = UserPlanPurchaseHistory.objects.all().aggregate(Sum("plan_purchase_detail__amount"))["plan_purchase_detail__amount__sum"]
         commission_amount = CreatorAffiliation.objects.all().aggregate(Sum("commission_amount"))["commission_amount__sum"]
@@ -98,7 +98,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         self.context['orders_count'] = []
         self.context['user_count']=User.objects.all().exclude(is_creator=True).exclude(username='admin').count()
         self.context['creator_count']=Creator.objects.all().filter(status='ACCEPT').count()
-        self.context['creator_classes_earnings']=creator_classes_earnings
+        self.context['creator_classes_earnings']='%.2f'%creator_classes_earnings
         self.context['pending_creator_count']=Creator.objects.filter(status='PENDING').count()
         self.context['live_stream'] = Stream.objects.filter(stream_datetime__gte=datetime.datetime.now()).count()
         self.context['transfer_money'] = CreatorTransferredMoney.objects.all().count()

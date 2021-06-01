@@ -13,14 +13,6 @@ from ..serializers import StreamUserListingSerializer, SessionUserListingSeriali
 from creator_class.helpers import get_pagination_response
 
 
-creator_class_commission = CreatorClassCommission.objects.all().first()
-if not creator_class_commission:
-    creator_class_commission = CreatorClassCommission()
-    creator_class_commission.affiliation_deduction = 10
-    creator_class_commission.creator_class_deduction = 10
-    creator_class_commission.save()
-
-
 
 class CreatorTotalEarningHistoryAPIView(APIView):
     """
@@ -30,6 +22,12 @@ class CreatorTotalEarningHistoryAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         result = {}
         streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
         stream_earnings = streams_booked.aggregate(Sum("stream__stream_amount"))[
@@ -45,13 +43,13 @@ class CreatorTotalEarningHistoryAPIView(APIView):
         session_earnings = session_booked.aggregate(Sum("transaction_detail__amount"))[
             "transaction_detail__amount__sum"
         ]
-        session_earnings = (
+        session_earnings = ((
             session_earnings
             - (
                 session_earnings
                 * creator_class_commission.creator_class_deduction
                 / 100
-            )
+            ))/100
             if session_earnings
             else 0
         )
@@ -89,13 +87,13 @@ class CreatorTotalEarningHistoryAPIView(APIView):
                 Sum("transaction_detail__amount")
             )["transaction_detail__amount__sum"]
 
-            month_session_earnings = (
+            month_session_earnings = ((
                 monthly_session_earnings
                 - (
                     monthly_session_earnings
                     * creator_class_commission.creator_class_deduction
                     / 100
-                )
+                ))/100
                 if monthly_session_earnings
                 else 0
             )
@@ -261,6 +259,12 @@ class StreamEarningChartAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         result = {}
         streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
         stream_earnings = streams_booked.aggregate(Sum("stream__stream_amount"))[
@@ -338,18 +342,25 @@ class CreatorSessionEarningChartAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+
         result = {}
         session_booked = SessionBooking.objects.filter(creator=request.user.pk)
         session_earnings = session_booked.aggregate(Sum("transaction_detail__amount"))[
             "transaction_detail__amount__sum"
         ]
-        session_earnings = (
+        session_earnings = ((
             session_earnings
             - (
                 session_earnings
                 * creator_class_commission.creator_class_deduction
                 / 100
-            )
+            ))/100
             if session_earnings
             else 0
         )
@@ -367,12 +378,12 @@ class CreatorSessionEarningChartAPIView(APIView):
             )["transaction_detail__amount__sum"]
 
             month_session_earnings = (
-                monthly_session_earnings
+                (monthly_session_earnings
                 - (
                     monthly_session_earnings
                     * creator_class_commission.creator_class_deduction
                     / 100
-                )
+                ))/100
                 if monthly_session_earnings
                 else 0
             )
@@ -390,13 +401,13 @@ class CreatorSessionEarningChartAPIView(APIView):
         month_session_earnings = month_session_booked.aggregate(
             Sum("transaction_detail__amount")
         )["transaction_detail__amount__sum"]
-        month_session_earnings = (
+        month_session_earnings = ((
             month_session_earnings
             - (
                 month_session_earnings
                 * creator_class_commission.creator_class_deduction
                 / 100
-            )
+            ))/100
             if month_session_earnings
             else 0
         )
@@ -417,6 +428,13 @@ class StreamUserListingAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+
         stream_bookings = StreamBooking.objects.filter(stream__creator=request.user.pk)
 
         start_date  = request.GET.get('start_date', None)
@@ -458,6 +476,13 @@ class SessionUserListingAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+
         session_bookings = SessionBooking.objects.filter(creator=request.user.pk)
 
         start_date  = request.GET.get('start_date', None)
@@ -500,6 +525,13 @@ class AffiliationUsersDetailAPIView(APIView):
     serializer_class = UserPlanPurchaseHistorySerializer
 
     def get(self, request):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
+
         plans_purchased = UserPlanPurchaseHistory.objects.filter(user__is_creator=False, user__affiliated_with=request.user.pk)
         start_date  = request.GET.get('start_date', None)
         end_date  = request.GET.get('end_date', None)

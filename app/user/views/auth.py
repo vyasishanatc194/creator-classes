@@ -48,12 +48,6 @@ import uuid
 
 utc = pytz.UTC
 
-creator_class_commission = CreatorClassCommission.objects.all().first()
-if not creator_class_commission:
-    creator_class_commission = CreatorClassCommission()
-    creator_class_commission.affiliation_deduction = 10
-    creator_class_commission.creator_class_deduction = 10
-    creator_class_commission.save()
 
 
 class SignUpApiView(APIView):
@@ -226,6 +220,12 @@ class PlanPurchaseAPIView(APIView):
 
     def post(self, request, format=None):
         """POST method to create the data"""
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         try:
             if "plan_id" not in request.data:
                 message = "plan_id is required!"
@@ -471,6 +471,12 @@ class PayPalPlanPurchaseAPIView(APIView):
 
     def post(self, request, format=None):
         """POST method to create the data"""
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         try:
             if "plan_id" not in request.data:
                 message = "plan_id is required!"
@@ -540,6 +546,12 @@ class ChangePlanAPIView(APIView):
     permission_classes = (IsAccountOwner, IsUser)
 
     def post(self, request, format=None):
+        creator_class_commission = CreatorClassCommission.objects.all().first()
+        if not creator_class_commission:
+            creator_class_commission = CreatorClassCommission()
+            creator_class_commission.affiliation_deduction = 10
+            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.save()
         """POST method to create the data"""
         try:
             if "plan_id" not in request.data:
