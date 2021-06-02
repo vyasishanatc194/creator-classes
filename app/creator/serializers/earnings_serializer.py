@@ -55,7 +55,8 @@ class SessionUserListingSerializer(serializers.ModelSerializer):
 
     def get_session_amount(self, instance):
         if instance.transaction_detail:
-            return instance.transaction_detail.amount/100
+            amount = instance.transaction_detail.amount/100
+            return float('%.2f'%amount)
         return 0
 
     def get_creator_session_amount(self, instance):
@@ -67,7 +68,8 @@ class SessionUserListingSerializer(serializers.ModelSerializer):
             creator_class_commission.save()
         if instance.transaction_detail:
             amount = instance.transaction_detail.amount
-            return (amount - (amount * creator_class_commission.creator_class_deduction/100))/100
+            creator_amount = (amount - (amount * creator_class_commission.creator_class_deduction/100))/100
+            return float('%.2f'%creator_amount)
         return 0
 
 
@@ -85,7 +87,8 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
         return instance.plan_purchase_detail.brand
 
     def get_plan_amount(self, instance):
-        return instance.plan_purchase_detail.amount
+        amount = instance.plan_purchase_detail.amount/100
+        return float('%.2f' %amount)
 
     def get_commission_amount(self, instance):
         creator_class_commission = CreatorClassCommission.objects.all().first()
@@ -97,7 +100,8 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
         plan_amount = instance.plan_purchase_detail.amount
         if not plan_amount:
             plan_amount = 0
-        return (plan_amount * (creator_class_commission.affiliation_deduction/100))
+        amount = (plan_amount * (creator_class_commission.affiliation_deduction/100))/100
+        return float('%.2f'%amount)
 
 
 class CreatorTransferredMoneyListingSerializer(serializers.ModelSerializer):
@@ -111,13 +115,13 @@ class CreatorTransferredMoneyListingSerializer(serializers.ModelSerializer):
 
 
     def get_transferred_amount(self, instance):
-        return instance.transferred_amount/100
+        return float('%.2f'%(instance.transferred_amount/100))
 
 
     def get_stream_amount_received(self, instance):
-        return instance.stream_amount_received/100
+        return float('%.2f'%(instance.stream_amount_received/100))
 
 
     def get_session_amount_received(self, instance):
-        return instance.session_amount_received/100
+        return float('%.2f'%(instance.session_amount_received/100))
 

@@ -127,11 +127,11 @@ class CreatorTotalEarningHistoryAPIView(APIView):
         ]
 
         # Total earnings
-        result["total_earnings"] = (
+        result["total_earnings"] = float('%.2f'%(
             (stream_earnings if stream_earnings else 0)
             + (session_earnings if session_earnings else 0)
             + (final_commission_amount if final_commission_amount else 0)
-        )
+        ))
 
         # This month total earnings
         this_month = datetime.datetime.now()
@@ -159,13 +159,13 @@ class CreatorTotalEarningHistoryAPIView(APIView):
         month_session_earnings = month_session_booked.aggregate(
             Sum("transaction_detail__amount")
         )["transaction_detail__amount__sum"]
-        month_session_earnings = (
+        month_session_earnings = ((
             month_session_earnings
             - (
                 month_session_earnings
                 * creator_class_commission.creator_class_deduction
                 / 100
-            )
+            ))/100
             if month_session_earnings
             else 0
         )
@@ -177,13 +177,13 @@ class CreatorTotalEarningHistoryAPIView(APIView):
             Sum("commission_amount")
         )["commission_amount__sum"]
 
-        result["this_month_earnings"] = (
+        result["this_month_earnings"] = float('%.2f'%(
             (month_stream_earnings if month_stream_earnings else 0)
             + (month_session_earnings if month_session_earnings else 0)
             + (month_commission_amount if month_commission_amount else 0)
-        )
+        ))
         result["total_stream_earnings"] = stream_earnings if stream_earnings else 0
-        result["total_session_earnings"] = session_earnings if session_earnings else 0
+        result["total_session_earnings"] = float('%.2f'%session_earnings if session_earnings else 0)
         result["total_affiliation_earnings"] = (
             final_commission_amount if final_commission_amount else 0
         )
@@ -394,7 +394,7 @@ class CreatorSessionEarningChartAPIView(APIView):
         # This month total earnings
         this_month = datetime.datetime.now()
         this_month = this_month.date().month
-        
+
         month_session_booked = session_booked.filter(
             creator=request.user.pk, created_at__date__month=this_month
         )
@@ -412,8 +412,8 @@ class CreatorSessionEarningChartAPIView(APIView):
             else 0
         )
 
-        result["this_month_earnings"] = month_session_earnings if month_session_earnings else 0
-        result["total_session_earnings"] = session_earnings if session_earnings else 0
+        result["this_month_earnings"] = float('%.2f'%month_session_earnings) if month_session_earnings else 0
+        result["total_session_earnings"] = float('%.2f'%session_earnings) if session_earnings else 0
         result["labels"] = session_chart.keys()
         result["session_chart"] = session_chart.values()
         message = "Creators Total Session Earnings fetched Successfully!"

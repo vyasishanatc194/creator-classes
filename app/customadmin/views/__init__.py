@@ -99,7 +99,6 @@ from .plans import (
     PlanCreateView,
     PlanDeleteView,
     PlanListView,
-    PlanUpdateView,
 )
 from .bookings import (
     StreamBookingAjaxPagination,

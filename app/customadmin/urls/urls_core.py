@@ -155,7 +155,6 @@ urlpatterns +=[
     path("plans/", views.PlanListView.as_view(), name="plan-detail"),
     path("plans/", views.PlanListView.as_view(), name="plan-list"),
     path("plans/create/", views.PlanCreateView.as_view(), name="plan-create"),
-    path("plans/<int:pk>/update/", views.PlanUpdateView.as_view(), name="plan-update"),
     path("plans/<int:pk>/delete/", views.PlanDeleteView.as_view(), name="plan-delete"),
     path("ajax-plans", views.PlanAjaxPagination.as_view(), name="plan-list-ajax"),
 #------------------------------------------------------------------------------------------------------

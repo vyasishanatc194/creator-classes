@@ -82,25 +82,12 @@ class PlanCoverUpdateInline(InlineFormSetFactory):
     form_class = PlanCoverChangeForm
     factory_kwargs = {'extra': 6, 'max_num': None, 'can_order': False, 'can_delete': True}
 
-class PlanUpdateView(MyNewFormsetUpdateView):
-    """View to update Plan"""
-
-    model = Plan
-    inline_model = PlanCover
-    inlines = [PlanCoverInline, ]
-    form_class = PlanChangeForm
-    template_name = "customadmin/plans/plan_form.html"
-    permission_required = ("customadmin.change_plan",)
-
-    def get_success_url(self):
-        messages.success(self.request, MSG_UPDATED.format(self.object))
-        return reverse("customadmin:plan-list")
 
 class PlanDeleteView(MyDeleteView):
     """View to delete Plan"""
 
     model = Plan
-    template_name = "customadmin/confirm_delete.html"
+    template_name = "customadmin/confirm_delete_plan.html"
     permission_required = ("customadmin.delete_plan",)
 
     def get_success_url(self):
