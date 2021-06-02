@@ -95,6 +95,22 @@ class MyStripe():
     def CancelSubscriptionPlan(self, subscription_id):
         return stripe.Subscription.delete(subscription_id)
 
+    def createProduct(self, name):
+        return stripe.Product.create(name=name)
+
+    def createPlan(self, amount, interval, product_id, interval_count=1):
+        return stripe.Plan.create(amount=amount, currency=settings.CURRENCY, interval=interval, product=product_id,
+                                  interval_count=interval_count)
+
+    def deletePlan(self, plan_id):
+        return stripe.Plan.delete(str(plan_id), )
+
+    def deleteProduct(self, product_id):
+        return stripe.Product.delete(str(product_id), )
+
+    def modifyProduct(self, product_id, name):
+        return stripe.Product.modify(product_id, name=name)
+
 
 def create_card_object(newcard, request):
     """This method is used to create a response object of a card"""
