@@ -44,11 +44,18 @@ class CreatorAffiliation(ActivityTracking):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="affiliated_user")
     plan_id = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="user")
     amount = models.FloatField(blank=True, null=True)
-    transfer_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
-    commission_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
+    transfer_amount = models.FloatField(default=0, blank=True, null=True)
+    commission_amount = models.FloatField(default=0, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.email}"
+
+    def clean(self):
+        if self.transfer_amount<0:
+            self.transfer_amount = 0
+        if self.commission_amount<0:
+            self.commission_amount = 0
+
 
     class Meta:
         verbose_name = "Creator Affiliation"

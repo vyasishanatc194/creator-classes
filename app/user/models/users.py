@@ -44,14 +44,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_image = models.ImageField(upload_to="profile_image", default="sample.jpg", null=True,  blank=True, verbose_name=_("Profile Image"))
     description = models.CharField(max_length=1000, blank=True)
     customer_id = models.CharField(_("Customer Id"), blank=True, max_length=255)
-    plan_id = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="selected_plan", null=True, blank=True)
+    plan_id = models.ForeignKey("customadmin.Plan", on_delete=models.SET_NULL, related_name="selected_plan", null=True, blank=True)
     plan_purchased_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, related_name="plan_payment_detail", null=True, blank=True)
+    plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.SET_NULL, related_name="plan_payment_detail", null=True, blank=True)
     stripe_account_id = models.CharField(max_length=255, blank=True, null=True, default='')
     stripe_subscription_id = models.CharField(_("Stripe subscription id"), max_length=255, blank=True, null=True)
     paypal_subscription_id = models.CharField(_("Paypal subscription id"), max_length=255, blank=True, null=True)
 
-    country_details = models.ForeignKey('CountryField',on_delete=models.CASCADE,null=True,blank=True)
+    country_details = models.ForeignKey('CountryField',on_delete=models.SET_NULL,null=True,blank=True)
 
     card_id = models.CharField(_("Card Id"), max_length=255, blank=True)
     last4 = models.CharField(_("Last 4 digits"), max_length=255, blank=True)
@@ -59,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     exp_month = models.CharField(_("Exp. month"), max_length=255, blank=True)
     exp_year = models.CharField(_("Exp. year"), max_length=255, blank=True)
     card_name = models.CharField(_("Card holder name"), max_length=255, blank=True, null=True)
-    affiliated_with = models.ForeignKey("creator.Creator", on_delete=models.CASCADE, null=True, blank=True)
+    affiliated_with = models.ForeignKey("creator.Creator", on_delete=models.SET_NULL, null=True, blank=True)
     link_expired_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     password_reset_link = models.UUIDField(unique=True, null=True, blank=True)
 
