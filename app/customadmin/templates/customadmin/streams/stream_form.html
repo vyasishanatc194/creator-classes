@@ -177,6 +177,13 @@
         secretAccessKey: ACCESS_KEY_SECRET,
         signatureVersion: AWS_S3_SIGNATURE_VERSION,
         region :AWS_S3_REGION_NAME,
+        maxRetries: 2,
+        httpOptions: {
+            connectTimeout: 120 * 1000, // time succeed in starting the call
+            timeout: 600 * 1000, // time to wait for a response
+            // the aws-sdk defaults to automatically retrying
+            // if one of these limits are met.
+        },
         endpoint: new AWS.Endpoint(ENDPOINT_URL),
         params: {
             Bucket: BUCKET_NAME
