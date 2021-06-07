@@ -397,7 +397,7 @@ def get_aws_s3_creds():
         'AWS_ACCESS_KEY_ID' : settings.AWS_ACCESS_KEY_ID,
         'AWS_SECRET_ACCESS_KEY' : settings.AWS_SECRET_ACCESS_KEY,
         'AWS_STORAGE_BUCKET_NAME' : settings.AWS_STORAGE_BUCKET_NAME,
-        'ENDPOINT_URL' : settings.ENDPOINT_URL,
+        'ENDPOINT_URL' : settings.BUCKET_URL,
         'BUCKET_NAME' : settings.BUCKET_NAME,
         'REGION_NAME' : settings.REGION_NAME,
         'SIGNATURE_VERSION' : settings.SIGNATURE_VERSION,

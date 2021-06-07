@@ -320,6 +320,7 @@ AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'myapp-user-uploads124112-creators'
 ENDPOINT_URL = "https://myapp-user-uploads124112-creators.s3-eu-west-1.amazonaws.com/"
+BUCKET_URL = "s3.amazonaws.com"
 BUCKET_NAME = "myapp-user-uploads124112-creators"
 REGION_NAME = "eu-west-1"
 SIGNATURE_VERSION = 'v4'
