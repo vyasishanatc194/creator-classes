@@ -23,6 +23,7 @@ class MyCreatorClassCreationForm(forms.ModelForm):
             "title",
             "thumbnail_file",
             "class_file",
+            "class_description",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -36,6 +37,7 @@ class MyCreatorClassCreationForm(forms.ModelForm):
         title = cleaned_data.get("title")
         thumbnail_file = cleaned_data.get("thumbnail_file")
         class_file = cleaned_data.get("class_file")
+        class_description = cleaned_data.get("class_description")
 
         if not creator :
             raise forms.ValidationError(
@@ -52,6 +54,11 @@ class MyCreatorClassCreationForm(forms.ModelForm):
         if not class_file :
             raise forms.ValidationError(
                 "Please add class file."
+            )
+
+        if not class_description:
+            raise forms.ValidationError(
+                "Please add class description."
             )
 
     def save(self, commit=True):
@@ -74,6 +81,7 @@ class MyCreatorClassChangeForm(forms.ModelForm):
             "title",
             "thumbnail_file",
             "class_file",
+            "class_description",
         )
 
     def __init__(self, *args, **kwargs):
@@ -86,6 +94,7 @@ class MyCreatorClassChangeForm(forms.ModelForm):
         title = cleaned_data.get("title")
         thumbnail_file = cleaned_data.get("thumbnail_file")
         class_file = cleaned_data.get("class_file")
+        class_description = cleaned_data.get("class_description")
 
         if not creator :
             raise forms.ValidationError(
@@ -102,6 +111,11 @@ class MyCreatorClassChangeForm(forms.ModelForm):
         if not class_file :
             raise forms.ValidationError(
                 "Please add class file."
+            )
+
+        if not class_description:
+            raise forms.ValidationError(
+                "Please add class description."
             )
 
     def save(self, commit=True):

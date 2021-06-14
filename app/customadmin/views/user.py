@@ -66,6 +66,7 @@ class UserDetailView(MyDetailView):
 
     def get(self, request, pk):
         self.context['user_detail'] = User.objects.filter(pk=pk).first()
+        self.context['plan_purchase_history'] = UserPlanPurchaseHistory.objects.filter(user__pk=pk)
         self.context['card_list'] = UserCard.objects.filter(user=pk)
         self.context['booked_session_list'] = SessionBooking.objects.filter(user=pk)
         self.context['booked_stream_list'] = StreamBooking.objects.filter(user=pk)

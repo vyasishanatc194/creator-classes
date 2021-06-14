@@ -98,6 +98,43 @@
                     </tbody>
 
                 </table>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Plan Id</th>
+                                    <th>Plan</th>
+                                    <th>Price</th>
+                                    <th>Purchased Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Plan Id</th>
+                                    <th>Plan</th>
+                                    <th>Price</th>
+                                    <th>Purchased Date</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            {% for o in plan_purchase_history %}
+                            <tr>
+                                <td>{{ o.plan.pk }}</td>
+                                <td>{{ o.plan.name }}</td>
+                                <td>{{ o.plan.plan_amount }}</td>
+                                <td>{{ o.created_at }}</td>
+                                <td class="row-actions">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
