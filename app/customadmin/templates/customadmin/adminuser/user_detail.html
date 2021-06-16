@@ -98,13 +98,14 @@
                     </tbody>
 
                 </table>
+                {% if is_plan_purchase_history %}
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Plan Id</th>
-                                    <th>Plan</th>
+                                    <th>Plan Name</th>
                                     <th>Price</th>
                                     <th>Purchased Date</th>
                                     <th></th>
@@ -113,7 +114,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Plan Id</th>
-                                    <th>Plan</th>
+                                    <th>Plan Name</th>
                                     <th>Price</th>
                                     <th>Purchased Date</th>
                                     <th></th>
@@ -135,6 +136,7 @@
                         </table>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
