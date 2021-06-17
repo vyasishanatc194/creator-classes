@@ -128,6 +128,7 @@ class UserPlanPurchaseHistory(ActivityTracking):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="plan_user")
     plan = models.ForeignKey("customadmin.Plan", on_delete=models.CASCADE, related_name="user_plan", null=True, blank=True)
     plan_purchase_detail = models.ForeignKey("user.TransactionDetail", on_delete=models.CASCADE, related_name="transaction_detail", null=True, blank=True)
+    status = models.CharField(max_length=50,null=True,blank=True,default="canceled")
     def __str__(self):
         return str(self.user.pk)
 

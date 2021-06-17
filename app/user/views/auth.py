@@ -292,7 +292,8 @@ class PlanPurchaseAPIView(APIView):
                     UserPlanPurchaseHistory.objects.create(
                         user = user,
                         plan = plan_check[0],
-                        plan_purchase_detail = transaction[0]
+                        plan_purchase_detail = transaction[0],
+                        status = 'active'
                     )
                     commision_amount = plan_check[0].plan_amount * creator_class_commission.affiliation_deduction/100
                     if user.affiliated_with:
@@ -440,6 +441,7 @@ class CancelSubscriptionAPIView(APIView):
 
         if request.user.is_authenticated:
             try:
+                plan_history = UserPlanPurchaseHistory.objects.filter(user=request.user).update(status='canceled')
                 stripe = MyStripe()
                 user_obj = User.objects.filter(id=request.user.id).first()
 
@@ -513,7 +515,8 @@ class PayPalPlanPurchaseAPIView(APIView):
                 UserPlanPurchaseHistory.objects.create(
                     user = user,
                     plan = plan_check[0],
-                    plan_purchase_detail = transaction[0]
+                    plan_purchase_detail = transaction[0],
+                    status='active'
                 )
                 commision_amount = plan_check[0].plan_amount * creator_class_commission.affiliation_deduction/100
                 if user.affiliated_with:
@@ -590,6 +593,7 @@ class ChangePlanAPIView(APIView):
                 subscribe_new_plan.metadata = None
 
                 chargeserializer = TransactionDetailSerializer(data=subscribe_new_plan)
+                UserPlanPurchaseHistory.objects.filter(user=request.user).update(status='canceled')
                 if chargeserializer.is_valid():
                     chargeserializer.save()
                     print("<<<-----|| TransactionDetail CREATED ||----->>>")
@@ -607,7 +611,8 @@ class ChangePlanAPIView(APIView):
                     UserPlanPurchaseHistory.objects.create(
                         user = user,
                         plan = plan_check[0],
-                        plan_purchase_detail = transaction[0]
+                        plan_purchase_detail = transaction[0],
+                        status = 'active'
                     )
                     commision_amount = plan_check[0].plan_amount * creator_class_commission.affiliation_deduction/100
                     if user.affiliated_with:

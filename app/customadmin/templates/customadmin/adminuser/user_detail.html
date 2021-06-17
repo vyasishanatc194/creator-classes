@@ -106,9 +106,9 @@
                                 <tr>
                                     <th>Plan Id</th>
                                     <th>Plan Name</th>
-                                    <th>Price</th>
+                                    pyt<th>Price</th>
                                     <th>Purchased Date</th>
-                                    <th></th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -117,7 +117,7 @@
                                     <th>Plan Name</th>
                                     <th>Price</th>
                                     <th>Purchased Date</th>
-                                    <th></th>
+                                    <th>Status</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -127,8 +127,7 @@
                                 <td>{{ o.plan.name }}</td>
                                 <td>{{ o.plan.plan_amount }}</td>
                                 <td>{{ o.created_at }}</td>
-                                <td class="row-actions">
-                                </td>
+                                <td>{% ifequal o.status 'active' %}Active{%else%}Canceled{%endifequal%}</td>
                             </tr>
                             {% endfor %}
                             </tbody>
