@@ -3,7 +3,7 @@ from creator_class.helpers import custom_response, serialized_response
 from rest_framework import status
 from creator_class.permissions import IsAccountOwner, IsCreator
 from ..models import Stream, TimeSlot
-from datetime import datetime
+from datetime import datetime, timezone
 from creator_class.settings import(
     AgoraAppID,
     AgoraAppCertificate,
@@ -13,7 +13,11 @@ from user.models import StreamBooking
 import time
 from .RtcTokenBuilder import RtcTokenBuilder
 expireTimeInSeconds = 86400
-currentTimestamp = int(time.time()) + 21600
+#currentTimestamp = int(time.time()) + 21600
+today = datetime.now(timezone.utc)
+utc_time = today.replace(tzinfo=timezone.utc)
+currentTimestamp = utc_time.timestamp()
+print(currentTimestamp)
 privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
 
