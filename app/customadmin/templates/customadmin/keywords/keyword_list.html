@@ -29,6 +29,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Keyword</th>
+                            <th>Image</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -36,6 +37,7 @@
                         <tr>
                             <th>Id</th>
                             <th>Keyword</th>
+                            <th>Image</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -44,6 +46,11 @@
                         <tr>
                             <td>{{ o.pk }}</td>
                             <td>{{ o.keyword }}</td>
+                            {% if o.image %}
+                            <td height="80px" width="180px"><img src="{{MEDIA_URL}}{{ o.image.url }}" alt="no image" height="80x" width="180px"></td>
+                            {% else %}
+                            <td height="60px" width="150px">NO IMAGE</td>
+                            {% endif %}
                             <td class="row-actions">
                                 {% include "customadmin/partials/list_row_actions.html" %}
                             </td>

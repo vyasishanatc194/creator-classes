@@ -17,7 +17,6 @@ expireTimeInSeconds = 86400
 today = datetime.now(timezone.utc)
 utc_time = today.replace(tzinfo=timezone.utc)
 currentTimestamp = utc_time.timestamp()
-print(currentTimestamp)
 privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
 

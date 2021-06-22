@@ -90,7 +90,7 @@ def send_templated_email(to_email, email_temlpate_id, dynamic_data_for_template)
     personalization = Personalization()
     personalization.add_to(Email(to_email))
     mail = Mail()
-    mail.from_email = Email("aaradhana.citrusbug@gmail.com")
+    mail.from_email = Email("team@creatorclasses.co")
     mail.template_id = email_temlpate_id
     personalization.dynamic_template_data = dynamic_data_for_template
     mail.add_personalization(personalization)

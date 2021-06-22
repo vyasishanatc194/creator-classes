@@ -15,16 +15,19 @@ class AdminKeywordCreationForm(forms.ModelForm):
         model = AdminKeyword
         fields = [
             "keyword",
+            "image"
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['keyword'].required = False
+        self.fields['image'].required = False
 
 
     def clean(self):
         cleaned_data = super(AdminKeywordCreationForm, self).clean()
         keyword = cleaned_data.get("keyword")
+        image = cleaned_data.get("image")
 
         instance = AdminKeyword.objects.filter(keyword__iexact=keyword).first()
         if instance:
@@ -35,6 +38,11 @@ class AdminKeywordCreationForm(forms.ModelForm):
         if not keyword:
             raise forms.ValidationError(
                 "Please add keyword."
+            )
+
+        if not image:
+            raise forms.ValidationError(
+                "Please add image."
             )
 
     def save(self, commit=True):
@@ -54,15 +62,19 @@ class AdminKeywordChangeForm(forms.ModelForm):
 
         fields = [
             "keyword",
+            "image"
+
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['keyword'].required = False
+        self.fields['image'].required = False
 
     def clean(self):
         cleaned_data = super(AdminKeywordChangeForm, self).clean()
         keyword = cleaned_data.get("keyword")
+        image = cleaned_data.get("image")
 
         if AdminKeyword.objects.filter(keyword__iexact=keyword).exclude(pk=self.instance.id).count() > 0:
             raise forms.ValidationError(
@@ -71,6 +83,11 @@ class AdminKeywordChangeForm(forms.ModelForm):
         if not keyword:
             raise forms.ValidationError(
                 "Please add keyword."
+            )
+
+        if not image:
+            raise forms.ValidationError(
+                "Please add image."
             )
 
     def save(self, commit=True):
