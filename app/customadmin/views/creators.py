@@ -74,7 +74,7 @@ def CreatorRejectRequestAjax(request):
         email_data = {
             'name': f"{creator_obj.first_name} {creator_obj.last_name}"
         }
-        send_templated_email(creator_obj.email, settings.CREATOR_REGISTRATION_REJECTED_TEMPLATE, email_data)
+        #send_templated_email(creator_obj.email, settings.CREATOR_REGISTRATION_REJECTED_TEMPLATE, email_data)
         messages.success(request, "'Request rejected successfully'")
     return JsonResponse({"success": True})
 
@@ -89,7 +89,7 @@ def CreatorAcceptRequestAjax(request):
         email_data = {
             'name': f"{creator_obj.first_name} {creator_obj.last_name}"
         }
-        send_templated_email(creator_obj.email, settings.CREATOR_REGISTRATION_ACCEPTED_TEMPLATE, email_data)
+        #send_templated_email(creator_obj.email, settings.CREATOR_REGISTRATION_ACCEPTED_TEMPLATE, email_data)
         messages.success(request, "'Request accept successfully'")
     return JsonResponse({"success": True})
 

@@ -151,7 +151,7 @@ class CreatorRegisterView(APIView):
         email_data = {
             'name': f"{request.data['first_name']} {request.data['last_name']}"
         }
-        send_templated_email(request.data["email"], CREATOR_SIGNUP_TEMPLATE, email_data)
+        #send_templated_email(request.data["email"], CREATOR_SIGNUP_TEMPLATE, email_data)
         return custom_response(response_status, status_code, message, result)
 
 
