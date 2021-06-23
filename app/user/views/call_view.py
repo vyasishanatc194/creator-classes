@@ -127,6 +127,7 @@ class LeaveStreamCallAPIView(APIView):
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
             booking = user_booking.first()
             booking.user_joined = False
+            booking.host = False
             booking.save()
 
 
