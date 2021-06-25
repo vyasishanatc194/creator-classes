@@ -67,7 +67,7 @@
                                 <hr>
                                 Creator : <a href="{% url 'customadmin:creator-detailview' stream_detail.creator.pk %}">{{stream_detail.creator.username}}</a>
                                 <hr>
-                                Sneak Peak File :<a href="{{sneak_peak_file_url}}" download>{{stream_detail.sneak_peak_file}}</a>
+                                Sneak Peak File :<a href="{{stream_detail.transcoded_sneak_peak_file}}" download>{{stream_detail.sneak_peak_file}}</a>
                                 <hr>
                                 Date Time : {{stream_detail.stream_datetime|date:'d-m-Y, H:i'}}
                                 <hr>

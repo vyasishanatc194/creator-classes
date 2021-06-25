@@ -100,8 +100,8 @@
                                 </td>
                                 {% elif '.mp4' in o.class_file.url or '.mp3' in o.class_file.url %}
                                     <td width="180px" height="80px">
-                                    <video width="80px" height="80px" controls controlsList="nodownload" autoplay>
-                                        <source src="{{MEDIA_URL}}{{ o.class_file.url }}" type="video/mp4"> </source>
+                                    <video width="80px" height="80px" controls controlsList="nodownload">
+                                        <source src="{{o.transcoded_class_file}}" type="video/mp4"> </source>
                                     </video>
                                     </td>
                                 {% elif '.pdf' in o.class_file.url %}

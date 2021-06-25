@@ -67,7 +67,7 @@
                                 <hr>
                                 Creator : <a href="{% url 'customadmin:creator-detailview' class_detail.creator.pk %}">{{class_detail.creator.username}}</a>
                                 <hr>
-                                Class File : <a href="{{class_file_url}}" download>{{class_detail.class_file}}</a>
+                                Class File : <a href="{{class_detail.transcoded_class_file}}" download>{{class_detail.class_file}}</a>
                             </td>
                         </tr>
                         <tr>

@@ -107,7 +107,7 @@
                                 {% elif '.mp4' in o.sneak_peak_file.url or '.mp3' in o.sneak_peak_file.url %}
                                 <td width="180px" height="80px">
                                 <video width="80px" height="80px" controls controlsList="nodownload">
-                                    <source src="{{MEDIA_URL}}{{ o.sneak_peak_file.url }}" type="video/mp4"> </source>
+                                    <source src="{{o.transcoded_sneak_peak_file}}" type="video/mp4"> </source>
                                 </video>
                                 </td>
                                 {% elif '.pdf' in o.sneak_peak_file.url %}

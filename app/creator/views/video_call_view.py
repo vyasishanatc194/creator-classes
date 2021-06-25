@@ -12,12 +12,6 @@ from user.serializers import StreamSeatHolderSerializer
 from user.models import StreamBooking
 import time
 from .RtcTokenBuilder import RtcTokenBuilder
-expireTimeInSeconds = 86400
-#currentTimestamp = int(time.time()) + 21600
-today = datetime.now(timezone.utc)
-utc_time = today.replace(tzinfo=timezone.utc)
-currentTimestamp = utc_time.timestamp()
-privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
 import random
 
 
@@ -28,6 +22,11 @@ class GenerateAgoraTokenAPIView(APIView):
     permission_classes = (IsAccountOwner, IsCreator)
 
     def get(self, request):
+        expireTimeInSeconds = 86400
+        today = datetime.now(timezone.utc)
+        utc_time = today.replace(tzinfo=timezone.utc)
+        currentTimestamp = int(utc_time.timestamp())
+        privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
         call_type = request.GET.get('call_type', None)
         call_id = request.GET.get('call_id', None)
         if not call_type or not call_id:

@@ -64,8 +64,8 @@
                                 </td>
                                 {% elif '.mp4' in o.thumbnail_file.url or '.mp3' in o.thumbnail_file.url %}
                                 <td width="180px" height="80px">
-                                <video width="80px" height="80px" controls autoplay>
-                                    <source src="{{MEDIA_URL}}{{ o.thumbnail_file.url }}" type="video/mp4"> </source>
+                                <video width="80px" height="80px" controls>
+                                    <source src="{{material_detail.transcoded_material_file}}" type="video/mp4"> </source>
                                 </video>
                                 </td>
                                 {% elif '.pdf' in o.thumbnail_file.url %}
@@ -102,7 +102,7 @@
                                 {% elif '.mp4' in o.material_file.url or '.mp3' in o.material_file.url %}
                                 <td width="180px" height="80px">
                                 <video width="80px" height="80px" controls autoplay>
-                                    <source src="{{MEDIA_URL}}{{ o.material_file.url }}" type="video/mp4"> </source>
+                                    <source src="{{ o.transcoded_material_file }}" type="video/mp4"> </source>
                                 </video>
                                 </td>
                                 {% elif '.pdf' in o.material_file.url %}
