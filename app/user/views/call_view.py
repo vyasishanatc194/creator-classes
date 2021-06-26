@@ -75,10 +75,14 @@ class JoinCallAPIView(APIView):
             if booking.time_slot.completed:
                 message = "Session is completed!"    
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
+            if not session.channel_name or not session.agora_token:
+                message = "Call has not started yet!"
+                return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
+
             booking.user_joined = True
             booking.save()
 
-            session.completed = True
             session.session_completed_at = datetime.now()
             session.save()
 

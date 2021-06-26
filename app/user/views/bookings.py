@@ -96,18 +96,18 @@ class OneToOneSessionBookingAPIView(APIView):
 
                     name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                     if request.user.email:
+                        #user email
                         email_data = {
-                            'name': name,
                             'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
                             'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
-                            'creator_name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}"
+                            'creator_name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}",
+                            'details':session_booking.transaction_detail.receipt_url
                         }
                         send_templated_email(request.user.email, settings.USER_SESSION_BOOKING, email_data)
 
                     # Creator Email
                     name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                     email_data = {
-                        'name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}",
                         'user_name': name,
                         'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
                         'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
@@ -160,7 +160,6 @@ class OneToOneSessionBookingAPIView(APIView):
                         name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                         if request.user.email:
                             email_data = {
-                                'name': name,
                                 'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
                                 'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
                                 'creator_name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}"
@@ -170,7 +169,6 @@ class OneToOneSessionBookingAPIView(APIView):
                         # Creator Email
                         name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                         email_data = {
-                            'name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}",
                             'user_name': name,
                             'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
                             'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
@@ -246,7 +244,7 @@ class StreamBookingAPIView(APIView):
                     stream_booking.save()
 
                     notification_creator = Notification()
-                    notification_creator.notification_type= "BOOKING"
+                    notification_creator.notification_type = "BOOKING"
                     notification_creator.user = check_seats[0].stream.creator
                     notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
                     notification_creator.title = "Booking"
@@ -254,7 +252,7 @@ class StreamBookingAPIView(APIView):
                     notification_creator.save()
 
                     notification_user = Notification()
-                    notification_user.notification_type= "BOOKING"
+                    notification_user.notification_type = "BOOKING"
                     notification_user.user = request.user
                     notification_user.description = f"Your seat is booked for {streams[0].title} stream."
                     notification_user.title = "Booking"
@@ -265,18 +263,17 @@ class StreamBookingAPIView(APIView):
                     name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                     if request.user.email:
                         email_data = {
-                            'name': name,
                             'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
                             'time': streams[0].stream_datetime.time().strftime("%H:%M"),
                             'stream_name': streams[0].title,
-                            'creator_name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}"
+                            'creator_name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
+                            'details':check_seats[0].transaction_detail.receipt_url
                         }
                         send_templated_email(request.user.email, settings.USER_LIVE_STREAM_BOOKING_TEMPLATE, email_data)
 
                     # Creator Email
                     name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                     email_data = {
-                        'name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
                         'user_name': name,
                         'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
                         'time': streams[0].stream_datetime.time().strftime("%H:%M"),
@@ -320,11 +317,11 @@ class BookedSessionSeatholdersAPIView(APIView):
     permission_classes = (IsCreator,)
 
     def get(self, request):
-        seat_holders = SessionBooking.objects.filter(active=True, creator=request.user.pk, time_slot__slot_datetime__gte=datetime.now())
+        seat_holders = SessionBooking.objects.filter(active=True, creator=request.user.pk,
+                                                     time_slot__slot_datetime__gte=datetime.now())
         serializer = SessionSeatHolderSerializer(seat_holders, many=True, context={"request": request})
         message = "Seat holders fetched successfully!"
         return custom_response(True, status.HTTP_200_OK, message, serializer.data)
-
 
 
 class PayPalStreamBookingAPIView(APIView):
@@ -367,7 +364,7 @@ class PayPalStreamBookingAPIView(APIView):
                 stream_booking.save()
 
                 notification_creator = Notification()
-                notification_creator.notification_type= "BOOKING"
+                notification_creator.notification_type = "BOOKING"
                 notification_creator.user = streams[0].creator
                 notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
                 notification_creator.title = "Booking"
@@ -375,7 +372,7 @@ class PayPalStreamBookingAPIView(APIView):
                 notification_creator.save()
 
                 notification_user = Notification()
-                notification_user.notification_type= "BOOKING"
+                notification_user.notification_type = "BOOKING"
                 notification_user.user = request.user
                 notification_user.description = f"Your seat is booked for {streams[0].title} stream."
                 notification_user.title = "Booking"
@@ -383,21 +380,20 @@ class PayPalStreamBookingAPIView(APIView):
                 notification_user.save()
 
                 # User Email
+                # User Email
                 name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                 if request.user.email:
                     email_data = {
-                        'name': name,
                         'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
                         'time': streams[0].stream_datetime.time().strftime("%H:%M"),
                         'stream_name': streams[0].title,
-                        'creator_name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}"
+                        'creator_name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
                     }
                     send_templated_email(request.user.email, settings.USER_LIVE_STREAM_BOOKING_TEMPLATE, email_data)
 
                 # Creator Email
                 name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                 email_data = {
-                    'name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
                     'user_name': name,
                     'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
                     'time': streams[0].stream_datetime.time().strftime("%H:%M"),
@@ -419,7 +415,6 @@ class PayPalStreamBookingAPIView(APIView):
             return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
 
-
 class PayPalSessionBookingAPIView(APIView):
     """
     API View to book One to One Session through Paypal
@@ -433,15 +428,16 @@ class PayPalSessionBookingAPIView(APIView):
                 message = "creator is required!"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
-            if "time_slot" not in request.data :
+            if "time_slot" not in request.data:
                 message = "time_slot is required!"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 
-            check_booking = TimeSlot.objects.filter(pk=request.data['time_slot'], session__creator__pk=request.data['creator'])
+            check_booking = TimeSlot.objects.filter(pk=request.data['time_slot'],
+                                                    session__creator__pk=request.data['creator'])
             if check_booking and check_booking[0].is_booked:
                 message = "This time slot is already booked. Please select another."
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
-            
+
             request_copy = request.data.copy()
             request_copy["user"] = request.user.pk
 
@@ -459,23 +455,23 @@ class PayPalSessionBookingAPIView(APIView):
                 session_booking.card_id = request.data['brand']
                 session_booking.transaction_detail = transaction[0]
                 if "description" in request.data:
-                    session_booking.description=request.data['description']
+                    session_booking.description = request.data['description']
                 session_booking.save()
                 message = "Session booked successfully!"
 
-                check_booking[0].is_booked=True
+                check_booking[0].is_booked = True
                 check_booking[0].save()
                 if 'keywords' in request.data:
                     keywords = request.data['keywords'].split(',')
                     for keyword in keywords:
                         keyword_exists = AdminKeyword.objects.filter(pk=keyword)
                         if keyword_exists:
-                            session_keywords =BookedSessionKeywords()
+                            session_keywords = BookedSessionKeywords()
                             session_keywords.session = session_booking
-                            session_keywords.keyword =keyword_exists[0]
+                            session_keywords.keyword = keyword_exists[0]
                             session_keywords.save()
                 notification_creator = Notification()
-                notification_creator.notification_type= "BOOKING"
+                notification_creator.notification_type = "BOOKING"
                 notification_creator.user = check_booking[0].session.creator
                 notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
                 notification_creator.title = "Booking"
@@ -483,7 +479,7 @@ class PayPalSessionBookingAPIView(APIView):
                 notification_creator.save()
 
                 notification_user = Notification()
-                notification_user.notification_type= "BOOKING"
+                notification_user.notification_type = "BOOKING"
                 notification_user.user = request.user
                 notification_user.title = "Booking"
                 notification_user.profile_image = check_booking[0].session.creator.profile_image
@@ -494,7 +490,6 @@ class PayPalSessionBookingAPIView(APIView):
                 name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                 if request.user.email:
                     email_data = {
-                        'name': name,
                         'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
                         'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),
                         'creator_name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}"
@@ -504,7 +499,6 @@ class PayPalSessionBookingAPIView(APIView):
                 # Creator Email
                 name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
                 email_data = {
-                    'name': f"{check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name}",
                     'user_name': name,
                     'date': check_booking[0].slot_datetime.date().strftime('%m/%d/%Y'),
                     'time': check_booking[0].slot_datetime.time().strftime("%H:%M"),

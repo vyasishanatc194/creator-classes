@@ -32,7 +32,7 @@ class Command(BaseCommand):
                                 'time': book.time_slot.slot_datetime.time().strftime("%H:%M"),
                                 'creator_name': creator_name,
                                 }
-                        send_templated_email(book.user.email, USER_SESSION_REMINDER_TEMPLATEN_REMINDER, data)
+                        send_templated_email(book.user.email, USER_SESSION_REMINDER_TEMPLATE, data)
                 self.stdout.write(self.style.SUCCESS("Default notification sent"))
             self.stdout.write(self.style.SUCCESS("Successfully sent custom notification"))
         except Exception as inst:

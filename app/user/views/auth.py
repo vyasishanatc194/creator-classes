@@ -365,8 +365,7 @@ class ForgotPasswordAPIView(APIView):
         user.save()
         name = user.username if user.username else f"{user.first_name} {user.last_name}"
         email_data = {
-            'name': name,
-            'link': f"{settings.RESET_PASSWORD_LINK}{user.password_reset_link}"
+            'url': f"{settings.RESET_PASSWORD_LINK}{user.password_reset_link}"
         }
         send_templated_email(request.data["email"], settings.FORGET_PASSWORD_TEMPLATE, email_data)
         message = "Email with password reset link has been sent successfully!"
