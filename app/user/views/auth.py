@@ -45,6 +45,7 @@ from django.conf import settings
 import datetime as datetime_obj
 import pytz
 import uuid
+from creator_class.settings import CREATOR_SIGNUP_TEMPLATE
 
 utc = pytz.UTC
 
@@ -84,7 +85,7 @@ class SignUpApiView(APIView):
                 if response_status
                 else status.HTTP_400_BAD_REQUEST
             )
-            # TODO Email
+            send_templated_email(request.data["email"], settings.USER_SIGNUP_TEMPLATE,dynamic_data_for_template={})
             return custom_response(response_status, status_code, message, result)
         else:
             return custom_response(
@@ -306,6 +307,7 @@ class PlanPurchaseAPIView(APIView):
                             affiliation_record.commission_amount = commision_amount
                             affiliation_record.save()
 
+                    send_templated_email(to_email=user.email,email_temlpate_id=settings.USER_SUBSCRIPTION_TEMPLATE,dynamic_data_for_template={})
                     return custom_response(True, status.HTTP_201_CREATED, message)
                 message = chargeserializer.errors
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
@@ -528,6 +530,8 @@ class PayPalPlanPurchaseAPIView(APIView):
                         affiliation_record.commission_amount = commision_amount
                         affiliation_record.save()
 
+                send_templated_email(to_email=user.email, email_temlpate_id=settings.USER_SUBSCRIPTION_TEMPLATE,
+                                     dynamic_data_for_template={})
                 return custom_response(True, status.HTTP_201_CREATED, message)
             else:
                 message = chargeserializer.errors

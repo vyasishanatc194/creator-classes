@@ -14,11 +14,9 @@ from creator_class.helpers import send_templated_email
 # Date Format
 
 today = date.today()
-yesterday = today - timedelta(days=1)
+end_date = today - timedelta(days=1)
 
-yesterday_date = today - timedelta(days=31)
-start_date_month = f"{yesterday_date} 00:00:00"
-end_date = f"{yesterday} 23:59:00"
+start_date_month = today - timedelta(days=31)
 
 
 class Command(BaseCommand):
@@ -57,12 +55,12 @@ class Command(BaseCommand):
 
                         transfer = CreatorTransferredMoney.objects.filter(
                             creator__id=creator.id,
-                            created_at__range=[start_date_month, end_date],
+                            created_at__date__range=[start_date_month, end_date],
                         )
 
                         if not transfer:
                             streams_booked = StreamBooking.objects.filter(stream__creator=creator.pk,
-                                                                          created_at__range=[start_date_month,
+                                                                          created_at__date__range=[start_date_month,
                                                                                              end_date])
                             stream_earnings = streams_booked.aggregate(Sum('transaction_detail__amount'))[
                                 'transaction_detail__amount__sum']
@@ -70,7 +68,7 @@ class Command(BaseCommand):
                                 stream_earnings = 0
 
                             session_booked = SessionBooking.objects.filter(creator=creator.pk,
-                                                                           created_at__range=[start_date_month,
+                                                                           created_at__date__range=[start_date_month,
                                                                                               end_date])
                             session_earnings = session_booked.aggregate(Sum('transaction_detail__amount'))[
                                 'transaction_detail__amount__sum']
