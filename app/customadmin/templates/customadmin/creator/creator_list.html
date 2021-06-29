@@ -57,7 +57,7 @@
                             <td>{{ o.first_name }}</td>
                             <td>{{ o.last_name }}</td>
                             {% if o.profile_image %}
-                            <td height="80px" width="180px"><img src="{{MEDIA_URL}}{{ o.profile_image.url }}" alt="no image" height="80x" width="180px"></td>
+                            <td height="150px" width="180px"><img src="{{MEDIA_URL}}{{ o.profile_image.url }}" alt="no image" height="150x" width="180px"></td>
                             {% else %}
                             <td height="60px" width="150px"><img src="{% static 'customadmin/img/big-icon@1.5x.png' %}" alt="no image" height="60x" width="120px"></td>
                             {% endif %}
