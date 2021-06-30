@@ -286,6 +286,54 @@ class StreamBookingAPIView(APIView):
 
                     return custom_response(True, status.HTTP_201_CREATED, message)
             else:
+                if streams[0].stream_amount == 0:
+                    stream_booking = StreamBooking()
+                    stream_booking.stream = streams[0]
+                    stream_booking.user = request.user
+                    message = "Stream booked successfully!"
+                    stream_booking.save()
+
+                    notification_creator = Notification()
+                    notification_creator.notification_type = "BOOKING"
+                    notification_creator.user = check_seats[0].stream.creator
+                    notification_creator.description = f"{request.user.username} booked a seat for {streams[0].title}"
+                    notification_creator.title = "Booking"
+                    notification_creator.profile_image = request.user.profile_image
+                    notification_creator.save()
+
+                    notification_user = Notification()
+                    notification_user.notification_type = "BOOKING"
+                    notification_user.user = request.user
+                    notification_user.description = f"Your seat is booked for {streams[0].title} stream."
+                    notification_user.title = "Booking"
+                    notification_user.profile_image = streams[0].creator.profile_image
+                    notification_user.save()
+
+                    # User Email
+                    name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                    if request.user.email:
+                        email_data = {
+                            'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
+                            'time': streams[0].stream_datetime.time().strftime("%H:%M"),
+                            'stream_name': streams[0].title,
+                            'creator_name': f"{streams[0].creator.first_name} {streams[0].creator.last_name}",
+                        }
+                        send_templated_email(request.user.email, settings.USER_LIVE_STREAM_BOOKING_TEMPLATE,
+                                             email_data)
+
+                    # Creator Email
+                    name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
+                    email_data = {
+                        'user_name': name,
+                        'date': streams[0].stream_datetime.date().strftime('%m/%d/%Y'),
+                        'time': streams[0].stream_datetime.time().strftime("%H:%M"),
+                        'stream_name': streams[0].title,
+                        'cost': streams[0].stream_amount,
+                        'seats_left': streams[0].total_seats - (check_seats.count())
+                    }
+                    send_templated_email(streams[0].creator.email, settings.CREATOR_LIVE_STREAM_BOOKING_TEMPLATE,
+                                         email_data)
+                    return custom_response(True, status.HTTP_201_CREATED, message)
                 message = "Card_id is required"
                 return custom_response(False, status.HTTP_400_BAD_REQUEST, message)
 

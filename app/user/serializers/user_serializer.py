@@ -18,7 +18,7 @@ class TimeZoneSerializer(serializers.ModelSerializer):
 class CountryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryField
-        fields = ['country_name', 'country_flag']
+        fields = ['id','country_name', 'country_flag']
 
 
 class AdminKeywordSerializer(serializers.ModelSerializer):
