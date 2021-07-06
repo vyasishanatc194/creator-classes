@@ -6,6 +6,9 @@ from creator.models import Creator, CreatorSkill
 
 from django.contrib.auth.hashers import make_password
 
+import uuid
+from django.conf import settings
+
 # -----------------------------------------------------------------------------
 # Creators
 # -----------------------------------------------------------------------------
@@ -86,6 +89,7 @@ class MyCreatorCreationForm(forms.ModelForm):
             instance.is_creator = True
             instance.is_active = False
             instance.password = make_password(instance.password)
+            instance.affiliation_link = f"{settings.USER_SIGNUP_LINK}{uuid.uuid4()}"
             instance.save()
         return instance
 
