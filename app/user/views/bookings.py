@@ -81,7 +81,7 @@ class OneToOneSessionBookingAPIView(APIView):
                     notification_creator = Notification()
                     notification_creator.notification_type= "BOOKING"
                     notification_creator.user = check_booking[0].session.creator
-                    notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
+                    notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime.date()} at {check_booking[0].slot_datetime.time()} ({check_booking[0].tz.tz})"
                     notification_creator.title = "Booking"
                     notification_creator.profile_image = request.user.profile_image
                     notification_creator.save()
@@ -91,7 +91,7 @@ class OneToOneSessionBookingAPIView(APIView):
                     notification_user.user = request.user
                     notification_user.title = "Booking"
                     notification_user.profile_image = check_booking[0].session.creator.profile_image
-                    notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is booked successfully"
+                    notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} on {check_booking[0].slot_datetime.date()} at {check_booking[0].slot_datetime.time()} ({check_booking[0].tz.tz}) is booked successfully"
                     notification_user.save()
 
                     name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
@@ -144,7 +144,7 @@ class OneToOneSessionBookingAPIView(APIView):
                         notification_creator = Notification()
                         notification_creator.notification_type = "BOOKING"
                         notification_creator.user = check_booking[0].session.creator
-                        notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
+                        notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime.date()} at {check_booking[0].slot_datetime.time()} ({check_booking[0].tz.tz})"
                         notification_creator.title = "Booking"
                         notification_creator.profile_image = request.user.profile_image
                         notification_creator.save()
@@ -154,7 +154,7 @@ class OneToOneSessionBookingAPIView(APIView):
                         notification_user.user = request.user
                         notification_user.title = "Booking"
                         notification_user.profile_image = check_booking[0].session.creator.profile_image
-                        notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is booked successfully"
+                        notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} on {check_booking[0].slot_datetime.date()} at {check_booking[0].slot_datetime.time()} ({check_booking[0].tz.tz}) is booked successfully"
                         notification_user.save()
 
                         name = request.user.username if request.user.username else f"{request.user.first_name} {request.user.last_name}"
@@ -521,7 +521,7 @@ class PayPalSessionBookingAPIView(APIView):
                 notification_creator = Notification()
                 notification_creator.notification_type = "BOOKING"
                 notification_creator.user = check_booking[0].session.creator
-                notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime}"
+                notification_creator.description = f"{request.user.username} booked one to one session with you on {check_booking[0].slot_datetime.date()} at {check_booking[0].slot_datetime.time()} ({check_booking[0].tz.tz})"
                 notification_creator.title = "Booking"
                 notification_creator.profile_image = request.user.profile_image
                 notification_creator.save()
@@ -531,7 +531,7 @@ class PayPalSessionBookingAPIView(APIView):
                 notification_user.user = request.user
                 notification_user.title = "Booking"
                 notification_user.profile_image = check_booking[0].session.creator.profile_image
-                notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} at {check_booking[0].slot_datetime} is booked successfully"
+                notification_user.description = f"Your one to one session with {check_booking[0].session.creator.first_name} {check_booking[0].session.creator.last_name} on {check_booking[0].slot_datetime.date()} at {check_booking[0].slot_datetime.time()} ({check_booking[0].tz.tz}) is booked successfully"
                 notification_user.save()
 
                 # User Email
