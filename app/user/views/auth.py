@@ -224,8 +224,8 @@ class PlanPurchaseAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         try:
             if "plan_id" not in request.data:
@@ -477,8 +477,8 @@ class PayPalPlanPurchaseAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         try:
             if "plan_id" not in request.data:
@@ -555,8 +555,8 @@ class ChangePlanAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         """POST method to create the data"""
         try:

@@ -20,8 +20,8 @@ class StreamEarningSerializer(serializers.ModelSerializer):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         return instance.stream_amount - (instance.stream_amount * creator_class_commission.creator_class_deduction/100)
 
@@ -63,8 +63,8 @@ class SessionUserListingSerializer(serializers.ModelSerializer):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         if instance.transaction_detail:
             amount = instance.transaction_detail.amount
@@ -94,8 +94,8 @@ class UserPlanPurchaseHistorySerializer(serializers.ModelSerializer):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         plan_amount = instance.plan_purchase_detail.amount
         if not plan_amount:

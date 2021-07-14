@@ -25,8 +25,8 @@ class CreatorTotalEarningHistoryAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         result = {}
         streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
@@ -262,8 +262,8 @@ class StreamEarningChartAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         result = {}
         streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
@@ -345,8 +345,8 @@ class CreatorSessionEarningChartAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
 
         result = {}
@@ -431,8 +431,8 @@ class StreamUserListingAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
 
         stream_bookings = StreamBooking.objects.filter(stream__creator=request.user.pk)
@@ -479,8 +479,8 @@ class SessionUserListingAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
 
         session_bookings = SessionBooking.objects.filter(creator=request.user.pk)
@@ -528,8 +528,8 @@ class AffiliationUsersDetailAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
 
         plans_purchased = UserPlanPurchaseHistory.objects.filter(user__is_creator=False, user__affiliated_with=request.user.pk)

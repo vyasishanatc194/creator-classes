@@ -270,8 +270,8 @@ class CreatorFundsAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         streams_booked = StreamBooking.objects.filter(stream__creator=request.user.pk)
         stream_earnings = streams_booked.aggregate(Sum("stream__stream_amount"))[
@@ -400,8 +400,8 @@ class AffiliationRecordAPIView(APIView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
 
         result.update(

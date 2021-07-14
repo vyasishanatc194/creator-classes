@@ -234,8 +234,8 @@ class AffiliationRecordSerializer(serializers.ModelSerializer):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         return float(float(instance.amount) * creator_class_commission.affiliation_deduction)/100
 
@@ -243,8 +243,8 @@ class AffiliationRecordSerializer(serializers.ModelSerializer):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         affiliation_deduction=float(float(instance.amount) * creator_class_commission.affiliation_deduction)/100
         return instance.amount - affiliation_deduction

@@ -83,8 +83,8 @@ class IndexView(LoginRequiredMixin, TemplateView):
         creator_class_commission = CreatorClassCommission.objects.all().first()
         if not creator_class_commission:
             creator_class_commission = CreatorClassCommission()
-            creator_class_commission.affiliation_deduction = 10
-            creator_class_commission.creator_class_deduction = 10
+            creator_class_commission.affiliation_deduction = 35
+            creator_class_commission.creator_class_deduction = 20
             creator_class_commission.save()
         stream_bookings = StreamBooking.objects.all().aggregate(Sum("stream__stream_amount"))["stream__stream_amount__sum"]
         stream_earnings = (stream_bookings * creator_class_commission.creator_class_deduction / 100) if stream_bookings else 0
